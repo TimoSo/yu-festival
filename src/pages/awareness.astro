@@ -1,8 +1,12 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { contact } from '../data/site';
 ---
 
-<BaseLayout title="Awareness" description="Das Awareness-Konzept des YU Festivals: Ein respektvoller, sicherer Raum für alle.">
+<BaseLayout
+  title="Awareness"
+  description="Das Awareness-Konzept des YU Festivals: ein respektvoller, sicherer Raum für alle."
+>
   <section class="section container narrow">
     <p class="eyebrow">Awareness</p>
     <h1>Awareness</h1>
@@ -28,14 +32,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
     <h2>Kontakt</h2>
     <p>
-      Platzhaltertext: Kontaktmöglichkeit für Anliegen rund um Awareness – z.&nbsp;B.
-      eine E-Mail-Adresse oder ein Hinweis, an wen man sich vor Ort wenden kann.
+      Bei Anliegen rund um Awareness erreicht ihr uns unter
+      <a href={`mailto:${contact.email}`}>{contact.email}</a>. Weitere Anlaufstellen
+      vor Ort ergänzen wir hier.
     </p>
   </section>
 </BaseLayout>
-
-<style>
-  .narrow {
-    max-width: 760px;
-  }
-</style>

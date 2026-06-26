@@ -1,0 +1,64 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { partners } from '../data/site';
+---
+
+<BaseLayout
+  title="Partner"
+  description="Die Kooperationspartner des YU Festivals – u. a. kiU und KoLab."
+>
+  <section class="section container">
+    <p class="eyebrow">In Kooperation mit</p>
+    <h1>Partner</h1>
+    <p class="lead">
+      Das YU Festival entsteht gemeinsam mit starken Partnern aus Kultur und
+      digitaler Produktion.
+    </p>
+
+    <div class="grid grid--2" style="margin-top: 2.5rem;">
+      {
+        partners.map((partner) => (
+          <article class="card partner-card">
+            <div class="partner-logo">{partner.name}</div>
+            <div>
+              <h3>{partner.name}</h3>
+              <p class="tag">{partner.role}</p>
+              <p>{partner.description}</p>
+              {partner.url && (
+                <a href={partner.url} rel="noopener">Website →</a>
+              )}
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .partner-card {
+    display: grid;
+    grid-template-columns: 5.5rem 1fr;
+    gap: 1.25rem;
+    align-items: start;
+  }
+  .partner-logo {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 1;
+    border-radius: 12px;
+    background: var(--color-weintor);
+    color: var(--color-white);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+  @media (max-width: 460px) {
+    .partner-card {
+      grid-template-columns: 1fr;
+    }
+    .partner-logo {
+      width: 4.5rem;
+    }
+  }
+</style>

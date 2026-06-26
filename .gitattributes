@@ -1,0 +1,11 @@
+# Einheitliche Zeilenenden (LF) im Repo, plattformübergreifend
+* text=auto eol=lf
+
+# Binärdateien nicht anfassen
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.woff binary
+*.woff2 binary
+*.pdf binary

@@ -17,8 +17,9 @@ npm-debug.log*
 .env.*
 !.env.example
 
-# Betriebssystem / Editor
+# Betriebssystem / Editor / Tools
 .DS_Store
 Thumbs.db
 .vscode/*
 !.vscode/extensions.json
+.claude/

@@ -1,0 +1,56 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { events } from '../../data/site';
+
+// Erzeugt für jedes Event aus site.ts eine eigene Unterseite.
+export function getStaticPaths() {
+  return events.map((event) => ({
+    params: { slug: event.slug },
+    props: { event },
+  }));
+}
+
+const { event } = Astro.props;
+---
+
+<BaseLayout title={event.title} description={event.description}>
+  <article class="section container narrow">
+    <p class="eyebrow">{event.category}</p>
+    <h1>{event.title}</h1>
+
+    <div class="media-placeholder event-hero">Bild folgt</div>
+
+    {event.guest && (
+      <p class="event-guest">mit <strong>{event.guest}</strong></p>
+    )}
+
+    <p class="lead">{event.description}</p>
+
+    {event.bio && (
+      <section style="margin-top: 2rem;">
+        <h2>Zur Person</h2>
+        <p>{event.bio}</p>
+      </section>
+    )}
+
+    {event.partner && (
+      <p class="tag" style="margin-top: 2rem;">In Kooperation mit {event.partner}</p>
+    )}
+
+    <p style="margin-top: 2.5rem;">
+      <a class="btn btn--ghost" href="/programm">← Zurück zum Programm</a>
+    </p>
+  </article>
+</BaseLayout>
+
+<style>
+  .event-hero {
+    aspect-ratio: 16 / 9;
+    margin: 1.5rem 0;
+  }
+  .event-guest {
+    font-family: var(--font-mono);
+    color: var(--color-petrol);
+    font-size: 1rem;
+  }
+</style>

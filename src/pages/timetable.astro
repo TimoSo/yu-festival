@@ -1,0 +1,144 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { events } from '../data/site';
+
+const accents: Record<string, string> = {
+  Diskurs: 'var(--accent-violet)',
+  'Performance & Musik': 'var(--accent-pink)',
+  Workshop: 'var(--accent-green)',
+};
+
+// Platzhalter-Slots: Reihenfolge = grober Tagesverlauf.
+// Sobald Uhrzeiten feststehen, hier eintragen.
+const slots = events.map((e, i) => ({
+  time: 'tba',
+  ...e,
+  order: i,
+}));
+---
+
+<BaseLayout
+  title="Timetable"
+  description="Visueller Überblick über den Ablauf des YU Festivals."
+>
+  <section class="section container">
+    <p class="eyebrow">Timetable</p>
+    <h1>Ablauf</h1>
+    <p class="lead">
+      Ein visueller Überblick über das Festival. Die genauen Uhrzeiten folgen –
+      die Reihenfolge zeigt schon mal den groben Verlauf.
+    </p>
+
+    <div class="legend">
+      {
+        Object.entries(accents).map(([cat, color]) => (
+          <span class="legend__item">
+            <span class="legend__dot" style={`background:${color}`} />
+            {cat}
+          </span>
+        ))
+      }
+    </div>
+
+    <ol class="timeline">
+      {
+        slots.map((slot) => (
+          <li class="timeline__row" style={`--cat:${accents[slot.category]}`}>
+            <span class="timeline__time">{slot.time}</span>
+            <span class="timeline__node" />
+            <a class="timeline__event" href={`/programm/${slot.slug}`}>
+              <span class="tag">{slot.category}</span>
+              <span class="timeline__title">{slot.title}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+</BaseLayout>
+
+<style>
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    margin: 2rem 0;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+  }
+  .legend__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+  }
+  .legend__dot {
+    width: 0.8rem;
+    height: 0.8rem;
+    border-radius: 999px;
+  }
+
+  .timeline {
+    list-style: none;
+    margin: 2.5rem 0 0;
+    padding: 0;
+  }
+  .timeline__row {
+    display: grid;
+    grid-template-columns: 5rem 1.5rem 1fr;
+    align-items: center;
+    gap: 1rem;
+    padding-block: 0.5rem;
+  }
+  .timeline__time {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    text-align: right;
+  }
+  .timeline__node {
+    justify-self: center;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 999px;
+    background: var(--cat);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--cat) 25%, transparent);
+    position: relative;
+  }
+  /* Verbindungslinie */
+  .timeline__row:not(:last-child) .timeline__node::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: calc(100% + 1rem);
+    background: var(--color-border);
+  }
+  .timeline__event {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    padding: 0.75rem 1rem;
+    background: var(--color-surface-2);
+    border: 1px solid var(--color-border);
+    border-left: 4px solid var(--cat);
+    border-radius: 10px;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.15s ease;
+  }
+  .timeline__event:hover {
+    transform: translateX(3px);
+  }
+  .timeline__title {
+    font-family: var(--font-display);
+    font-weight: 600;
+  }
+
+  @media (max-width: 560px) {
+    .timeline__row {
+      grid-template-columns: 3.5rem 1.25rem 1fr;
+    }
+  }
+</style>

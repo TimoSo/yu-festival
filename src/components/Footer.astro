@@ -1,13 +1,14 @@
 ---
-import { site, nav } from '../data/site';
+import { site, nav, contact } from '../data/site';
 const year = new Date().getFullYear();
 ---
 
 <footer class="site-footer">
   <div class="container site-footer__inner">
-    <div>
+    <div class="site-footer__brand-col">
       <p class="site-footer__brand">{site.name}</p>
       <p class="site-footer__subtitle">{site.subtitle} · {site.subtitleAlt}</p>
+      <a class="site-footer__mail" href={`mailto:${contact.email}`}>{contact.email}</a>
     </div>
 
     <nav aria-label="Footer-Navigation">
@@ -15,10 +16,11 @@ const year = new Date().getFullYear();
         {nav.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
       </ul>
     </nav>
+  </div>
 
-    <p class="site-footer__meta">
-      © {year} {site.name} · Eintritt frei
-    </p>
+  <div class="container site-footer__meta">
+    <span>© {year} {site.name}</span>
+    <span>Eintritt frei</span>
   </div>
 </footer>
 
@@ -26,50 +28,64 @@ const year = new Date().getFullYear();
   .site-footer {
     border-top: 1px solid var(--color-border);
     background: var(--color-surface);
-    padding-block: 2.5rem;
+    padding-block: 2.75rem 1.5rem;
     margin-top: var(--space-section);
   }
 
   .site-footer__inner {
     display: flex;
     flex-wrap: wrap;
-    gap: 1.5rem 2.5rem;
+    gap: 2rem 3rem;
     align-items: start;
     justify-content: space-between;
   }
 
   .site-footer__brand {
-    font-weight: 800;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.3rem;
+    color: var(--color-weintor);
     margin: 0;
   }
-
   .site-footer__subtitle {
+    font-family: var(--font-mono);
     color: var(--color-text-muted);
+    font-size: 0.78rem;
+    margin: 0.35rem 0 0.75rem;
+  }
+  .site-footer__mail {
+    font-family: var(--font-mono);
     font-size: 0.85rem;
-    margin: 0;
+    color: var(--color-petrol);
   }
 
   .site-footer nav ul {
     list-style: none;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.25rem;
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    gap: 0.6rem 2rem;
     margin: 0;
     padding: 0;
   }
-
   .site-footer nav a {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
     color: var(--color-text-muted);
     text-decoration: none;
   }
-
   .site-footer nav a:hover {
-    color: var(--color-text);
+    color: var(--color-weintor);
   }
 
   .site-footer__meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 2.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--color-border);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
     color: var(--color-text-muted);
-    font-size: 0.85rem;
-    margin: 0;
   }
 </style>

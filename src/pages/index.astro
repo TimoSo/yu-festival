@@ -7,14 +7,15 @@ import { pillars, partners } from '../data/site';
 <BaseLayout>
   <Hero />
 
-  <!-- Über das Festival -->
+  <!-- Worum es geht -->
   <section class="section container">
     <p class="eyebrow">Worum es geht</p>
-    <h2>Digitale Medien gestalten – allein und gemeinsam</h2>
+    <h2>Digitale Medien gestalten – <span class="text-petrol">allein</span> und
+      <span class="text-weintor">gemeinsam</span></h2>
     <p class="lead">
       Das YU Festival beschäftigt sich mit digitalen Medien. Den kritischen Blick
-      vergessen wir dabei nicht – unser Fokus liegt aber auf den
-      Gestaltungsmöglichkeiten, die das Individuum und das „Wir“ als
+      vergessen wir nicht – unser Fokus liegt aber auf den
+      Gestaltungsmöglichkeiten, die das Individuum und das „Wir" als
       Kollektivgedanken haben.
     </p>
   </section>
@@ -27,8 +28,8 @@ import { pillars, partners } from '../data/site';
       <div class="grid grid--3" style="margin-top: 2.5rem;">
         {
           pillars.map((pillar) => (
-            <article class="card">
-              <p class="card__share">{pillar.share}</p>
+            <article class="card pillar" style={`--pillar: ${pillar.accent}`}>
+              <span class="pillar__share">{pillar.share}</span>
               <h3>{pillar.title}</h3>
               <p>{pillar.text}</p>
             </article>
@@ -38,7 +39,7 @@ import { pillars, partners } from '../data/site';
     </div>
   </section>
 
-  <!-- Partner -->
+  <!-- Partner-Vorschau -->
   <section class="section container">
     <p class="eyebrow">In Kooperation mit</p>
     <h2>Partner</h2>
@@ -47,11 +48,28 @@ import { pillars, partners } from '../data/site';
         partners.map((partner) => (
           <article class="card">
             <h3>{partner.name}</h3>
-            <p class="card__share">{partner.role}</p>
-            {partner.note && <p>{partner.note}</p>}
+            <p class="tag">{partner.role}</p>
+            <p>{partner.description}</p>
           </article>
         ))
       }
     </div>
+    <p style="margin-top: 2rem;">
+      <a class="btn btn--ghost" href="/partner">Alle Partner ansehen</a>
+    </p>
   </section>
 </BaseLayout>
+
+<style>
+  .pillar {
+    border-top: 4px solid var(--pillar);
+  }
+  .pillar__share {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--pillar);
+    margin-bottom: 0.5rem;
+  }
+</style>

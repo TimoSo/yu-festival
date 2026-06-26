@@ -2,62 +2,102 @@
 import { site } from '../data/site';
 ---
 
-<section class="hero">
+<section class="hero pixel-bg">
   <div class="container">
     <p class="hero__alt">{site.subtitleAlt}</p>
-    <h1 class="hero__title">{site.name}</h1>
-    <p class="hero__subtitle">{site.subtitle}</p>
+    <h1 class="hero__title">
+      <span class="hero__yu">YU</span><span class="hero__fest">Festival</span>
+    </h1>
+    <p class="hero__subtitle">
+      Medien<span class="dot">.</span>Kunst<span class="dot">.</span>Diskurs
+    </p>
     <p class="lead hero__lead">
       Ein Festival für digitale Medien – mit kritischem Blick, aber vor allem mit
-      Gestaltungslust. Es geht um die Möglichkeiten, die das Individuum und das
-      „Wir“ als Kollektiv in die Hand nehmen können.
+      <em>Gestaltungslust</em>. Es geht um die Möglichkeiten, die das Individuum
+      und das „Wir" als Kollektiv in die Hand nehmen.
     </p>
     <div class="hero__actions">
-      <a class="btn btn--primary" href="/programm">Zum Programm</a>
-      <a class="btn btn--ghost" href="/faq">Häufige Fragen</a>
+      <a class="btn btn--primary" href="/programm">Zum Programm →</a>
+      <a class="btn btn--ghost" href="/about">Über das Festival</a>
     </div>
-    {site.free && <p class="hero__free">Eintritt frei</p>}
+    {site.free && <p class="hero__free">★ Eintritt frei</p>}
   </div>
 </section>
 
 <style>
   .hero {
     padding-block: clamp(4rem, 12vw, 8rem);
+    background-color: var(--color-bg);
+    position: relative;
+    overflow: hidden;
+  }
+  /* farbige Lichtschleier zusätzlich zur Pixel-Textur */
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
     background:
       radial-gradient(
-        55% 70% at 85% -10%,
-        color-mix(in srgb, var(--color-secondary) 22%, transparent),
+        50% 60% at 88% -10%,
+        color-mix(in srgb, var(--color-petrol) 28%, transparent),
         transparent
       ),
       radial-gradient(
-        50% 60% at 0% 110%,
-        color-mix(in srgb, var(--color-primary) 18%, transparent),
+        45% 55% at -5% 110%,
+        color-mix(in srgb, var(--color-weintor) 24%, transparent),
         transparent
-      ),
-      var(--color-bg);
+      );
+    pointer-events: none;
+  }
+  .hero .container {
+    position: relative;
   }
 
   .hero__alt {
+    font-family: var(--font-mono);
     font-size: 0.85rem;
     letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: var(--color-accent);
-    margin-bottom: 1rem;
+    color: var(--color-petrol);
+    margin-bottom: 1.25rem;
   }
 
   .hero__title {
-    font-size: clamp(3.5rem, 14vw, 9rem);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.15em 0.3em;
+    font-size: clamp(3.5rem, 13vw, 9rem);
     margin: 0;
+    line-height: 0.92;
+  }
+  .hero__yu {
+    color: var(--color-weintor);
+    letter-spacing: -0.03em;
+  }
+  /* gemischter Schnitt – „spiel mit typografien" */
+  .hero__fest {
+    color: var(--color-petrol);
+    font-style: italic;
+    font-weight: 500;
   }
 
   .hero__subtitle {
-    font-size: clamp(1.3rem, 3vw, 2rem);
-    font-weight: 600;
-    margin: 0.25rem 0 1.5rem;
+    font-family: var(--font-display);
+    font-size: clamp(1.3rem, 3vw, 2.1rem);
+    font-weight: 500;
+    color: var(--color-text);
+    margin: 0.5rem 0 1.5rem;
+  }
+  .hero__subtitle .dot {
+    color: var(--accent-pink);
   }
 
   .hero__lead {
     margin-bottom: 2rem;
+  }
+  .hero__lead em {
+    color: var(--color-weintor);
+    font-style: italic;
   }
 
   .hero__actions {
@@ -67,9 +107,11 @@ import { site } from '../data/site';
   }
 
   .hero__free {
-    margin-top: 1.5rem;
+    margin-top: 1.75rem;
     display: inline-block;
+    font-family: var(--font-mono);
     font-weight: 700;
-    color: var(--color-accent);
+    color: var(--color-weintor);
+    letter-spacing: 0.05em;
   }
 </style>

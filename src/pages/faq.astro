@@ -8,7 +8,7 @@ const faqs: { q: string; a: string }[] = [
   },
   {
     q: 'Worum geht es beim YU Festival?',
-    a: 'Um digitale Medien: mit kritischem Blick, aber mit Fokus auf die Gestaltungsmöglichkeiten, die das Individuum und das „Wir“ als Kollektiv haben. Inhaltlich teilt es sich in Diskurs, Performance & Musik und Workshops.',
+    a: 'Um digitale Medien: mit kritischem Blick, aber mit Fokus auf die Gestaltungsmöglichkeiten, die das Individuum und das „Wir" als Kollektiv haben. Inhaltlich teilt es sich in Diskurs, Performance & Musik und Workshops.',
   },
   {
     q: 'Muss ich mich für Workshops anmelden?',
@@ -48,10 +48,6 @@ const faqs: { q: string; a: string }[] = [
 </BaseLayout>
 
 <style>
-  .narrow {
-    max-width: 760px;
-  }
-
   .faq-list {
     margin-top: 2.5rem;
     display: grid;
@@ -67,8 +63,10 @@ const faqs: { q: string; a: string }[] = [
 
   .faq-item summary {
     cursor: pointer;
+    font-family: var(--font-display);
     font-weight: 600;
     font-size: 1.05rem;
+    color: var(--color-text);
     padding: 1.25rem 0;
     list-style: none;
     display: flex;
@@ -76,19 +74,16 @@ const faqs: { q: string; a: string }[] = [
     align-items: center;
     gap: 1rem;
   }
-
   .faq-item summary::-webkit-details-marker {
     display: none;
   }
-
   .faq-item summary::after {
     content: '+';
-    color: var(--color-secondary);
-    font-size: 1.4rem;
+    color: var(--color-petrol);
+    font-size: 1.5rem;
     line-height: 1;
     transition: transform 0.2s ease;
   }
-
   .faq-item[open] summary::after {
     transform: rotate(45deg);
   }

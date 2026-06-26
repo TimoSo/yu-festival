@@ -1,42 +1,48 @@
 /* ============================================================
-   GLOBALE STYLES & DESIGN-TOKENS
+   GLOBALE STYLES & DESIGN-TOKENS  ·  YU Festival
    ------------------------------------------------------------
-   CI kommt später: Im Block :root unten Farben, Schriften und
-   Abstände anpassen – der Rest der Seite zieht automatisch nach.
+   CI-Idee (laut Briefing): positiver, experimenteller, ver-
+   spielter Blick auf Digitalität. Statt schwarzer Texte mit
+   FARBKONTRASTEN arbeiten. Fotos in Graustufen/Duoton.
+   Alle Farben & Schriften stehen als Variablen im :root-Block –
+   hier zentral anpassen, der Rest der Seite zieht nach.
+   (Schriften werden in BaseLayout.astro geladen.)
    ============================================================ */
 
 :root {
-  /* --- Markenfarben (CI) ---
-     Weiß    #EFEDE8
-     Weintor #8B1D5C  → Primär-Akzent
-     Petrol  #1C7A78  → Sekundär-Akzent
-     Schwarz #1C1A17  → Text / unterstützend (warmes Schwarz) */
-  --color-white: #efede8;
-  --color-weintor: #8b1d5c;
-  --color-petrol: #1c7a78;
-  --color-black: #1c1a17;
+  /* === MARKENFARBEN === */
+  --color-white: #efede8; /* warmes Off-White – Grundfläche */
+  --color-weintor: #8b1d5c; /* Primär */
+  --color-petrol: #1c7a78; /* Sekundär */
+  --color-black: #1c1a17; /* warmes Schwarz – nur sparsam */
 
-  /* --- Rollen (auf die Markenfarben gemappt) --- */
+  /* === LEUCHTENDE AKZENTE (Tupfer „zwischendurch") === */
+  --accent-pink: #f2588a;
+  --accent-violet: #7b5cff;
+  --accent-green: #3fb984;
+  --accent-yellow: #f2e25c;
+  --accent-blue: #5bb0ef;
+
+  /* === ROLLEN === */
   --color-bg: var(--color-white);
-  --color-surface: #e7e3db; /* leicht abgesetzte Abschnitts-Bänder */
+  --color-surface: #e8e3da; /* abgesetzte Bänder */
   --color-surface-2: #fbfaf7; /* Karten (fast weiß) */
-  --color-text: var(--color-black);
-  --color-text-muted: #6e665b; /* warmes Grau */
+  --color-text: #211019; /* tiefes Pflaumen-Schwarz (kein Rein-Schwarz) */
+  --color-text-muted: #6e5560; /* gedämpftes Pflaumen-Grau */
   --color-primary: var(--color-weintor);
   --color-secondary: var(--color-petrol);
-  --color-accent: var(--color-primary); /* Haupt-Akzent */
-  --color-accent-text: var(--color-white); /* Text auf Akzentfläche */
-  --color-border: #d8d2c7;
+  --color-border: #d9d1c6;
+  --color-accent-text: var(--color-white); /* Text auf farbiger Fläche */
 
-  /* --- Typografie --- */
-  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial,
-    sans-serif;
-  --font-display: var(--font-sans); /* später z.B. eigene Headline-Schrift */
+  /* === TYPOGRAFIE === */
+  --font-display: 'Space Grotesk Variable', system-ui, sans-serif;
+  --font-sans: 'Inter Variable', system-ui, -apple-system, sans-serif;
+  --font-mono: 'Space Mono', ui-monospace, 'SFMono-Regular', monospace;
 
-  /* --- Layout --- */
-  --max-width: 1100px;
-  --radius: 14px;
-  --space-section: clamp(3rem, 8vw, 6rem);
+  /* === LAYOUT === */
+  --max-width: 1180px;
+  --radius: 16px;
+  --space-section: clamp(3.5rem, 9vw, 7rem);
 
   color-scheme: light;
 }
@@ -57,31 +63,36 @@ body {
   background: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-sans);
-  line-height: 1.6;
+  font-size: clamp(1rem, 0.97rem + 0.15vw, 1.08rem);
+  line-height: 1.65;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
+/* Headlines sind farbig statt schwarz (CI-Kontrastidee) */
 h1,
 h2,
-h3 {
+h3,
+h4 {
   font-family: var(--font-display);
-  line-height: 1.1;
+  line-height: 1.05;
   font-weight: 700;
   margin: 0 0 0.5em;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
 }
 
 h1 {
-  font-size: clamp(2.5rem, 7vw, 5rem);
-  letter-spacing: -0.02em;
+  font-size: clamp(2.6rem, 7vw, 5.5rem);
+  color: var(--color-primary);
 }
-
 h2 {
-  font-size: clamp(1.6rem, 4vw, 2.5rem);
+  font-size: clamp(1.7rem, 4vw, 2.8rem);
+  color: var(--color-primary);
 }
-
 h3 {
-  font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+  font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+  color: var(--color-text);
 }
 
 p {
@@ -89,7 +100,8 @@ p {
 }
 
 a {
-  color: inherit;
+  color: var(--color-secondary);
+  text-underline-offset: 0.2em;
 }
 
 img {
@@ -113,47 +125,73 @@ img {
   background: var(--color-surface);
 }
 
+.narrow {
+  max-width: 760px;
+}
+
+/* Mono-„Eyebrow" – kleines Label über Überschriften */
 .eyebrow {
   display: inline-block;
-  font-size: 0.8rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--color-accent);
+  color: var(--color-secondary);
   margin-bottom: 1rem;
 }
 
+.eyebrow::before {
+  content: '// ';
+  opacity: 0.6;
+}
+
 .lead {
-  font-size: clamp(1.1rem, 2vw, 1.35rem);
-  color: var(--color-text-muted);
-  max-width: 60ch;
+  font-size: clamp(1.15rem, 2vw, 1.4rem);
+  color: var(--color-text);
+  max-width: 62ch;
+  line-height: 1.5;
+}
+
+/* Farb-Utilities */
+.text-weintor {
+  color: var(--color-weintor);
+}
+.text-petrol {
+  color: var(--color-petrol);
 }
 
 /* --- Buttons --- */
 .btn {
-  display: inline-block;
-  padding: 0.85rem 1.6rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.7rem;
   border-radius: 999px;
-  font-weight: 600;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
   text-decoration: none;
-  transition: transform 0.15s ease, opacity 0.15s ease;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease, color 0.15s ease;
 }
 
 .btn--primary {
-  background: var(--color-accent);
+  background: var(--color-weintor);
   color: var(--color-accent-text);
 }
-
 .btn--primary:hover {
   transform: translateY(-2px);
+  background: var(--color-petrol);
 }
 
 .btn--ghost {
-  border: 1px solid var(--color-border);
-  color: var(--color-text);
+  border: 2px solid var(--color-weintor);
+  color: var(--color-weintor);
 }
-
 .btn--ghost:hover {
-  border-color: var(--color-accent);
+  background: var(--color-weintor);
+  color: var(--color-accent-text);
 }
 
 /* --- Karten-Raster --- */
@@ -161,13 +199,12 @@ img {
   display: grid;
   gap: 1.5rem;
 }
-
-@media (min-width: 720px) {
-  .grid--3 {
-    grid-template-columns: repeat(3, 1fr);
-  }
+@media (min-width: 760px) {
   .grid--2 {
     grid-template-columns: repeat(2, 1fr);
+  }
+  .grid--3 {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
@@ -176,13 +213,79 @@ img {
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
   padding: 1.75rem;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+.card:hover {
+  transform: translateY(-3px);
+  border-color: var(--color-secondary);
 }
 
-.card__share {
-  font-size: 0.85rem;
+/* Mono-Label (Prozente, Rollen, Kategorien) */
+.tag {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
   font-weight: 700;
-  color: var(--color-secondary);
   letter-spacing: 0.05em;
+  color: var(--color-secondary);
+}
+
+/* --- Bild-Treatment (Briefing: Graustufen / Duoton) --- */
+/* Platzhalter-Block, solange noch keine Fotos da sind */
+.media-placeholder {
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius);
+  display: grid;
+  place-items: center;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-white);
+  background:
+    repeating-linear-gradient(
+      45deg,
+      color-mix(in srgb, var(--color-weintor) 88%, black),
+      color-mix(in srgb, var(--color-weintor) 88%, black) 10px,
+      var(--color-weintor) 10px,
+      var(--color-weintor) 20px
+    );
+}
+
+/* Echte Fotos später: Graustufen + optionaler Duoton-Tint.
+   Anwendung:  <div class="duotone"><img src="…" alt="…"></div> */
+.media-grayscale img {
+  filter: grayscale(1) contrast(1.05);
+}
+.duotone {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius);
+}
+.duotone img {
+  filter: grayscale(1) contrast(1.1);
+  display: block;
+  width: 100%;
+}
+.duotone::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  mix-blend-mode: color;
+  background: linear-gradient(
+    135deg,
+    var(--color-weintor),
+    var(--color-petrol)
+  );
+}
+
+/* --- Pixel-Textur (digitaler „Mosaik"-Look der Referenzen) --- */
+.pixel-bg {
+  background-image: radial-gradient(
+    color-mix(in srgb, var(--color-weintor) 22%, transparent) 1.5px,
+    transparent 1.6px
+  );
+  background-size: 14px 14px;
 }
 
 /* --- Zugänglichkeit --- */
@@ -198,8 +301,23 @@ img {
   border: 0;
 }
 
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -3rem;
+  background: var(--color-weintor);
+  color: var(--color-white);
+  padding: 0.6rem 1rem;
+  border-radius: 0 0 8px 8px;
+  z-index: 100;
+  transition: top 0.2s ease;
+}
+.skip-link:focus {
+  top: 0;
+}
+
 :focus-visible {
-  outline: 2px solid var(--color-accent);
+  outline: 3px solid var(--color-petrol);
   outline-offset: 3px;
 }
 
