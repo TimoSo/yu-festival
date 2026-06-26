@@ -1,0 +1,75 @@
+---
+import { site } from '../data/site';
+---
+
+<section class="hero">
+  <div class="container">
+    <p class="hero__alt">{site.subtitleAlt}</p>
+    <h1 class="hero__title">{site.name}</h1>
+    <p class="hero__subtitle">{site.subtitle}</p>
+    <p class="lead hero__lead">
+      Ein Festival für digitale Medien – mit kritischem Blick, aber vor allem mit
+      Gestaltungslust. Es geht um die Möglichkeiten, die das Individuum und das
+      „Wir“ als Kollektiv in die Hand nehmen können.
+    </p>
+    <div class="hero__actions">
+      <a class="btn btn--primary" href="/programm">Zum Programm</a>
+      <a class="btn btn--ghost" href="/faq">Häufige Fragen</a>
+    </div>
+    {site.free && <p class="hero__free">Eintritt frei</p>}
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding-block: clamp(4rem, 12vw, 8rem);
+    background:
+      radial-gradient(
+        55% 70% at 85% -10%,
+        color-mix(in srgb, var(--color-secondary) 22%, transparent),
+        transparent
+      ),
+      radial-gradient(
+        50% 60% at 0% 110%,
+        color-mix(in srgb, var(--color-primary) 18%, transparent),
+        transparent
+      ),
+      var(--color-bg);
+  }
+
+  .hero__alt {
+    font-size: 0.85rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin-bottom: 1rem;
+  }
+
+  .hero__title {
+    font-size: clamp(3.5rem, 14vw, 9rem);
+    margin: 0;
+  }
+
+  .hero__subtitle {
+    font-size: clamp(1.3rem, 3vw, 2rem);
+    font-weight: 600;
+    margin: 0.25rem 0 1.5rem;
+  }
+
+  .hero__lead {
+    margin-bottom: 2rem;
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .hero__free {
+    margin-top: 1.5rem;
+    display: inline-block;
+    font-weight: 700;
+    color: var(--color-accent);
+  }
+</style>

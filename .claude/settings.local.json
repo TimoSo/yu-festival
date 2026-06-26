@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(node --version)",
+      "PowerShell(npm --version)",
+      "PowerShell(npm install --no-fund --no-audit)",
+      "PowerShell(npx astro --version)",
+      "PowerShell(npm run build)",
+      "PowerShell(npm run dev)",
+      "PowerShell(npm run build 2>&1)",
+      "PowerShell(Get-NetTCPConnection -LocalPort 4321 -State Listen -ErrorAction SilentlyContinue)",
+      "PowerShell(Get-Process node -ErrorAction SilentlyContinue)",
+      "PowerShell(Get-NetTCPConnection -LocalPort 4321 -State Listen -ErrorAction SilentlyContinue | Select-Object LocalAddress, LocalPort, State; echo \"--- HTTP-Test ---\"; try { $r = Invoke-WebRequest -Uri \"http://localhost:4321/\" -UseBasicParsing -TimeoutSec 10; \"Status: $\\($r.StatusCode\\)  Bytes: $\\($r.RawContentLength\\)\" } catch { \"Fehler: $\\($_.Exception.Message\\)\" })",
+      "PowerShell(py -m pip install --quiet --disable-pip-version-check pypdf 2>&1)"
+    ]
+  }
+}

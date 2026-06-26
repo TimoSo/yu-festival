@@ -1,0 +1,144 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { pillars } from '../data/site';
+
+// Platzhalter-Programm. Später durch echte Slots ersetzen
+// (oder aus einer Datenquelle / einem CMS laden).
+const programm: {
+  pillar: string;
+  items: { title: string; detail: string; time?: string }[];
+}[] = [
+  {
+    pillar: 'Diskurs',
+    items: [
+      {
+        title: 'kiU Talk mit Tobias Biesecke',
+        detail: 'Gespräch über digitale Medien und ihre Gestaltungsräume.',
+        time: 'tba',
+      },
+      {
+        title: 'Panel: Wir gestalten das Digitale',
+        detail: 'Platzhalter – Programmpunkt folgt.',
+        time: 'tba',
+      },
+    ],
+  },
+  {
+    pillar: 'Performance & Musik',
+    items: [
+      {
+        title: 'Audiovisuelle Performance',
+        detail: 'Platzhalter – Programmpunkt folgt.',
+        time: 'tba',
+      },
+      {
+        title: 'Live-Set',
+        detail: 'Platzhalter – Programmpunkt folgt.',
+        time: 'tba',
+      },
+    ],
+  },
+  {
+    pillar: 'Workshops',
+    items: [
+      {
+        title: 'Workshop mit dem KoLab',
+        detail:
+          'Digitales Koproduktionslabor der Stadt Dortmund – Hands-on-Workshop.',
+        time: 'tba',
+      },
+      {
+        title: 'Workshop in Kooperation mit dem kiU',
+        detail: 'Platzhalter – Programmpunkt folgt.',
+        time: 'tba',
+      },
+    ],
+  },
+];
+---
+
+<BaseLayout title="Programm" description="Das Programm des YU Festivals: Diskurs, Performance & Musik und Workshops.">
+  <section class="section container">
+    <p class="eyebrow">Programm</p>
+    <h1>Programm</h1>
+    <p class="lead">
+      Das Programm verteilt sich zu je einem Drittel auf Diskurs, Performance &amp;
+      Musik und Workshops. Die einzelnen Programmpunkte und Uhrzeiten folgen –
+      hier entsteht der Überblick.
+    </p>
+  </section>
+
+  {
+    programm.map((block) => {
+      const meta = pillars.find((p) => p.title === block.pillar);
+      return (
+        <section class="section container programm-block">
+          <header class="programm-block__head">
+            <h2>{block.pillar}</h2>
+            {meta && <span class="card__share">{meta.share}</span>}
+          </header>
+          <ul class="programm-list">
+            {block.items.map((item) => (
+              <li class="programm-item">
+                <div>
+                  <h3>{item.title}</h3>
+                  <p>{item.detail}</p>
+                </div>
+                {item.time && <span class="programm-item__time">{item.time}</span>}
+              </li>
+            ))}
+          </ul>
+        </section>
+      );
+    })
+  }
+</BaseLayout>
+
+<style>
+  .programm-block {
+    padding-block: 2.5rem;
+  }
+
+  .programm-block__head {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .programm-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 1rem;
+  }
+
+  .programm-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 1.5rem;
+    background: var(--color-surface-2);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: 1.25rem 1.5rem;
+  }
+
+  .programm-item h3 {
+    margin-bottom: 0.25rem;
+  }
+
+  .programm-item p {
+    margin: 0;
+    color: var(--color-text-muted);
+  }
+
+  .programm-item__time {
+    flex-shrink: 0;
+    color: var(--color-secondary);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+</style>

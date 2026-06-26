@@ -1,0 +1,75 @@
+---
+import { site, nav } from '../data/site';
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container site-footer__inner">
+    <div>
+      <p class="site-footer__brand">{site.name}</p>
+      <p class="site-footer__subtitle">{site.subtitle} · {site.subtitleAlt}</p>
+    </div>
+
+    <nav aria-label="Footer-Navigation">
+      <ul>
+        {nav.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
+      </ul>
+    </nav>
+
+    <p class="site-footer__meta">
+      © {year} {site.name} · Eintritt frei
+    </p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--color-border);
+    background: var(--color-surface);
+    padding-block: 2.5rem;
+    margin-top: var(--space-section);
+  }
+
+  .site-footer__inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem 2.5rem;
+    align-items: start;
+    justify-content: space-between;
+  }
+
+  .site-footer__brand {
+    font-weight: 800;
+    margin: 0;
+  }
+
+  .site-footer__subtitle {
+    color: var(--color-text-muted);
+    font-size: 0.85rem;
+    margin: 0;
+  }
+
+  .site-footer nav ul {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    margin: 0;
+    padding: 0;
+  }
+
+  .site-footer nav a {
+    color: var(--color-text-muted);
+    text-decoration: none;
+  }
+
+  .site-footer nav a:hover {
+    color: var(--color-text);
+  }
+
+  .site-footer__meta {
+    color: var(--color-text-muted);
+    font-size: 0.85rem;
+    margin: 0;
+  }
+</style>

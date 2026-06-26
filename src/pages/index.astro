@@ -1,0 +1,57 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import { pillars, partners } from '../data/site';
+---
+
+<BaseLayout>
+  <Hero />
+
+  <!-- Über das Festival -->
+  <section class="section container">
+    <p class="eyebrow">Worum es geht</p>
+    <h2>Digitale Medien gestalten – allein und gemeinsam</h2>
+    <p class="lead">
+      Das YU Festival beschäftigt sich mit digitalen Medien. Den kritischen Blick
+      vergessen wir dabei nicht – unser Fokus liegt aber auf den
+      Gestaltungsmöglichkeiten, die das Individuum und das „Wir“ als
+      Kollektivgedanken haben.
+    </p>
+  </section>
+
+  <!-- Die drei Säulen -->
+  <section class="section section--muted">
+    <div class="container">
+      <p class="eyebrow">Drei Säulen, je ein Drittel</p>
+      <h2>Diskurs · Performance &amp; Musik · Workshops</h2>
+      <div class="grid grid--3" style="margin-top: 2.5rem;">
+        {
+          pillars.map((pillar) => (
+            <article class="card">
+              <p class="card__share">{pillar.share}</p>
+              <h3>{pillar.title}</h3>
+              <p>{pillar.text}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Partner -->
+  <section class="section container">
+    <p class="eyebrow">In Kooperation mit</p>
+    <h2>Partner</h2>
+    <div class="grid grid--2" style="margin-top: 2.5rem;">
+      {
+        partners.map((partner) => (
+          <article class="card">
+            <h3>{partner.name}</h3>
+            <p class="card__share">{partner.role}</p>
+            {partner.note && <p>{partner.note}</p>}
+          </article>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>

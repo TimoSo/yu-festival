@@ -1,0 +1,213 @@
+/* ============================================================
+   GLOBALE STYLES & DESIGN-TOKENS
+   ------------------------------------------------------------
+   CI kommt später: Im Block :root unten Farben, Schriften und
+   Abstände anpassen – der Rest der Seite zieht automatisch nach.
+   ============================================================ */
+
+:root {
+  /* --- Markenfarben (CI) ---
+     Weiß    #EFEDE8
+     Weintor #8B1D5C  → Primär-Akzent
+     Petrol  #1C7A78  → Sekundär-Akzent
+     Schwarz #1C1A17  → Text / unterstützend (warmes Schwarz) */
+  --color-white: #efede8;
+  --color-weintor: #8b1d5c;
+  --color-petrol: #1c7a78;
+  --color-black: #1c1a17;
+
+  /* --- Rollen (auf die Markenfarben gemappt) --- */
+  --color-bg: var(--color-white);
+  --color-surface: #e7e3db; /* leicht abgesetzte Abschnitts-Bänder */
+  --color-surface-2: #fbfaf7; /* Karten (fast weiß) */
+  --color-text: var(--color-black);
+  --color-text-muted: #6e665b; /* warmes Grau */
+  --color-primary: var(--color-weintor);
+  --color-secondary: var(--color-petrol);
+  --color-accent: var(--color-primary); /* Haupt-Akzent */
+  --color-accent-text: var(--color-white); /* Text auf Akzentfläche */
+  --color-border: #d8d2c7;
+
+  /* --- Typografie --- */
+  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial,
+    sans-serif;
+  --font-display: var(--font-sans); /* später z.B. eigene Headline-Schrift */
+
+  /* --- Layout --- */
+  --max-width: 1100px;
+  --radius: 14px;
+  --space-section: clamp(3rem, 8vw, 6rem);
+
+  color-scheme: light;
+}
+
+/* --- Reset / Basis --- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  line-height: 1.1;
+  font-weight: 700;
+  margin: 0 0 0.5em;
+}
+
+h1 {
+  font-size: clamp(2.5rem, 7vw, 5rem);
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  font-size: clamp(1.6rem, 4vw, 2.5rem);
+}
+
+h3 {
+  font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+}
+
+p {
+  margin: 0 0 1rem;
+}
+
+a {
+  color: inherit;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* --- Layout-Hilfen --- */
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 5vw, 2.5rem);
+}
+
+.section {
+  padding-block: var(--space-section);
+}
+
+.section--muted {
+  background: var(--color-surface);
+}
+
+.eyebrow {
+  display: inline-block;
+  font-size: 0.8rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin-bottom: 1rem;
+}
+
+.lead {
+  font-size: clamp(1.1rem, 2vw, 1.35rem);
+  color: var(--color-text-muted);
+  max-width: 60ch;
+}
+
+/* --- Buttons --- */
+.btn {
+  display: inline-block;
+  padding: 0.85rem 1.6rem;
+  border-radius: 999px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.btn--primary {
+  background: var(--color-accent);
+  color: var(--color-accent-text);
+}
+
+.btn--primary:hover {
+  transform: translateY(-2px);
+}
+
+.btn--ghost {
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+}
+
+.btn--ghost:hover {
+  border-color: var(--color-accent);
+}
+
+/* --- Karten-Raster --- */
+.grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+@media (min-width: 720px) {
+  .grid--3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .grid--2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.card {
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 1.75rem;
+}
+
+.card__share {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-secondary);
+  letter-spacing: 0.05em;
+}
+
+/* --- Zugänglichkeit --- */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  * {
+    transition: none !important;
+  }
+}
