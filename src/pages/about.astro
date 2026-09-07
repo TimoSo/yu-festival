@@ -7,43 +7,50 @@ import { site } from '../data/site';
   title="About"
   description="Über das YU Festival – Haltung, Themen und Idee."
 >
-  <section class="section container narrow">
-    <p class="eyebrow">About</p>
-    <h1>Über das Festival</h1>
+  <section class="section section--lavender">
+    <div class="container narrow">
+      <p class="eyebrow">About</p>
+      <h1>Über das Festival</h1>
+      <p class="lead">
+        Das YU Festival ist ein Festival für digitale Medien. Es wirft einen
+        positiven, optimistischen und aufgeschlossenen Blick auf Digitalität –
+        ohne den kritischen Blick zu verlieren.
+      </p>
+    </div>
+  </section>
 
-    <p class="lead">
-      Das YU Festival ist ein Festival für digitale Medien. Es wirft einen
-      positiven, optimistischen und aufgeschlossenen Blick auf Digitalität –
-      ohne den kritischen Blick zu verlieren.
-    </p>
+  <section class="section">
+    <div class="container narrow">
+      <h2>Unsere Haltung</h2>
+      <p>
+        Im Zentrum stehen die Gestaltungsmöglichkeiten, die digitale Medien
+        eröffnen – für das Individuum genauso wie für das „Wir" als
+        Kollektivgedanken. Wir gehen kreativ, experimentell und verspielt mit
+        digitalen Elementen um und fragen: Wie wollen wir das Digitale gestalten?
+      </p>
 
-    <h2>Unsere Haltung</h2>
-    <p>
-      Im Zentrum stehen die <strong>Gestaltungsmöglichkeiten</strong>, die
-      digitale Medien eröffnen – für das Individuum genauso wie für das „Wir" als
-      Kollektivgedanken. Wir gehen kreativ, experimentell und verspielt mit
-      digitalen Elementen um und fragen: Wie wollen wir das Digitale gestalten?
-    </p>
+      <h2 style="margin-top: 2.5rem;">Drei Säulen</h2>
+      <p>
+        Inhaltlich teilt sich das Festival zu je einem Drittel in Diskurs,
+        Performance &amp; Musik und Workshops. So treffen Reflexion,
+        künstlerischer Ausdruck und eigenes Gestalten aufeinander.
+      </p>
+    </div>
+  </section>
 
-    <h2>Drei Säulen</h2>
-    <p>
-      Inhaltlich teilt sich das Festival zu je einem Drittel in
-      <span class="text-weintor">Diskurs</span>,
-      <span class="text-petrol">Performance &amp; Musik</span> und
-      <strong>Workshops</strong>. So treffen Reflexion, künstlerischer Ausdruck
-      und eigenes Gestalten aufeinander.
-    </p>
+  <section class="section section--lime">
+    <div class="container narrow">
+      <h2>Eckdaten</h2>
+      <dl class="facts">
+        <div><dt>Termin</dt><dd>{site.date}</dd></div>
+        <div><dt>Ort</dt><dd>{site.location}</dd></div>
+        <div><dt>Eintritt</dt><dd>frei</dd></div>
+      </dl>
 
-    <h2>Eckdaten</h2>
-    <dl class="facts">
-      <div><dt>Termin</dt><dd>{site.date}</dd></div>
-      <div><dt>Ort</dt><dd>{site.location}</dd></div>
-      <div><dt>Eintritt</dt><dd>frei</dd></div>
-    </dl>
-
-    <p style="margin-top: 2.5rem;">
-      <a class="btn btn--primary" href="/programm">Zum Programm →</a>
-    </p>
+      <p style="margin-top: 2.5rem;">
+        <a class="btn btn--primary" href="/programm">Zum Programm</a>
+      </p>
+    </div>
   </section>
 </BaseLayout>
 
@@ -51,25 +58,25 @@ import { site } from '../data/site';
   .facts {
     display: grid;
     gap: 0.75rem;
-    margin: 1rem 0 0;
+    margin: 1.5rem 0 0;
   }
   .facts > div {
     display: flex;
+    flex-wrap: wrap;
     gap: 1rem;
-    border-bottom: 1px solid var(--color-border);
+    border-bottom: 3px solid color-mix(in srgb, var(--deep-purple) 25%, transparent);
     padding-bottom: 0.6rem;
   }
   .facts dt {
-    font-family: var(--font-mono);
-    font-size: 0.85rem;
+    font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: var(--color-petrol);
+    font-size: 0.85rem;
     min-width: 7rem;
     margin: 0;
   }
   .facts dd {
     margin: 0;
-    font-weight: 600;
+    font-weight: 800;
   }
 </style>

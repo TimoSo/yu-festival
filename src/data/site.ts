@@ -39,19 +39,19 @@ export const pillars: {
     title: 'Diskurs',
     share: '33 %',
     text: 'Talks, Panels und Gespräche über die Gestaltungsmöglichkeiten digitaler Medien – für das Individuum und für das „Wir" als Kollektivgedanken.',
-    accent: 'var(--accent-violet)',
+    accent: 'var(--lavender)',
   },
   {
     title: 'Performance & Musik',
     share: '33 %',
     text: 'Bühne frei für audiovisuelle Performances, Konzerte und Klangwelten, die digitale Medien erfahrbar machen.',
-    accent: 'var(--accent-pink)',
+    accent: 'var(--coral)',
   },
   {
     title: 'Workshops',
     share: '33 %',
     text: 'Selbst gestalten, ausprobieren, mitmachen – Workshops in Kooperation mit dem kiU und dem KoLab.',
-    accent: 'var(--accent-green)',
+    accent: 'var(--lime)',
   },
 ];
 

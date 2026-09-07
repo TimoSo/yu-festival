@@ -1,47 +1,47 @@
 /* ============================================================
-   GLOBALE STYLES & DESIGN-TOKENS  ·  YU Festival
+   YU FESTIVAL – DESIGN-SYSTEM (CI v2)
    ------------------------------------------------------------
-   CI-Idee (laut Briefing): positiver, experimenteller, ver-
-   spielter Blick auf Digitalität. Statt schwarzer Texte mit
-   FARBKONTRASTEN arbeiten. Fotos in Graustufen/Duoton.
-   Alle Farben & Schriften stehen als Variablen im :root-Block –
-   hier zentral anpassen, der Rest der Seite zieht nach.
-   (Schriften werden in BaseLayout.astro geladen.)
+   Umgesetzt nach "CI Preview". Formensprache: rund, flach,
+   kontrastreich. Farbflaechen ("Color-Blocking") statt Grau.
+   Schriften werden in BaseLayout.astro geladen.
    ============================================================ */
 
 :root {
-  /* === MARKENFARBEN === */
-  --color-white: #efede8; /* warmes Off-White – Grundfläche */
-  --color-weintor: #8b1d5c; /* Primär */
-  --color-petrol: #1c7a78; /* Sekundär */
-  --color-black: #1c1a17; /* warmes Schwarz – nur sparsam */
-
-  /* === LEUCHTENDE AKZENTE (Tupfer „zwischendurch") === */
-  --accent-pink: #f2588a;
-  --accent-violet: #7b5cff;
-  --accent-green: #3fb984;
-  --accent-yellow: #f2e25c;
-  --accent-blue: #5bb0ef;
+  /* === MARKENFARBEN (CI) === */
+  --lime: #c2ff55;
+  --lavender: #894ef7;
+  --deep-purple: #432494;
+  --coral: #f17569;
+  --black: #000000;
+  --white: #ffffff;
 
   /* === ROLLEN === */
-  --color-bg: var(--color-white);
-  --color-surface: #e8e3da; /* abgesetzte Bänder */
-  --color-surface-2: #fbfaf7; /* Karten (fast weiß) */
-  --color-text: #211019; /* tiefes Pflaumen-Schwarz (kein Rein-Schwarz) */
-  --color-text-muted: #6e5560; /* gedämpftes Pflaumen-Grau */
-  --color-primary: var(--color-weintor);
-  --color-secondary: var(--color-petrol);
-  --color-border: #d9d1c6;
-  --color-accent-text: var(--color-white); /* Text auf farbiger Fläche */
+  --color-bg: var(--white);
+  --color-fg: var(--black);
+  --color-primary: var(--lavender);
+  --color-accent: var(--lime);
 
-  /* === TYPOGRAFIE === */
-  --font-display: 'Space Grotesk Variable', system-ui, sans-serif;
-  --font-sans: 'Inter Variable', system-ui, -apple-system, sans-serif;
-  --font-mono: 'Space Mono', ui-monospace, 'SFMono-Regular', monospace;
+  /* Standardwerte fuer Sektionen (werden von .section--* ueberschrieben) */
+  --section-bg: transparent;
+  --section-fg: var(--color-fg);
+  --section-accent: var(--lavender);
+
+  /* === TYPOGRAFIE ===
+     Blob Regular            -> Baloo 2  (Headlines)
+     Helvetica Rounded Heavy -> Nunito 800 (Subline)
+     Helvetica Rounded Bold  -> Nunito 600/700 (Text)
+     Echte Lizenz-Fonts koennen hier 1:1 eingesetzt werden. */
+  --font-display: 'Baloo 2', 'Trebuchet MS', system-ui, sans-serif;
+  --font-sans: 'Nunito Variable', 'Trebuchet MS', system-ui, sans-serif;
+
+  /* === FORM === */
+  --radius: 28px;
+  --radius-sm: 16px;
+  --radius-pill: 999px;
+  --border-w: 4px;
 
   /* === LAYOUT === */
   --max-width: 1180px;
-  --radius: 16px;
   --space-section: clamp(3.5rem, 9vw, 7rem);
 
   color-scheme: light;
@@ -61,38 +61,44 @@ html {
 body {
   margin: 0;
   background: var(--color-bg);
-  color: var(--color-text);
+  color: var(--color-fg);
   font-family: var(--font-sans);
-  font-size: clamp(1rem, 0.97rem + 0.15vw, 1.08rem);
-  line-height: 1.65;
+  font-weight: 600; /* CI: Fliesstext in Rounded Bold */
+  font-size: clamp(1rem, 0.96rem + 0.2vw, 1.12rem);
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
 }
 
-/* Headlines sind farbig statt schwarz (CI-Kontrastidee) */
+/* Headlines: Blob-Ersatz, versal, sehr rund */
 h1,
 h2,
 h3,
 h4 {
   font-family: var(--font-display);
-  line-height: 1.05;
-  font-weight: 700;
-  margin: 0 0 0.5em;
-  letter-spacing: -0.02em;
+  font-weight: 800;
+  line-height: 1;
+  margin: 0 0 0.4em;
+  color: inherit;
   text-wrap: balance;
+  /* lange Wortketten ohne Leerzeichen (z. B. "Medien.Kunst.Diskurs")
+     duerfen notfalls umbrechen statt ueberzulaufen */
+  overflow-wrap: break-word;
+}
+
+h1,
+h2 {
+  text-transform: uppercase;
+  letter-spacing: 0.005em;
 }
 
 h1 {
-  font-size: clamp(2.6rem, 7vw, 5.5rem);
-  color: var(--color-primary);
+  font-size: clamp(2.8rem, 9vw, 6.5rem);
 }
 h2 {
-  font-size: clamp(1.7rem, 4vw, 2.8rem);
-  color: var(--color-primary);
+  font-size: clamp(2rem, 5vw, 3.5rem);
 }
 h3 {
-  font-size: clamp(1.2rem, 2.5vw, 1.6rem);
-  color: var(--color-text);
+  font-size: clamp(1.25rem, 2.4vw, 1.75rem);
 }
 
 p {
@@ -100,8 +106,9 @@ p {
 }
 
 a {
-  color: var(--color-secondary);
-  text-underline-offset: 0.2em;
+  color: inherit;
+  text-underline-offset: 0.25em;
+  text-decoration-thickness: 2px;
 }
 
 img {
@@ -109,7 +116,7 @@ img {
   display: block;
 }
 
-/* --- Layout-Hilfen --- */
+/* --- Layout --- */
 .container {
   width: 100%;
   max-width: var(--max-width);
@@ -117,84 +124,117 @@ img {
   padding-inline: clamp(1.25rem, 5vw, 2.5rem);
 }
 
+.narrow {
+  max-width: 780px;
+}
+
+/* --- Farbflaechen / Color-Blocking --- */
 .section {
   padding-block: var(--space-section);
+  background: var(--section-bg);
+  color: var(--section-fg);
+  position: relative;
 }
 
-.section--muted {
-  background: var(--color-surface);
+.section--lavender {
+  --section-bg: var(--lavender);
+  --section-fg: var(--white);
+  --section-accent: var(--lime);
+}
+.section--lime {
+  --section-bg: var(--lime);
+  --section-fg: var(--deep-purple);
+  --section-accent: var(--lavender);
+}
+.section--coral {
+  --section-bg: var(--coral);
+  --section-fg: var(--black); /* Weiss auf Coral haette zu wenig Kontrast */
+  --section-accent: var(--deep-purple);
+}
+.section--purple {
+  --section-bg: var(--deep-purple);
+  --section-fg: var(--white);
+  --section-accent: var(--lime);
 }
 
-.narrow {
-  max-width: 760px;
+.accent {
+  color: var(--section-accent);
 }
 
-/* Mono-„Eyebrow" – kleines Label über Überschriften */
+/* --- Eyebrow als Pille --- */
 .eyebrow {
-  display: inline-block;
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
-  letter-spacing: 0.18em;
+  /* block + fit-content: Pille umschliesst den Text, steht aber
+     immer auf einer eigenen Zeile (inline-block wuerde sie neben
+     das folgende Element rutschen lassen). */
+  display: block;
+  width: fit-content;
+  font-weight: 800;
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--color-secondary);
-  margin-bottom: 1rem;
+  padding: 0.35rem 0.9rem;
+  border-radius: var(--radius-pill);
+  background: var(--section-accent);
+  color: var(--section-bg, var(--white));
+  margin-bottom: 1.25rem;
 }
-
-.eyebrow::before {
-  content: '// ';
-  opacity: 0.6;
+/* auf weissem Grund braucht die Pille eine sichtbare Schriftfarbe */
+.section:not([class*='section--']) .eyebrow {
+  background: var(--lavender);
+  color: var(--white);
 }
 
 .lead {
-  font-size: clamp(1.15rem, 2vw, 1.4rem);
-  color: var(--color-text);
-  max-width: 62ch;
-  line-height: 1.5;
+  font-size: clamp(1.15rem, 2.2vw, 1.5rem);
+  font-weight: 800; /* CI: Subline in Rounded Heavy */
+  line-height: 1.3;
+  max-width: 60ch;
 }
 
-/* Farb-Utilities */
-.text-weintor {
-  color: var(--color-weintor);
-}
-.text-petrol {
-  color: var(--color-petrol);
-}
-
-/* --- Buttons --- */
+/* --- Buttons (Pillenform) --- */
 .btn {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.85rem 1.7rem;
-  border-radius: 999px;
-  font-family: var(--font-mono);
-  font-size: 0.9rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
+  padding: 0.9rem 1.9rem;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-sans);
+  font-weight: 800;
+  font-size: 1rem;
   text-decoration: none;
   cursor: pointer;
+  border: var(--border-w) solid transparent;
   transition: transform 0.15s ease, background 0.15s ease, color 0.15s ease;
+}
+.btn:hover {
+  transform: translate(-2px, -2px);
 }
 
 .btn--primary {
-  background: var(--color-weintor);
-  color: var(--color-accent-text);
+  background: var(--section-accent);
+  color: var(--section-bg);
+  border-color: var(--section-accent);
 }
-.btn--primary:hover {
-  transform: translateY(-2px);
-  background: var(--color-petrol);
+/* auf weissem Grund */
+.section:not([class*='section--']) .btn--primary,
+.btn--primary.btn--on-white {
+  background: var(--lavender);
+  color: var(--white);
+  border-color: var(--lavender);
 }
 
 .btn--ghost {
-  border: 2px solid var(--color-weintor);
-  color: var(--color-weintor);
+  border-color: currentColor;
+  color: inherit;
+  background: transparent;
 }
 .btn--ghost:hover {
-  background: var(--color-weintor);
-  color: var(--color-accent-text);
+  background: var(--section-accent);
+  color: var(--section-bg);
+  border-color: var(--section-accent);
 }
 
-/* --- Karten-Raster --- */
+/* --- Karten --- */
 .grid {
   display: grid;
   gap: 1.5rem;
@@ -209,86 +249,59 @@ img {
 }
 
 .card {
-  background: var(--color-surface-2);
-  border: 1px solid var(--color-border);
+  background: var(--white);
+  color: var(--black);
   border-radius: var(--radius);
   padding: 1.75rem;
-  transition: transform 0.15s ease, border-color 0.15s ease;
+  transition: transform 0.15s ease;
 }
 .card:hover {
-  transform: translateY(-3px);
-  border-color: var(--color-secondary);
+  transform: translate(-3px, -3px);
 }
 
-/* Mono-Label (Prozente, Rollen, Kategorien) */
+/* Karte mit dickem Rahmen statt Flaeche */
+.card--outline {
+  background: transparent;
+  color: inherit;
+  border: var(--border-w) solid currentColor;
+}
+
+/* --- Pillen-Label --- */
 .tag {
   display: inline-block;
-  font-family: var(--font-mono);
+  font-weight: 800;
   font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  color: var(--color-secondary);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-pill);
+  background: var(--lavender);
+  color: var(--white);
 }
 
-/* --- Bild-Treatment (Briefing: Graustufen / Duoton) --- */
-/* Platzhalter-Block, solange noch keine Fotos da sind */
+/* --- Bilder: runde Rahmen, Blob-Masken --- */
+.media {
+  border-radius: var(--radius);
+  overflow: hidden;
+}
 .media-placeholder {
   aspect-ratio: 4 / 3;
   border-radius: var(--radius);
   display: grid;
   place-items: center;
-  font-family: var(--font-mono);
+  font-weight: 800;
   font-size: 0.8rem;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--color-white);
-  background:
-    repeating-linear-gradient(
-      45deg,
-      color-mix(in srgb, var(--color-weintor) 88%, black),
-      color-mix(in srgb, var(--color-weintor) 88%, black) 10px,
-      var(--color-weintor) 10px,
-      var(--color-weintor) 20px
-    );
+  background: var(--lavender);
+  color: var(--lime);
+}
+/* organische Maske im Stil der CI-Moods */
+.media--blob {
+  border-radius: 48% 52% 46% 54% / 54% 46% 54% 46%;
 }
 
-/* Echte Fotos später: Graustufen + optionaler Duoton-Tint.
-   Anwendung:  <div class="duotone"><img src="…" alt="…"></div> */
-.media-grayscale img {
-  filter: grayscale(1) contrast(1.05);
-}
-.duotone {
-  position: relative;
-  overflow: hidden;
-  border-radius: var(--radius);
-}
-.duotone img {
-  filter: grayscale(1) contrast(1.1);
-  display: block;
-  width: 100%;
-}
-.duotone::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  mix-blend-mode: color;
-  background: linear-gradient(
-    135deg,
-    var(--color-weintor),
-    var(--color-petrol)
-  );
-}
-
-/* --- Pixel-Textur (digitaler „Mosaik"-Look der Referenzen) --- */
-.pixel-bg {
-  background-image: radial-gradient(
-    color-mix(in srgb, var(--color-weintor) 22%, transparent) 1.5px,
-    transparent 1.6px
-  );
-  background-size: 14px 14px;
-}
-
-/* --- Zugänglichkeit --- */
+/* --- Zugaenglichkeit --- */
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -304,11 +317,12 @@ img {
 .skip-link {
   position: absolute;
   left: 1rem;
-  top: -3rem;
-  background: var(--color-weintor);
-  color: var(--color-white);
-  padding: 0.6rem 1rem;
-  border-radius: 0 0 8px 8px;
+  top: -4rem;
+  background: var(--deep-purple);
+  color: var(--white);
+  font-weight: 800;
+  padding: 0.7rem 1.2rem;
+  border-radius: 0 0 var(--radius-sm) var(--radius-sm);
   z-index: 100;
   transition: top 0.2s ease;
 }
@@ -317,8 +331,13 @@ img {
 }
 
 :focus-visible {
-  outline: 3px solid var(--color-petrol);
+  outline: 4px solid var(--lavender);
   outline-offset: 3px;
+  border-radius: 4px;
+}
+.section--lavender :focus-visible,
+.section--purple :focus-visible {
+  outline-color: var(--lime);
 }
 
 @media (prefers-reduced-motion: reduce) {

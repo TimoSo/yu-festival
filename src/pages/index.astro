@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
+import Deco from '../components/Deco.astro';
 import { pillars, partners } from '../data/site';
 ---
 
@@ -8,20 +9,21 @@ import { pillars, partners } from '../data/site';
   <Hero />
 
   <!-- Worum es geht -->
-  <section class="section container">
-    <p class="eyebrow">Worum es geht</p>
-    <h2>Digitale Medien gestalten – <span class="text-petrol">allein</span> und
-      <span class="text-weintor">gemeinsam</span></h2>
-    <p class="lead">
-      Das YU Festival beschäftigt sich mit digitalen Medien. Den kritischen Blick
-      vergessen wir nicht – unser Fokus liegt aber auf den
-      Gestaltungsmöglichkeiten, die das Individuum und das „Wir" als
-      Kollektivgedanken haben.
-    </p>
+  <section class="section">
+    <div class="container narrow">
+      <p class="eyebrow">Worum es geht</p>
+      <h2>Digitale Medien gestalten</h2>
+      <p class="lead">
+        Das YU Festival wirft einen positiven, aufgeschlossenen Blick auf
+        Digitalität. Den kritischen Blick vergessen wir nicht – unser Fokus liegt
+        aber auf den Gestaltungsmöglichkeiten, die das Individuum und das „Wir"
+        als Kollektivgedanken haben.
+      </p>
+    </div>
   </section>
 
   <!-- Die drei Säulen -->
-  <section class="section section--muted">
+  <section class="section section--lime">
     <div class="container">
       <p class="eyebrow">Drei Säulen, je ein Drittel</p>
       <h2>Diskurs · Performance &amp; Musik · Workshops</h2>
@@ -39,37 +41,60 @@ import { pillars, partners } from '../data/site';
     </div>
   </section>
 
-  <!-- Partner-Vorschau -->
-  <section class="section container">
-    <p class="eyebrow">In Kooperation mit</p>
-    <h2>Partner</h2>
-    <div class="grid grid--2" style="margin-top: 2.5rem;">
-      {
-        partners.map((partner) => (
-          <article class="card">
-            <h3>{partner.name}</h3>
-            <p class="tag">{partner.role}</p>
-            <p>{partner.description}</p>
-          </article>
-        ))
-      }
+  <!-- Partner -->
+  <section class="section section--coral">
+    <div class="container">
+      <div class="partner-head">
+        <div>
+          <p class="eyebrow">In Kooperation mit</p>
+          <h2>Partner</h2>
+        </div>
+        <div class="partner-squiggle">
+          <Deco shape="squiggle" width="200px" />
+        </div>
+      </div>
+
+      <div class="grid grid--2" style="margin-top: 2rem;">
+        {
+          partners.map((partner) => (
+            <article class="card">
+              <h3>{partner.name}</h3>
+              <p class="tag">{partner.role}</p>
+              <p style="margin-top: 0.75rem;">{partner.description}</p>
+            </article>
+          ))
+        }
+      </div>
+
+      <p style="margin-top: 2.5rem;">
+        <a class="btn btn--ghost" href="/partner">Alle Partner ansehen</a>
+      </p>
     </div>
-    <p style="margin-top: 2rem;">
-      <a class="btn btn--ghost" href="/partner">Alle Partner ansehen</a>
-    </p>
   </section>
 </BaseLayout>
 
 <style>
   .pillar {
-    border-top: 4px solid var(--pillar);
+    border-bottom: 10px solid var(--pillar);
   }
   .pillar__share {
     display: inline-block;
-    font-family: var(--font-mono);
-    font-weight: 700;
-    font-size: 1.1rem;
-    color: var(--pillar);
-    margin-bottom: 0.5rem;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 2rem;
+    line-height: 1;
+    color: var(--deep-purple);
+    margin-bottom: 0.35rem;
+  }
+
+  .partner-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+  .partner-squiggle {
+    color: var(--deep-purple);
   }
 </style>

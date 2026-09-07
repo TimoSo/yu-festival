@@ -11,46 +11,67 @@ export function getStaticPaths() {
 }
 
 const { event } = Astro.props;
+
+const accents: Record<string, string> = {
+  Diskurs: 'var(--lavender)',
+  'Performance & Musik': 'var(--coral)',
+  Workshop: 'var(--lime)',
+};
+const accent = accents[event.category] ?? 'var(--lavender)';
 ---
 
 <BaseLayout title={event.title} description={event.description}>
-  <article class="section container narrow">
-    <p class="eyebrow">{event.category}</p>
-    <h1>{event.title}</h1>
+  <section class="section section--purple">
+    <div class="container narrow">
+      <p class="eyebrow">{event.category}</p>
+      <h1>{event.title}</h1>
+      {event.guest && <p class="lead">mit {event.guest}</p>}
+    </div>
+  </section>
 
-    <div class="media-placeholder event-hero">Bild folgt</div>
+  <article class="section" style={`--cat:${accent}`}>
+    <div class="container narrow">
+      <div class="media-placeholder event-hero">Bild folgt</div>
 
-    {event.guest && (
-      <p class="event-guest">mit <strong>{event.guest}</strong></p>
-    )}
+      <p class="lead">{event.description}</p>
 
-    <p class="lead">{event.description}</p>
+      {
+        event.bio && (
+          <section class="bio">
+            <h2>Zur Person</h2>
+            <p>{event.bio}</p>
+          </section>
+        )
+      }
 
-    {event.bio && (
-      <section style="margin-top: 2rem;">
-        <h2>Zur Person</h2>
-        <p>{event.bio}</p>
-      </section>
-    )}
+      {
+        event.partner && (
+          <p style="margin-top: 2rem;">
+            <span class="tag">In Kooperation mit {event.partner}</span>
+          </p>
+        )
+      }
 
-    {event.partner && (
-      <p class="tag" style="margin-top: 2rem;">In Kooperation mit {event.partner}</p>
-    )}
-
-    <p style="margin-top: 2.5rem;">
-      <a class="btn btn--ghost" href="/programm">← Zurück zum Programm</a>
-    </p>
+      <p style="margin-top: 2.5rem;">
+        <a class="btn btn--primary btn--on-white" href="/programm">
+          ← Zurück zum Programm
+        </a>
+      </p>
+    </div>
   </article>
 </BaseLayout>
 
 <style>
   .event-hero {
     aspect-ratio: 16 / 9;
-    margin: 1.5rem 0;
+    margin-bottom: 2rem;
+    background: var(--cat);
+    color: var(--deep-purple);
   }
-  .event-guest {
-    font-family: var(--font-mono);
-    color: var(--color-petrol);
-    font-size: 1rem;
+  .bio {
+    margin-top: 2.5rem;
+  }
+  .bio h2 {
+    color: var(--deep-purple);
   }
 </style>

@@ -1,0 +1,63 @@
+---
+// Gestaltungselemente aus der CI: Mäander-Band, Zahn-Kapsel, Pille.
+// Alle einfarbig über `currentColor` – Farbe kommt vom Elternelement.
+interface Props {
+  shape?: 'squiggle' | 'capsule' | 'pill';
+  width?: string;
+  class?: string;
+}
+const { shape = 'squiggle', width, class: className } = Astro.props;
+---
+
+<span
+  class:list={['deco', className]}
+  style={width ? `width:${width}` : undefined}
+  aria-hidden="true"
+>
+  {
+    shape === 'squiggle' && (
+      <svg viewBox="0 0 300 90" fill="none" stroke="currentColor" stroke-width="26" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M15 74V44h55v30h55V44h55v30h55V44h45" />
+      </svg>
+    )
+  }
+  {
+    shape === 'capsule' && (
+      <svg viewBox="0 0 240 160" fill="currentColor">
+        {/* Zähne oben und unten */}
+        <circle cx="60" cy="45" r="25" />
+        <circle cx="105" cy="45" r="25" />
+        <circle cx="150" cy="45" r="25" />
+        <circle cx="195" cy="45" r="25" />
+        <circle cx="60" cy="115" r="25" />
+        <circle cx="105" cy="115" r="25" />
+        <circle cx="150" cy="115" r="25" />
+        <circle cx="195" cy="115" r="25" />
+        {/* Körper */}
+        <rect x="25" y="45" width="190" height="70" rx="35" />
+        {/* innere Öffnung */}
+        <rect x="88" y="68" width="80" height="24" rx="12" fill="var(--deco-inner, var(--lavender))" />
+      </svg>
+    )
+  }
+  {
+    shape === 'pill' && (
+      <svg viewBox="0 0 120 220" fill="currentColor">
+        <rect x="0" y="0" width="120" height="220" rx="60" />
+      </svg>
+    )
+  }
+</span>
+
+<style>
+  .deco {
+    display: inline-block;
+    line-height: 0;
+    color: inherit;
+  }
+  .deco svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+</style>

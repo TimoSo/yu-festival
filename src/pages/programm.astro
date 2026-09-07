@@ -4,9 +4,9 @@ import { events } from '../data/site';
 
 const categories = ['Diskurs', 'Performance & Musik', 'Workshop'] as const;
 const accents: Record<(typeof categories)[number], string> = {
-  Diskurs: 'var(--accent-violet)',
-  'Performance & Musik': 'var(--accent-pink)',
-  Workshop: 'var(--accent-green)',
+  Diskurs: 'var(--lavender)',
+  'Performance & Musik': 'var(--coral)',
+  Workshop: 'var(--lime)',
 };
 ---
 
@@ -14,35 +14,40 @@ const accents: Record<(typeof categories)[number], string> = {
   title="Programm"
   description="Das Programm des YU Festivals: Diskurs, Performance & Musik und Workshops – mit Kurzbeschreibungen und Gast-Bios."
 >
-  <section class="section container">
-    <p class="eyebrow">Programm</p>
-    <h1>Programm</h1>
-    <p class="lead">
-      Das Programm verteilt sich zu je einem Drittel auf Diskurs, Performance &amp;
-      Musik und Workshops. Klick auf eine Veranstaltung für Details und Gast-Infos.
-    </p>
+  <section class="section section--lavender">
+    <div class="container">
+      <p class="eyebrow">Programm</p>
+      <h1>Programm</h1>
+      <p class="lead">
+        Je ein Drittel Diskurs, Performance &amp; Musik und Workshops. Klick auf
+        eine Veranstaltung für Details und Gast-Infos.
+      </p>
+    </div>
   </section>
 
   {
     categories.map((cat) => {
       const items = events.filter((e) => e.category === cat);
       return (
-        <section class="section container" style={`--cat: ${accents[cat]}`}>
-          <h2 class="cat-head">
-            <span class="cat-bar" />
-            {cat}
-          </h2>
-          <div class="grid grid--3" style="margin-top: 1.5rem;">
-            {items.map((event) => (
-              <a class="event-card" href={`/programm/${event.slug}`}>
-                <div class="media-placeholder">Bild folgt</div>
-                <p class="tag">{event.category}</p>
-                <h3>{event.title}</h3>
-                {event.guest && <p class="event-card__guest">mit {event.guest}</p>}
-                <p class="event-card__desc">{event.description}</p>
-                <span class="event-card__more">Mehr →</span>
-              </a>
-            ))}
+        <section class="section cat" style={`--cat: ${accents[cat]}`}>
+          <div class="container">
+            <h2 class="cat__head">
+              <span class="cat__bar" />
+              {cat}
+            </h2>
+            <div class="grid grid--3" style="margin-top: 1.75rem;">
+              {items.map((event) => (
+                <a class="event-card" href={`/programm/${event.slug}`}>
+                  <div class="media-placeholder event-card__media">Bild folgt</div>
+                  <h3>{event.title}</h3>
+                  {event.guest && (
+                    <p class="event-card__guest">mit {event.guest}</p>
+                  )}
+                  <p class="event-card__desc">{event.description}</p>
+                  <span class="event-card__more">Mehr →</span>
+                </a>
+              ))}
+            </div>
           </div>
         </section>
       );
@@ -51,55 +56,62 @@ const accents: Record<(typeof categories)[number], string> = {
 </BaseLayout>
 
 <style>
-  .cat-head {
+  .cat {
+    padding-block: clamp(2.5rem, 6vw, 4rem);
+  }
+
+  .cat__head {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 1rem;
+    color: var(--deep-purple);
   }
-  .cat-bar {
-    width: 2.5rem;
-    height: 0.4rem;
-    border-radius: 999px;
+  .cat__bar {
+    display: inline-block;
+    width: 3.5rem;
+    height: 1rem;
+    border-radius: var(--radius-pill);
     background: var(--cat);
+    flex-shrink: 0;
   }
 
   .event-card {
     display: flex;
     flex-direction: column;
-    background: var(--color-surface-2);
-    border: 1px solid var(--color-border);
+    border: var(--border-w) solid var(--cat);
     border-radius: var(--radius);
     padding: 1rem;
     text-decoration: none;
-    color: inherit;
-    transition: transform 0.15s ease, border-color 0.15s ease;
+    color: var(--black);
+    background: var(--white);
+    transition: transform 0.15s ease, background 0.15s ease;
   }
   .event-card:hover {
-    transform: translateY(-3px);
-    border-color: var(--cat);
+    transform: translate(-3px, -3px);
+    background: color-mix(in srgb, var(--cat) 14%, var(--white));
   }
-  .event-card .media-placeholder {
+
+  .event-card__media {
+    aspect-ratio: 16 / 10;
     margin-bottom: 1rem;
+    background: var(--cat);
+    color: var(--deep-purple);
   }
+
   .event-card h3 {
-    margin: 0.15rem 0 0.35rem;
+    margin-bottom: 0.35rem;
   }
   .event-card__guest {
-    font-family: var(--font-mono);
-    font-size: 0.85rem;
-    color: var(--color-petrol);
+    font-weight: 800;
+    color: var(--lavender);
     margin: 0 0 0.5rem;
   }
   .event-card__desc {
-    color: var(--color-text-muted);
-    font-size: 0.95rem;
     flex-grow: 1;
+    margin-bottom: 0.75rem;
   }
   .event-card__more {
-    font-family: var(--font-mono);
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: var(--color-weintor);
-    margin-top: 0.5rem;
+    font-weight: 800;
+    color: var(--deep-purple);
   }
 </style>

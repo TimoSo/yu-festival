@@ -17,6 +17,14 @@ npm-debug.log*
 .env.*
 !.env.example
 
+# Kommerzielle Schriftdateien – bewusst NICHT im Repo.
+# "Helvetica Rounded LT Std" und "Blob" sind lizenzpflichtig. Einchecken
+# wuerde sie ueber GitHub verteilen; aus public/ waeren sie zusaetzlich
+# frei herunterladbar. Sobald eine Webfont-Lizenz vorliegt: Zeilen
+# entfernen, Dateien nach public/fonts/ legen und per @font-face einbinden.
+public/*.otf
+public/*.ttf
+
 # Betriebssystem / Editor / Tools
 .DS_Store
 Thumbs.db

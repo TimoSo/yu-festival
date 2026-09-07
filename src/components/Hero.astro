@@ -1,103 +1,80 @@
 ---
 import { site } from '../data/site';
+import Logo from './Logo.astro';
+import Deco from './Deco.astro';
 ---
 
-<section class="hero pixel-bg">
-  <div class="container">
-    <p class="hero__alt">{site.subtitleAlt}</p>
-    <h1 class="hero__title">
-      <span class="hero__yu">YU</span><span class="hero__fest">Festival</span>
-    </h1>
-    <p class="hero__subtitle">
-      Medien<span class="dot">.</span>Kunst<span class="dot">.</span>Diskurs
-    </p>
-    <p class="lead hero__lead">
-      Ein Festival für digitale Medien – mit kritischem Blick, aber vor allem mit
-      <em>Gestaltungslust</em>. Es geht um die Möglichkeiten, die das Individuum
-      und das „Wir" als Kollektiv in die Hand nehmen.
-    </p>
-    <div class="hero__actions">
-      <a class="btn btn--primary" href="/programm">Zum Programm →</a>
-      <a class="btn btn--ghost" href="/about">Über das Festival</a>
+<section class="section section--lavender hero">
+  <div class="container hero__inner">
+    <div class="hero__content">
+      <p class="eyebrow">{site.subtitleAlt}</p>
+
+      <div class="hero__logo">
+        <Logo variant="stacked" width="min(340px, 70vw)" />
+      </div>
+
+      {/* <wbr> erlaubt saubere Umbruchstellen nach den Punkten */}
+      <h1 class="hero__title">
+        Medien<span class="dot">.</span><wbr />Kunst<span class="dot">.</span><wbr
+        />Diskurs
+      </h1>
+
+      <p class="lead hero__lead">
+        Ein Festival für digitale Medien – mit kritischem Blick, aber vor allem
+        mit Gestaltungslust. Es geht um die Möglichkeiten, die das Individuum
+        und das „Wir" als Kollektiv in die Hand nehmen.
+      </p>
+
+      <div class="hero__actions">
+        <a class="btn btn--primary" href="/programm">Zum Programm</a>
+        <a class="btn btn--ghost" href="/about">Über das Festival</a>
+      </div>
+
+      {site.free && <p class="hero__free">Eintritt frei</p>}
     </div>
-    {site.free && <p class="hero__free">★ Eintritt frei</p>}
+
+    <div class="hero__deco" aria-hidden="true">
+      <div class="hero__capsule">
+        <Deco shape="capsule" width="min(260px, 45vw)" />
+      </div>
+      <div class="hero__squiggle">
+        <Deco shape="squiggle" width="min(320px, 60vw)" />
+      </div>
+    </div>
   </div>
 </section>
 
 <style>
   .hero {
-    padding-block: clamp(4rem, 12vw, 8rem);
-    background-color: var(--color-bg);
-    position: relative;
     overflow: hidden;
   }
-  /* farbige Lichtschleier zusätzlich zur Pixel-Textur */
-  .hero::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background:
-      radial-gradient(
-        50% 60% at 88% -10%,
-        color-mix(in srgb, var(--color-petrol) 28%, transparent),
-        transparent
-      ),
-      radial-gradient(
-        45% 55% at -5% 110%,
-        color-mix(in srgb, var(--color-weintor) 24%, transparent),
-        transparent
-      );
-    pointer-events: none;
+
+  .hero__inner {
+    display: grid;
+    gap: 2.5rem;
+    align-items: center;
   }
-  .hero .container {
-    position: relative;
+  @media (min-width: 1000px) {
+    .hero__inner {
+      grid-template-columns: 1fr auto;
+    }
   }
 
-  .hero__alt {
-    font-family: var(--font-mono);
-    font-size: 0.85rem;
-    letter-spacing: 0.25em;
-    color: var(--color-petrol);
-    margin-bottom: 1.25rem;
+  .hero__logo {
+    color: var(--white);
+    line-height: 0;
+    margin-bottom: 1.75rem;
   }
 
   .hero__title {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 0.15em 0.3em;
-    font-size: clamp(3.5rem, 13vw, 9rem);
-    margin: 0;
-    line-height: 0.92;
+    margin-bottom: 1.25rem;
   }
-  .hero__yu {
-    color: var(--color-weintor);
-    letter-spacing: -0.03em;
-  }
-  /* gemischter Schnitt – „spiel mit typografien" */
-  .hero__fest {
-    color: var(--color-petrol);
-    font-style: italic;
-    font-weight: 500;
-  }
-
-  .hero__subtitle {
-    font-family: var(--font-display);
-    font-size: clamp(1.3rem, 3vw, 2.1rem);
-    font-weight: 500;
-    color: var(--color-text);
-    margin: 0.5rem 0 1.5rem;
-  }
-  .hero__subtitle .dot {
-    color: var(--accent-pink);
+  .hero__title .dot {
+    color: var(--lime);
   }
 
   .hero__lead {
     margin-bottom: 2rem;
-  }
-  .hero__lead em {
-    color: var(--color-weintor);
-    font-style: italic;
   }
 
   .hero__actions {
@@ -107,11 +84,38 @@ import { site } from '../data/site';
   }
 
   .hero__free {
-    margin-top: 1.75rem;
     display: inline-block;
-    font-family: var(--font-mono);
-    font-weight: 700;
-    color: var(--color-weintor);
-    letter-spacing: 0.05em;
+    margin-top: 1.75rem;
+    padding: 0.5rem 1.25rem;
+    border-radius: var(--radius-pill);
+    background: var(--lime);
+    color: var(--deep-purple);
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+  }
+
+  .hero__deco {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+  }
+  .hero__capsule {
+    color: var(--lime);
+    --deco-inner: var(--lavender);
+  }
+  .hero__squiggle {
+    color: var(--coral);
+  }
+
+  @media (max-width: 999px) {
+    .hero__deco {
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+      flex-wrap: wrap;
+    }
   }
 </style>

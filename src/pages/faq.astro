@@ -26,47 +26,53 @@ const faqs: { q: string; a: string }[] = [
 ---
 
 <BaseLayout title="FAQ" description="Häufig gestellte Fragen zum YU Festival.">
-  <section class="section container narrow">
-    <p class="eyebrow">FAQ</p>
-    <h1>Häufige Fragen</h1>
-    <p class="lead">
-      Die wichtigsten Antworten auf einen Blick. Fehlt etwas? Dann ergänzen wir es
-      hier.
-    </p>
+  <section class="section section--lime">
+    <div class="container narrow">
+      <p class="eyebrow">FAQ</p>
+      <h1>Häufige Fragen</h1>
+      <p class="lead">
+        Die wichtigsten Antworten auf einen Blick. Fehlt etwas? Dann ergänzen wir
+        es hier.
+      </p>
+    </div>
+  </section>
 
-    <div class="faq-list">
-      {
-        faqs.map((item) => (
-          <details class="faq-item">
-            <summary>{item.q}</summary>
-            <p>{item.a}</p>
-          </details>
-        ))
-      }
+  <section class="section">
+    <div class="container narrow">
+      <div class="faq-list">
+        {
+          faqs.map((item) => (
+            <details class="faq-item">
+              <summary>{item.q}</summary>
+              <p>{item.a}</p>
+            </details>
+          ))
+        }
+      </div>
     </div>
   </section>
 </BaseLayout>
 
 <style>
   .faq-list {
-    margin-top: 2.5rem;
     display: grid;
-    gap: 0.75rem;
+    gap: 1rem;
   }
 
   .faq-item {
-    background: var(--color-surface-2);
-    border: 1px solid var(--color-border);
+    border: var(--border-w) solid var(--lavender);
     border-radius: var(--radius);
     padding: 0 1.5rem;
+    background: var(--white);
   }
 
   .faq-item summary {
     cursor: pointer;
     font-family: var(--font-display);
-    font-weight: 600;
-    font-size: 1.05rem;
-    color: var(--color-text);
+    font-weight: 800;
+    font-size: 1.2rem;
+    line-height: 1.2;
+    color: var(--deep-purple);
     padding: 1.25rem 0;
     list-style: none;
     display: flex;
@@ -79,8 +85,15 @@ const faqs: { q: string; a: string }[] = [
   }
   .faq-item summary::after {
     content: '+';
-    color: var(--color-petrol);
-    font-size: 1.5rem;
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: var(--radius-pill);
+    background: var(--lavender);
+    color: var(--white);
+    font-size: 1.4rem;
     line-height: 1;
     transition: transform 0.2s ease;
   }
@@ -90,7 +103,6 @@ const faqs: { q: string; a: string }[] = [
 
   .faq-item p {
     margin: 0;
-    padding-bottom: 1.25rem;
-    color: var(--color-text-muted);
+    padding-bottom: 1.5rem;
   }
 </style>

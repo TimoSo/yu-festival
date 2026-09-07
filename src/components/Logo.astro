@@ -1,0 +1,54 @@
+---
+// YU-Festival-Logo in vier Varianten.
+// Die SVGs stammen 1:1 aus der CI-PDF (Vektor) und sind einfarbig:
+// Farbe kommt per CSS (`color`), da sie fill="currentColor" nutzen.
+import horizontal from '../../public/images/logo/logo-horizontal.svg?raw';
+import primary from '../../public/images/logo/logo-primary.svg?raw';
+import stacked from '../../public/images/logo/logo-stacked.svg?raw';
+import yu from '../../public/images/logo/logo-yu.svg?raw';
+
+interface Props {
+  /** horizontal = Wortmarke im Rahmen (Header) · primary = Badge ·
+   *  stacked = YU über FESTIVAL · yu = nur das Signet */
+  variant?: 'horizontal' | 'primary' | 'stacked' | 'yu';
+  /** Breite als CSS-Wert, z. B. "180px" oder "12rem" */
+  width?: string;
+  label?: string;
+  class?: string;
+}
+
+const {
+  variant = 'horizontal',
+  width,
+  label = 'YU Festival',
+  class: className,
+} = Astro.props;
+
+const sources = { horizontal, primary, stacked, yu };
+// Rolle wandert auf den Wrapper – das innere SVG ist rein dekorativ.
+const svg = sources[variant].replace(
+  'role="img"',
+  'aria-hidden="true" focusable="false"'
+);
+---
+
+<span
+  class:list={['logo', className]}
+  role="img"
+  aria-label={label}
+  style={width ? `width:${width}` : undefined}
+  set:html={svg}
+/>
+
+<style>
+  .logo {
+    display: inline-block;
+    line-height: 0;
+    color: inherit;
+  }
+  .logo :global(svg) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+</style>

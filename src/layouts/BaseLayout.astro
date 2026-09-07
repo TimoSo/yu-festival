@@ -4,10 +4,11 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 
 // Selbst gehostete Web-Schriften (Fontsource)
-import '@fontsource-variable/space-grotesk';
-import '@fontsource-variable/inter';
-import '@fontsource/space-mono/400.css';
-import '@fontsource/space-mono/700.css';
+// Baloo 2 = Ersatz für "Blob Regular" (Headlines)
+// Nunito  = Ersatz für "Helvetica Rounded LT Std" (Subline/Text)
+import '@fontsource/baloo-2/700.css';
+import '@fontsource/baloo-2/800.css';
+import '@fontsource-variable/nunito';
 import '../styles/global.css';
 
 interface Props {
@@ -30,7 +31,7 @@ const pageTitle = title
     <meta name="generator" content={Astro.generator} />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#8b1d5c" />
+    <meta name="theme-color" content="#894ef7" />
     <!-- Open Graph (Social Sharing) -->
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />

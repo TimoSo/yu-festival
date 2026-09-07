@@ -24,30 +24,37 @@ Weitere Befehle:
 
 ```text
 B:\YU_Festival
-├── public/                  # statische Dateien (1:1 ausgeliefert)
-│   ├── favicon.svg          # Favicon (Weintor-Kachel)
-│   └── images/              # Bilder, Logos, Grafiken
+├── public/
+│   ├── favicon.svg              # YU-Signet auf Lavendel
+│   └── images/
+│       └── logo/                # Logo als Vektor, 4 Varianten
+│           ├── logo-primary.svg     # Badge: YU + FESTIVAL im Rahmen
+│           ├── logo-horizontal.svg  # Querformat (Header)
+│           ├── logo-stacked.svg     # YU über FESTIVAL, ohne Rahmen
+│           └── logo-yu.svg          # nur das Signet
 ├── src/
-│   ├── components/          # wiederverwendbare Bausteine
+│   ├── components/
+│   │   ├── Logo.astro       # Logo-Komponente (variant/width/label)
+│   │   ├── Deco.astro       # Gestaltungselemente: Mäander, Zahn-Kapsel, Pille
 │   │   ├── Header.astro     # Logo + Navigation (mobil + aktiver Reiter)
 │   │   ├── Footer.astro
-│   │   └── Hero.astro       # großer Kopfbereich der Startseite
+│   │   └── Hero.astro
 │   ├── data/
 │   │   └── site.ts          # ★ zentrale Inhalte: Navigation, Säulen, Events, Partner
 │   ├── layouts/
-│   │   └── BaseLayout.astro # gemeinsames Grundgerüst (head, Fonts, Header, Footer)
+│   │   └── BaseLayout.astro # Grundgerüst (head, Fonts, Header, Footer)
 │   ├── pages/               # ★ jede Datei = eine URL/ein Reiter
-│   │   ├── index.astro          # Start / Landing Page   → /
-│   │   ├── programm.astro       # Programm-Übersicht      → /programm
-│   │   ├── programm/[slug].astro# Event-Detailseiten      → /programm/<event>
-│   │   ├── timetable.astro      # Ablauf / Timeline       → /timetable
-│   │   ├── partner.astro        # Partner                 → /partner
-│   │   ├── about.astro          # Über das Festival       → /about
-│   │   ├── awareness.astro      # Awareness               → /awareness
-│   │   ├── faq.astro            # FAQ                     → /faq
-│   │   └── kontakt.astro        # Kontakt                 → /kontakt
+│   │   ├── index.astro           # Start                  → /
+│   │   ├── programm.astro        # Programm-Übersicht     → /programm
+│   │   ├── programm/[slug].astro # Event-Detailseiten     → /programm/<event>
+│   │   ├── timetable.astro       # Ablauf / Timeline      → /timetable
+│   │   ├── partner.astro         # Partner                → /partner
+│   │   ├── about.astro           # Über das Festival      → /about
+│   │   ├── awareness.astro       # Awareness              → /awareness
+│   │   ├── faq.astro             # FAQ                    → /faq
+│   │   └── kontakt.astro         # Kontakt                → /kontakt
 │   └── styles/
-│       └── global.css       # ★ Design-Tokens (Farben/Schriften) – die CI
+│       └── global.css       # ★ Design-Tokens – die CI
 ├── astro.config.mjs
 ├── package.json
 └── tsconfig.json
@@ -56,42 +63,56 @@ B:\YU_Festival
 ## Häufige Aufgaben
 
 - **Texte/Programm ändern:** vieles steht zentral in `src/data/site.ts`
-  (Navigation, Säulen, Events inkl. Gast-Bios, Partner, Kontakt). Längere
-  Fließtexte direkt in den Dateien unter `src/pages/`.
+  (Navigation, Säulen, Events inkl. Gast-Bios, Partner, Kontakt).
 - **Event hinzufügen:** Eintrag im `events`-Array in `src/data/site.ts` ergänzen
   – Übersicht, Detailseite und Timetable werden automatisch erzeugt.
-- **Neuen Reiter hinzufügen:** Datei in `src/pages/` anlegen und im `nav`-Array
-  in `src/data/site.ts` eintragen.
-- **Bilder:** in `public/images/` ablegen und als `/images/datei.jpg` einbinden.
-  Für den Briefing-Look gibt es fertige Utilities: `.media-grayscale` (Graustufen)
-  und `.duotone` (Graustufen + Weintor/Petrol-Tint).
+- **Logo einsetzen:** `<Logo variant="horizontal" width="200px" />`. Das SVG ist
+  einfarbig (`fill="currentColor"`) – die Farbe kommt vom `color` des
+  Elternelements.
+- **Bilder:** in `public/images/` ablegen, einbinden als `/images/datei.jpg`.
+  Für den CI-Look gibt es `.media` (runder Rahmen) und `.media--blob`
+  (organische Maske wie in den Mood-Vorlagen).
 
-## CI / Design
+## CI
 
-Umgesetzt nach Briefing (positiv, experimentell, verspielt; Farbkontraste statt
-schwarzer Texte; Fotos in Graustufen/Duoton).
+Umgesetzt nach `YU_CI_small.pdf` (CI Preview): rund, flach, kontrastreich –
+Farbflächen statt Grau.
 
 **Farben** (CSS-Variablen im `:root`-Block in `src/styles/global.css`):
 
-| Rolle              | Farbe   | Hex                                   |
-| ------------------ | ------- | ------------------------------------- |
-| Hintergrund / Weiß | Weiß    | `#EFEDE8`                             |
-| Primär-Akzent      | Weintor | `#8B1D5C`                             |
-| Sekundär-Akzent    | Petrol  | `#1C7A78`                             |
-| Text               | Schwarz | `#211019` (Pflaumen-Schwarz)          |
-| Leuchtende Akzente  | div.    | Pink, Violett, Grün, Gelb, Blau       |
+| Name        | Hex       | Einsatz                              |
+| ----------- | --------- | ------------------------------------ |
+| Light Lime  | `#c2ff55` | Akzente, Flächen, aktive Zustände    |
+| Lavender    | `#894ef7` | Primärfarbe, Hero, Rahmen            |
+| Deep Purple | `#432494` | Header/Footer, Headlines auf Hell    |
+| Pure Coral  | `#f17569` | Akzentfläche                         |
+| Deep Black  | `#000000` | Fließtext                            |
+| White       | `#ffffff` | Grundfläche, Text auf Dunkel         |
 
-**Schriften** (selbst gehostet via Fontsource, in `BaseLayout.astro` geladen):
+Farbflächen setzt man per Klasse: `.section--lavender`, `.section--lime`,
+`.section--coral`, `.section--purple`. Jede Fläche definiert Text- und
+Akzentfarbe automatisch mit.
 
-- `Space Grotesk` – Headlines / Display (`--font-display`)
-- `Inter` – Fließtext (`--font-sans`)
-- `Space Mono` – Labels, Zeiten, Untertitel (`--font-mono`)
+> Hinweis zum Kontrast: Auf Coral steht der Text **schwarz**, nicht weiß –
+> Weiß auf Coral erreicht nur ~2,8:1 und wäre nicht barrierefrei lesbar.
 
-> Die Schriften sind lizenzfreie Web-Entsprechungen zu den Briefing-Beispielen
-> (Cybersky, Galiver etc.) und jederzeit austauschbar.
+**Schriften** (selbst gehostet via Fontsource, geladen in `BaseLayout.astro`):
+
+| CI-Vorgabe                   | aktuell eingesetzt | Rolle              |
+| ---------------------------- | ------------------ | ------------------ |
+| Blob Regular                 | **Baloo 2** (800)  | Headlines          |
+| Helvetica Rounded LT Heavy   | **Nunito** (800)   | Subline / Lead     |
+| Helvetica Rounded LT Bold    | **Nunito** (600)   | Fließtext          |
+
+> ⚠️ **Blob Regular** und **Helvetica Rounded LT Std** sind kommerzielle
+> Schriften und liegen nicht als Webfont-Lizenz vor. Aktuell laufen lizenzfreie
+> Entsprechungen mit gleichem Charakter (rund, geometrisch). Sobald die echten
+> Webfont-Dateien (`.woff2`) vorliegen, genügt es, sie einzubinden und
+> `--font-display` / `--font-sans` in `src/styles/global.css` umzustellen.
 
 ## Status
 
-Grundgerüst mit CI-Umsetzung (Farben, Schriften, Layout). Inhalte sind teils
-Platzhalter (als „tba" / „Platzhalter" markiert) und werden ergänzt. Noch offen:
-echtes Logo, finale Fotos, Anbindung des Kontaktformulars, echte Termine/Uhrzeiten.
+CI umgesetzt: Farben, Schriften, Logo, Formensprache, alle Seiten.
+Noch offen: echte Fotos, Termine/Uhrzeiten, Gast-Bios, Anbindung des
+Kontaktformulars, Lizenz-Webfonts. Platzhalter sind mit „tba“ bzw.
+„Platzhalter“ markiert.
