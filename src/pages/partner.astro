@@ -26,7 +26,7 @@ import { partners } from '../data/site';
             <article class="partner-card">
               <div class="partner-logo">{partner.name}</div>
               <div>
-                <h3>{partner.name}</h3>
+                <h3 class="brand-name">{partner.name}</h3>
                 <p class="tag">{partner.role}</p>
                 <p style="margin-top: 0.75rem;">{partner.description}</p>
                 {partner.url && (
@@ -58,8 +58,9 @@ import { partners } from '../data/site';
     border-radius: var(--radius-sm);
     background: var(--lavender);
     color: var(--white);
-    font-family: var(--font-display);
-    font-weight: 800;
+    /* bewusst nicht Blob: sonst wird aus "kiU" ein "KIU" */
+    font-family: var(--font-sans);
+    font-weight: 900;
     font-size: 1.3rem;
   }
   @media (max-width: 480px) {

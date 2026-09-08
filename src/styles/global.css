@@ -3,8 +3,35 @@
    ------------------------------------------------------------
    Umgesetzt nach "CI Preview". Formensprache: rund, flach,
    kontrastreich. Farbflaechen ("Color-Blocking") statt Grau.
-   Schriften werden in BaseLayout.astro geladen.
+   Schriften: Original-CI-Fonts, lokal als WOFF2 in public/fonts/.
    ============================================================ */
+
+/* ---- Schriften der CI (lokal gehostet, WOFF2) ----
+   Blob gibt es nur in EINEM Schnitt (400). Ihm fehlen einige Zeichen,
+   u. a. ss-Ligatur, & , % und typografische Anfuehrungszeichen. Fuer
+   solche Zeichen greift automatisch der naechste Font der Kette
+   (Helvetica Rounded) – deshalb steht der dort als Fallback. */
+@font-face {
+  font-family: 'Blob';
+  src: url('/fonts/blob-regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Helvetica Rounded LT Std';
+  src: url('/fonts/helvetica-rounded-bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Helvetica Rounded LT Std';
+  src: url('/fonts/helvetica-rounded-black.woff2') format('woff2');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
 
 :root {
   /* === MARKENFARBEN (CI) === */
@@ -26,13 +53,14 @@
   --section-fg: var(--color-fg);
   --section-accent: var(--lavender);
 
-  /* === TYPOGRAFIE ===
-     Blob Regular            -> Baloo 2  (Headlines)
-     Helvetica Rounded Heavy -> Nunito 800 (Subline)
-     Helvetica Rounded Bold  -> Nunito 600/700 (Text)
-     Echte Lizenz-Fonts koennen hier 1:1 eingesetzt werden. */
-  --font-display: 'Baloo 2', 'Trebuchet MS', system-ui, sans-serif;
-  --font-sans: 'Nunito Variable', 'Trebuchet MS', system-ui, sans-serif;
+  /* === TYPOGRAFIE (Original-Schriften der CI) ===
+     Blob Regular (400)              -> Headlines
+     Helvetica Rounded LT Std Black  (900) -> Subline / Lead
+     Helvetica Rounded LT Std Bold   (700) -> Fliesstext
+     Andere Gewichte gibt es nicht – nur 400 / 700 / 900 verwenden,
+     sonst rechnet der Browser einen unschoenen Fett-Schnitt hoch. */
+  --font-display: 'Blob', 'Helvetica Rounded LT Std', system-ui, sans-serif;
+  --font-sans: 'Helvetica Rounded LT Std', system-ui, sans-serif;
 
   /* === FORM === */
   --radius: 28px;
@@ -63,19 +91,19 @@ body {
   background: var(--color-bg);
   color: var(--color-fg);
   font-family: var(--font-sans);
-  font-weight: 600; /* CI: Fliesstext in Rounded Bold */
+  font-weight: 700; /* CI: Fliesstext in Rounded Bold */
   font-size: clamp(1rem, 0.96rem + 0.2vw, 1.12rem);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
 
-/* Headlines: Blob-Ersatz, versal, sehr rund */
+/* Headlines: Blob, versal */
 h1,
 h2,
 h3,
 h4 {
   font-family: var(--font-display);
-  font-weight: 800;
+  font-weight: 400; /* Blob: nur ein Schnitt */
   line-height: 1;
   margin: 0 0 0.4em;
   color: inherit;
@@ -168,7 +196,7 @@ img {
      das folgende Element rutschen lassen). */
   display: block;
   width: fit-content;
-  font-weight: 800;
+  font-weight: 900;
   font-size: 0.8rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -186,7 +214,7 @@ img {
 
 .lead {
   font-size: clamp(1.15rem, 2.2vw, 1.5rem);
-  font-weight: 800; /* CI: Subline in Rounded Heavy */
+  font-weight: 900; /* CI: Subline in Rounded Heavy */
   line-height: 1.3;
   max-width: 60ch;
 }
@@ -199,7 +227,7 @@ img {
   padding: 0.9rem 1.9rem;
   border-radius: var(--radius-pill);
   font-family: var(--font-sans);
-  font-weight: 800;
+  font-weight: 900;
   font-size: 1rem;
   text-decoration: none;
   cursor: pointer;
@@ -266,10 +294,18 @@ img {
   border: var(--border-w) solid currentColor;
 }
 
+/* Eigennamen (kiU, KoLab, ...) duerfen NICHT in Blob gesetzt werden:
+   Blob ist unicase, macht also "kiU" zu "KIU" und schreibt Marken falsch. */
+.brand-name {
+  font-family: var(--font-sans);
+  font-weight: 900;
+  text-transform: none;
+}
+
 /* --- Pillen-Label --- */
 .tag {
   display: inline-block;
-  font-weight: 800;
+  font-weight: 900;
   font-size: 0.78rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -289,7 +325,7 @@ img {
   border-radius: var(--radius);
   display: grid;
   place-items: center;
-  font-weight: 800;
+  font-weight: 900;
   font-size: 0.8rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -320,7 +356,7 @@ img {
   top: -4rem;
   background: var(--deep-purple);
   color: var(--white);
-  font-weight: 800;
+  font-weight: 900;
   padding: 0.7rem 1.2rem;
   border-radius: 0 0 var(--radius-sm) var(--radius-sm);
   z-index: 100;

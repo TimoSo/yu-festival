@@ -58,7 +58,7 @@ import { pillars, partners } from '../data/site';
         {
           partners.map((partner) => (
             <article class="card">
-              <h3>{partner.name}</h3>
+              <h3 class="brand-name">{partner.name}</h3>
               <p class="tag">{partner.role}</p>
               <p style="margin-top: 0.75rem;">{partner.description}</p>
             </article>
@@ -80,7 +80,7 @@ import { pillars, partners } from '../data/site';
   .pillar__share {
     display: inline-block;
     font-family: var(--font-display);
-    font-weight: 800;
+    font-weight: 400; /* Blob: nur ein Schnitt */
     font-size: 2rem;
     line-height: 1;
     color: var(--deep-purple);

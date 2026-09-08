@@ -26,6 +26,7 @@ Weitere Befehle:
 B:\YU_Festival
 ├── public/
 │   ├── favicon.svg              # YU-Signet auf Lavendel
+│   ├── fonts/                   # CI-Schriften als WOFF2
 │   └── images/
 │       └── logo/                # Logo als Vektor, 4 Varianten
 │           ├── logo-primary.svg     # Badge: YU + FESTIVAL im Rahmen
@@ -96,19 +97,32 @@ Akzentfarbe automatisch mit.
 > Hinweis zum Kontrast: Auf Coral steht der Text **schwarz**, nicht weiß –
 > Weiß auf Coral erreicht nur ~2,8:1 und wäre nicht barrierefrei lesbar.
 
-**Schriften** (selbst gehostet via Fontsource, geladen in `BaseLayout.astro`):
+**Schriften** – die Original-Schriften der CI, lokal als WOFF2 in
+`public/fonts/`, eingebunden per `@font-face` in `src/styles/global.css`:
 
-| CI-Vorgabe                   | aktuell eingesetzt | Rolle              |
-| ---------------------------- | ------------------ | ------------------ |
-| Blob Regular                 | **Baloo 2** (800)  | Headlines          |
-| Helvetica Rounded LT Heavy   | **Nunito** (800)   | Subline / Lead     |
-| Helvetica Rounded LT Bold    | **Nunito** (600)   | Fließtext          |
+| Schrift                              | Gewicht | Rolle          |
+| ------------------------------------ | ------- | -------------- |
+| **Blob Regular**                     | 400     | Headlines      |
+| **Helvetica Rounded LT Std Black**   | 900     | Subline / Lead |
+| **Helvetica Rounded LT Std Bold**    | 700     | Fließtext      |
 
-> ⚠️ **Blob Regular** und **Helvetica Rounded LT Std** sind kommerzielle
-> Schriften und liegen nicht als Webfont-Lizenz vor. Aktuell laufen lizenzfreie
-> Entsprechungen mit gleichem Charakter (rund, geometrisch). Sobald die echten
-> Webfont-Dateien (`.woff2`) vorliegen, genügt es, sie einzubinden und
-> `--font-display` / `--font-sans` in `src/styles/global.css` umzustellen.
+Es gibt **nur diese drei Schnitte**. Verwende ausschließlich `font-weight`
+400, 700 oder 900 – bei anderen Werten rechnet der Browser einen unschönen
+Fett-Schnitt hoch.
+
+Zwei Eigenheiten von Blob, die man kennen muss:
+
+- **Blob ist unicase**: Kleinbuchstaben werden als Großbuchstaben gezeichnet.
+  Eigennamen wie „kiU“ oder „KoLab“ würden dadurch falsch geschrieben – dafür
+  gibt es die Klasse `.brand-name`, die auf Helvetica Rounded umstellt.
+- **Blob fehlen einige Zeichen**: `ß`, `&`, `%`, `@`, `€`, `§` und die
+  typografischen Anführungszeichen. Für solche Zeichen greift automatisch
+  Helvetica Rounded (steht als Fallback in `--font-display`). Sichtbar z. B.
+  bei „Performance & Musik“ und „33 %“.
+
+> Die Schriften sind lizenzpflichtig. Die Quelldateien (`.otf`) liegen in
+> `ci/Fonts/` und sind über `.gitignore` vom Repo ausgeschlossen; ausgeliefert
+> werden nur die daraus erzeugten WOFF2-Dateien.
 
 ## Status
 

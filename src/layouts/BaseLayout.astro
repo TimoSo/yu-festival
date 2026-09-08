@@ -3,12 +3,8 @@ import { site } from '../data/site';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 
-// Selbst gehostete Web-Schriften (Fontsource)
-// Baloo 2 = Ersatz für "Blob Regular" (Headlines)
-// Nunito  = Ersatz für "Helvetica Rounded LT Std" (Subline/Text)
-import '@fontsource/baloo-2/700.css';
-import '@fontsource/baloo-2/800.css';
-import '@fontsource-variable/nunito';
+// Schriften der CI liegen als WOFF2 in public/fonts/ und werden
+// per @font-face in global.css eingebunden.
 import '../styles/global.css';
 
 interface Props {
@@ -28,6 +24,21 @@ const pageTitle = title
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <!-- Schriften vorladen: verhindert sichtbaren Schriftwechsel beim Laden -->
+    <link
+      rel="preload"
+      href="/fonts/blob-regular.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/helvetica-rounded-bold.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
     <meta name="generator" content={Astro.generator} />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />

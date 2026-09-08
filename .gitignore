@@ -17,6 +17,12 @@ npm-debug.log*
 .env.*
 !.env.example
 
+# CI-Quellmaterial (Lieferung der Gestaltung) – NICHT ins Repo.
+# Enthaelt u. a. YU_CI.ai mit ~270 MB (GitHub lehnt >100 MB ab) sowie
+# lizenzpflichtige Schriften. Was die Website braucht, liegt aufbereitet
+# in public/ (Logos als SVG, Schriften als WOFF2).
+ci/
+
 # Lizenzpflichtige Schriftdateien – bewusst NICHT im Repo.
 # "Helvetica Rounded LT Std" und "Blob Regular" sind kommerziell. Einchecken
 # wuerde sie ueber GitHub verteilen; in public/ waeren sie zusaetzlich auf der
