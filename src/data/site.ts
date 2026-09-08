@@ -138,3 +138,46 @@ export const contact = {
   instagram: '',
   note: 'Du erreichst uns am besten per E-Mail. Social-Media-Kanäle folgen.',
 };
+
+// ------------------------------------------------------------
+//  Eigennamen-Schutz fuer die Headline-Schrift
+//  Blob ist unicase: Kleinbuchstaben werden als Grossbuchstaben
+//  gezeichnet, aus "kiU" wuerde also "KIU". splitBrands() zerlegt
+//  einen Text so, dass Eigennamen separat ausgezeichnet und in
+//  Helvetica Rounded gesetzt werden koennen (siehe BrandText.astro).
+// ------------------------------------------------------------
+
+/** Namen, die exakt so geschrieben bleiben muessen. */
+export const brandNames: string[] = partners.map((p) => p.name);
+
+export function splitBrands(
+  text: string
+): { text: string; isBrand: boolean }[] {
+  // laengste zuerst, damit bei gleicher Position der laengere Name gewinnt
+  const namen = [...brandNames].sort((a, b) => b.length - a.length);
+  const teile: { text: string; isBrand: boolean }[] = [];
+  let rest = text;
+
+  while (rest.length > 0) {
+    let position = -1;
+    let treffer = '';
+    for (const name of namen) {
+      const i = rest.indexOf(name);
+      if (i !== -1 && (position === -1 || i < position)) {
+        position = i;
+        treffer = name;
+      }
+    }
+    if (position === -1) {
+      teile.push({ text: rest, isBrand: false });
+      break;
+    }
+    if (position > 0) {
+      teile.push({ text: rest.slice(0, position), isBrand: false });
+    }
+    teile.push({ text: treffer, isBrand: true });
+    rest = rest.slice(position + treffer.length);
+  }
+
+  return teile;
+}

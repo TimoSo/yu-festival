@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { events } from '../data/site';
+import BrandText from '../components/BrandText.astro';
 
 const accents: Record<string, string> = {
   Diskurs: 'var(--lavender)',
@@ -49,7 +50,7 @@ const slots = events.map((e) => ({ time: 'tba', ...e }));
               <span class="timeline__node" />
               <a class="timeline__event" href={`/programm/${slot.slug}`}>
                 <span class="tag timeline__cat">{slot.category}</span>
-                <span class="timeline__title">{slot.title}</span>
+                <span class="timeline__title"><BrandText text={slot.title} /></span>
               </a>
             </li>
           ))

@@ -1,0 +1,18 @@
+---
+// Gibt einen Text aus und setzt darin enthaltene Eigennamen (kiU, KoLab, …)
+// in Helvetica Rounded – sonst wuerde die unicase-Schrift Blob sie in
+// Grossbuchstaben verwandeln und damit falsch schreiben.
+import { splitBrands } from '../data/site';
+
+interface Props {
+  text: string;
+}
+const { text } = Astro.props;
+const teile = splitBrands(text);
+---
+
+{
+  teile.map((teil) =>
+    teil.isBrand ? <span class="brand-name">{teil.text}</span> : teil.text
+  )
+}

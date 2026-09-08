@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { events } from '../data/site';
+import BrandText from '../components/BrandText.astro';
 
 const categories = ['Diskurs', 'Performance & Musik', 'Workshop'] as const;
 const accents: Record<(typeof categories)[number], string> = {
@@ -39,7 +40,7 @@ const accents: Record<(typeof categories)[number], string> = {
               {items.map((event) => (
                 <a class="event-card" href={`/programm/${event.slug}`}>
                   <div class="media-placeholder event-card__media">Bild folgt</div>
-                  <h3>{event.title}</h3>
+                  <h3><BrandText text={event.title} /></h3>
                   {event.guest && (
                     <p class="event-card__guest">mit {event.guest}</p>
                   )}

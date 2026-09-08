@@ -36,6 +36,7 @@ B:\YU_Festival
 ├── src/
 │   ├── components/
 │   │   ├── Logo.astro       # Logo-Komponente (variant/width/label)
+│   │   ├── BrandText.astro  # schützt Eigennamen vor der unicase-Schrift
 │   │   ├── Deco.astro       # Gestaltungselemente: Mäander, Zahn-Kapsel, Pille
 │   │   ├── Header.astro     # Logo + Navigation (mobil + aktiver Reiter)
 │   │   ├── Footer.astro
@@ -113,8 +114,14 @@ Fett-Schnitt hoch.
 Zwei Eigenheiten von Blob, die man kennen muss:
 
 - **Blob ist unicase**: Kleinbuchstaben werden als Großbuchstaben gezeichnet.
-  Eigennamen wie „kiU“ oder „KoLab“ würden dadurch falsch geschrieben – dafür
-  gibt es die Klasse `.brand-name`, die auf Helvetica Rounded umstellt.
+  Eigennamen wie „kiU“ oder „KoLab“ würden dadurch falsch geschrieben. Dagegen
+  gibt es zwei Werkzeuge:
+  - Klasse `.brand-name` – stellt ein ganzes Element auf Helvetica Rounded um
+    (z. B. Partnernamen).
+  - Komponente `<BrandText text="..." />` – lässt den Text in Blob, setzt aber
+    enthaltene Eigennamen einzeln in Helvetica Rounded. Wird bei Event-Titeln
+    genutzt, damit aus „kiU Talk“ kein „KIU TALK“ wird. Welche Namen geschützt
+    sind, ergibt sich automatisch aus `partners` in `src/data/site.ts`.
 - **Blob fehlen einige Zeichen**: `ß`, `&`, `%`, `@`, `€`, `§` und die
   typografischen Anführungszeichen. Für solche Zeichen greift automatisch
   Helvetica Rounded (steht als Fallback in `--font-display`). Sichtbar z. B.
