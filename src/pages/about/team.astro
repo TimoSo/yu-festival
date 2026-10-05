@@ -1,0 +1,71 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { team, contact } from '../../data/site';
+---
+
+<BaseLayout
+  title="YU Team"
+  description="Das Team hinter dem YU Festival."
+>
+  <section class="section section--lavender">
+    <div class="container narrow">
+      <p class="eyebrow">About</p>
+      <h1>YU Team</h1>
+      <p class="lead">
+        Hinter dem YU Festival steht ein Team aus Kultur, Vermittlung und
+        digitaler Produktion.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="grid grid--3">
+        {
+          team.map((person) => (
+            <article class="person">
+              <div class="person__portrait">Foto folgt</div>
+              <h3>{person.name}</h3>
+              <p class="person__role">{person.role}</p>
+              {person.note && <p>{person.note}</p>}
+            </article>
+          ))
+        }
+      </div>
+
+      <p class="team-hint">
+        Die Namen werden ergänzt, sobald sie feststehen. Für Anfragen:
+        <a href={`mailto:${contact.email}`}>{contact.email}</a>
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .person {
+    border: var(--border-w) solid var(--lavender);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+  }
+  .person__portrait {
+    aspect-ratio: 1;
+    border-radius: var(--radius-sm);
+    display: grid;
+    place-items: center;
+    margin-bottom: 1rem;
+    background: var(--lavender);
+    color: var(--lime);
+    font-weight: 900;
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .person__role {
+    font-weight: 900;
+    color: var(--lavender);
+    margin: 0;
+  }
+  .team-hint {
+    margin-top: 2.5rem;
+  }
+</style>

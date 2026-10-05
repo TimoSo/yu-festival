@@ -97,14 +97,11 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Headlines: Blob, versal */
+/* Gemeinsame Grundlagen aller Ueberschriften */
 h1,
 h2,
 h3,
 h4 {
-  font-family: var(--font-display);
-  font-weight: 400; /* Blob: nur ein Schnitt */
-  line-height: 1;
   margin: 0 0 0.4em;
   color: inherit;
   text-wrap: balance;
@@ -113,10 +110,24 @@ h4 {
   overflow-wrap: break-word;
 }
 
+/* Blob ist eine Display-Schrift und bleibt den GROSSEN Section-
+   Ueberschriften vorbehalten. Als Fliesstext ermuedet sie beim Lesen,
+   ausserdem fehlen ihr Zeichen wie & oder @. */
 h1,
 h2 {
+  font-family: var(--font-display);
+  font-weight: 400; /* Blob: nur ein Schnitt */
+  line-height: 1;
   text-transform: uppercase;
   letter-spacing: 0.005em;
+}
+
+/* Kleinere Ueberschriften in Helvetica Rounded – deutlich lesbarer */
+h3,
+h4 {
+  font-family: var(--font-sans);
+  font-weight: 900;
+  line-height: 1.2;
 }
 
 h1 {

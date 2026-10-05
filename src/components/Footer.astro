@@ -1,31 +1,78 @@
 ---
-import { site, nav, contact } from '../data/site';
+import fs from 'node:fs';
+import path from 'node:path';
+import { site, nav, contact, footerLogos } from '../data/site';
 import Logo from './Logo.astro';
+
 const year = new Date().getFullYear();
+
+// Beim Bauen pruefen, ob die Logodatei schon existiert. Fehlt sie,
+// zeigen wir den Namen als Text – kein kaputtes Bild.
+const hasFile = (p?: string) =>
+  !!p && fs.existsSync(path.join(process.cwd(), 'public', p));
 ---
 
 <footer class="site-footer">
-  <div class="container site-footer__inner">
-    <div class="site-footer__brand-col">
-      <div class="site-footer__logo">
-        <Logo variant="stacked" width="150px" />
+  <div class="container">
+    <div class="site-footer__top">
+      <div class="site-footer__brand-col">
+        <div class="site-footer__logo">
+          <Logo variant="stacked" width="150px" />
+        </div>
+        <p class="site-footer__subtitle">{site.subtitle} · {site.subtitleAlt}</p>
+        <a class="site-footer__mail" href={`mailto:${contact.email}`}>
+          {contact.email}
+        </a>
       </div>
-      <p class="site-footer__subtitle">{site.subtitle} · {site.subtitleAlt}</p>
-      <a class="site-footer__mail" href={`mailto:${contact.email}`}>
-        {contact.email}
-      </a>
+
+      <nav aria-label="Footer-Navigation">
+        <ul class="site-footer__nav">
+          {
+            nav.map((item) => (
+              <li>
+                <a href={item.href}>{item.label}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
     </div>
 
-    <nav aria-label="Footer-Navigation">
-      <ul>
-        {nav.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
-      </ul>
-    </nav>
-  </div>
+    <!-- Logoleisten: Förderende und Partner -->
+    <div class="logobars">
+      {
+        footerLogos.map((row) => (
+          <section class="logobar">
+            <p class="logobar__heading">{row.heading}</p>
+            <ul class="logobar__list">
+              {row.items.map((item) => (
+                <li>
+                  {hasFile(item.logo) ? (
+                    <img
+                      class="logobar__img"
+                      src={item.logo}
+                      alt={item.name}
+                      loading="lazy"
+                    />
+                  ) : (
+                    <span class="logobar__fallback">{item.name}</span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))
+      }
+    </div>
 
-  <div class="container site-footer__meta">
-    <span>© {year} {site.name}</span>
-    <span>Eintritt frei</span>
+    <div class="site-footer__meta">
+      <span>© {year} {site.name}</span>
+      <span class="site-footer__links">
+        <a href="/about/team">YU Team</a>
+        <a href="/impressum">Impressum</a>
+      </span>
+      <span>Eintritt frei</span>
+    </div>
   </div>
 </footer>
 
@@ -36,7 +83,7 @@ const year = new Date().getFullYear();
     padding-block: 3rem 1.5rem;
   }
 
-  .site-footer__inner {
+  .site-footer__top {
     display: flex;
     flex-wrap: wrap;
     gap: 2.5rem 3rem;
@@ -60,7 +107,7 @@ const year = new Date().getFullYear();
     color: var(--white);
   }
 
-  .site-footer nav ul {
+  .site-footer__nav {
     list-style: none;
     display: grid;
     grid-template-columns: repeat(2, auto);
@@ -68,24 +115,78 @@ const year = new Date().getFullYear();
     margin: 0;
     padding: 0;
   }
-  .site-footer nav a {
+  .site-footer__nav a {
     font-weight: 700;
     color: var(--white);
     text-decoration: none;
   }
-  .site-footer nav a:hover {
+  .site-footer__nav a:hover {
     color: var(--lime);
   }
 
+  /* ---- Logoleisten ---- */
+  .logobars {
+    display: grid;
+    gap: 2rem;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 2px solid color-mix(in srgb, var(--white) 25%, transparent);
+  }
+  .logobar__heading {
+    font-weight: 900;
+    font-size: 0.75rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--lime);
+    margin: 0 0 1rem;
+  }
+  .logobar__list {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.25rem 2.5rem;
+    margin: 0;
+    padding: 0;
+  }
+  .logobar__img {
+    height: 2.6rem;
+    width: auto;
+    object-fit: contain;
+  }
+  /* Platzhalter, solange die Logodatei fehlt */
+  .logobar__fallback {
+    display: inline-block;
+    padding: 0.45rem 1rem;
+    border: 2px dashed color-mix(in srgb, var(--white) 45%, transparent);
+    border-radius: var(--radius-pill);
+    font-weight: 900;
+    font-size: 0.9rem;
+    color: color-mix(in srgb, var(--white) 80%, transparent);
+  }
+
+  /* ---- Fußzeile ---- */
   .site-footer__meta {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: 1rem;
-    margin-top: 3rem;
+    gap: 0.75rem 1.5rem;
+    margin-top: 2.5rem;
     padding-top: 1.25rem;
     border-top: 2px solid color-mix(in srgb, var(--white) 25%, transparent);
     font-weight: 700;
     font-size: 0.85rem;
+  }
+  .site-footer__links {
+    display: flex;
+    gap: 1.5rem;
+  }
+  .site-footer__links a {
+    color: var(--white);
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+  }
+  .site-footer__links a:hover {
+    color: var(--lime);
   }
 </style>

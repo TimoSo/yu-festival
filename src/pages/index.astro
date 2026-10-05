@@ -26,12 +26,11 @@ import { pillars, partners } from '../data/site';
   <section class="section section--lime">
     <div class="container">
       <p class="eyebrow">Drei Säulen, je ein Drittel</p>
-      <h2>Diskurs · Performance &amp; Musik · Workshops</h2>
+      <h2>Diskurs · Performance und Musik · Workshops</h2>
       <div class="grid grid--3" style="margin-top: 2.5rem;">
         {
           pillars.map((pillar) => (
             <article class="card pillar" style={`--pillar: ${pillar.accent}`}>
-              <span class="pillar__share">{pillar.share}</span>
               <h3>{pillar.title}</h3>
               <p>{pillar.text}</p>
             </article>
@@ -77,16 +76,6 @@ import { pillars, partners } from '../data/site';
   .pillar {
     border-bottom: 10px solid var(--pillar);
   }
-  .pillar__share {
-    display: inline-block;
-    font-family: var(--font-display);
-    font-weight: 400; /* Blob: nur ein Schnitt */
-    font-size: 2rem;
-    line-height: 1;
-    color: var(--deep-purple);
-    margin-bottom: 0.35rem;
-  }
-
   .partner-head {
     display: flex;
     align-items: center;

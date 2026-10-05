@@ -28,6 +28,7 @@ B:\YU_Festival
 │   ├── favicon.svg              # YU-Signet auf Lavendel
 │   ├── fonts/                   # CI-Schriften als WOFF2
 │   └── images/
+│       ├── partner/             # Logos für die Fußleiste (siehe README dort)
 │       └── logo/                # Logo als Vektor, 4 Varianten
 │           ├── logo-primary.svg     # Badge: YU + FESTIVAL im Rahmen
 │           ├── logo-horizontal.svg  # Querformat (Header)
@@ -42,19 +43,18 @@ B:\YU_Festival
 │   │   ├── Footer.astro
 │   │   └── Hero.astro
 │   ├── data/
-│   │   └── site.ts          # ★ zentrale Inhalte: Navigation, Säulen, Events, Partner
+│   │   └── site.ts          # ★ zentrale Inhalte: Navigation, Programm, Partner, Team …
 │   ├── layouts/
 │   │   └── BaseLayout.astro # Grundgerüst (head, Fonts, Header, Footer)
 │   ├── pages/               # ★ jede Datei = eine URL/ein Reiter
 │   │   ├── index.astro           # Start                  → /
-│   │   ├── programm.astro        # Programm-Übersicht     → /programm
-│   │   ├── programm/[slug].astro # Event-Detailseiten     → /programm/<event>
-│   │   ├── timetable.astro       # Ablauf / Timeline      → /timetable
+│   │   ├── programm.astro        # Programm mit Zeitplan  → /programm
 │   │   ├── partner.astro         # Partner                → /partner
-│   │   ├── about.astro           # Über das Festival      → /about
-│   │   ├── awareness.astro       # Awareness              → /awareness
+│   │   ├── about.astro           # About › Festival       → /about
+│   │   ├── about/team.astro      # About › Team           → /about/team
 │   │   ├── faq.astro             # FAQ                    → /faq
-│   │   └── kontakt.astro         # Kontakt                → /kontakt
+│   │   ├── kontakt.astro         # Kontakt                → /kontakt
+│   │   └── impressum.astro       # Impressum              → /impressum
 │   └── styles/
 │       └── global.css       # ★ Design-Tokens – die CI
 ├── astro.config.mjs
@@ -65,9 +65,18 @@ B:\YU_Festival
 ## Häufige Aufgaben
 
 - **Texte/Programm ändern:** vieles steht zentral in `src/data/site.ts`
-  (Navigation, Säulen, Events inkl. Gast-Bios, Partner, Kontakt).
-- **Event hinzufügen:** Eintrag im `events`-Array in `src/data/site.ts` ergänzen
-  – Übersicht, Detailseite und Timetable werden automatisch erzeugt.
+  (Navigation, Säulen, Programm, Partner, Team, Impressum, Kontakt).
+- **Programm:** `/programm` hat drei Bereiche (`tracks`): Festival, Konferenz,
+  Hackathon – jeder mit eigenen drei Kategorien und Farben. Die Filterleiste
+  oben schaltet um; ein Klick auf einen Programmpunkt klappt ihn auf.
+- **Programmpunkt hinzufügen:** Eintrag im `events`-Array ergänzen, mit
+  `track` (festival/konferenz/hackathon), `day` (1–4), `time` und `category`
+  (muss zu den Kategorien des Tracks passen, sonst fehlt die Farbe).
+- **Durchgehende Arbeiten** (Installationen, die alle vier Tage laufen) stehen
+  im Array `ongoing` und erscheinen über dem Zeitplan – in allen Bereichen.
+- **Fußleisten-Logos:** Dateien nach `public/images/partner/` legen
+  (Dateinamen siehe README dort). Fehlt eine Datei, steht der Name als
+  Platzhalter da.
 - **Logo einsetzen:** `<Logo variant="horizontal" width="200px" />`. Das SVG ist
   einfarbig (`fill="currentColor"`) – die Farbe kommt vom `color` des
   Elternelements.
@@ -113,6 +122,9 @@ Fett-Schnitt hoch.
 
 Zwei Eigenheiten von Blob, die man kennen muss:
 
+- **Blob nur für große Überschriften** (h1/h2). Alles andere – Fließtext,
+  Programmpunkte, Zwischenüberschriften (h3/h4) – steht in Helvetica Rounded.
+  Blob ermüdet als Lesetext und ihm fehlen Zeichen wie `&` und `@`.
 - **Blob ist unicase**: Kleinbuchstaben werden als Großbuchstaben gezeichnet.
   Eigennamen wie „kiU“ oder „KoLab“ würden dadurch falsch geschrieben. Dagegen
   gibt es zwei Werkzeuge:

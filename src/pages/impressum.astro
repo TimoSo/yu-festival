@@ -1,0 +1,85 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { impressum } from '../data/site';
+---
+
+<BaseLayout
+  title="Impressum"
+  description="Impressum und Anbieterkennzeichnung des YU Festivals."
+>
+  <section class="section section--purple">
+    <div class="container narrow">
+      <h1>Impressum</h1>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container narrow">
+      <p class="hinweis">
+        Hinweis: Die Pflichtangaben sind noch Platzhalter. Vor dem Launch
+        müssen sie ausgefüllt werden – ein unvollständiges Impressum ist
+        abmahnfähig. Die Werte stehen in <code>src/data/site.ts</code>.
+      </p>
+
+      <h3>Angaben gemäß § 5 TMG</h3>
+      <p>
+        {impressum.anbieter}<br />
+        {impressum.strasse}<br />
+        {impressum.plz} {impressum.ort}
+      </p>
+
+      <h3>Vertreten durch</h3>
+      <p>{impressum.vertreten}</p>
+
+      <h3>Kontakt</h3>
+      <p>
+        E-Mail: <a href={`mailto:${impressum.email}`}>{impressum.email}</a><br />
+        Telefon: {impressum.telefon}
+      </p>
+
+      {
+        (impressum.registergericht || impressum.registernummer) && (
+          <>
+            <h3>Registereintrag</h3>
+            <p>
+              {impressum.registergericht}
+              <br />
+              {impressum.registernummer}
+            </p>
+          </>
+        )
+      }
+
+      {
+        impressum.ustId && (
+          <>
+            <h3>Umsatzsteuer-ID</h3>
+            <p>{impressum.ustId}</p>
+          </>
+        )
+      }
+
+      <h3>Verantwortlich für den Inhalt</h3>
+      <p>{impressum.vertreten}</p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hinweis {
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius-sm);
+    background: var(--lime);
+    color: var(--deep-purple);
+    font-weight: 700;
+    margin-bottom: 2.5rem;
+  }
+  .hinweis code {
+    font-family: ui-monospace, monospace;
+    font-size: 0.9em;
+  }
+  h3 {
+    margin-top: 2rem;
+    color: var(--lavender);
+  }
+</style>

@@ -26,14 +26,37 @@ const isActive = (href: string) =>
       <ul>
         {
           nav.map((item) => (
-            <li>
+            <li class:list={['site-nav__item', { 'has-sub': !!item.children }]}>
               <a
                 href={item.href}
-                class:list={['site-nav__link', { 'is-active': isActive(item.href) }]}
+                class:list={[
+                  'site-nav__link',
+                  { 'is-active': isActive(item.href) },
+                ]}
                 aria-current={isActive(item.href) ? 'page' : undefined}
               >
                 {item.label}
+                {item.children && <span class="caret" aria-hidden="true" />}
               </a>
+
+              {item.children && (
+                <ul class="subnav">
+                  {item.children.map((child) => (
+                    <li>
+                      <a
+                        href={child.href}
+                        class:list={[
+                          'subnav__link',
+                          { 'is-active': path === child.href },
+                        ]}
+                        aria-current={path === child.href ? 'page' : undefined}
+                      >
+                        {child.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </li>
           ))
         }
@@ -78,8 +101,14 @@ const isActive = (href: string) =>
     justify-content: flex-end;
   }
 
+  .site-nav__item {
+    position: relative;
+  }
+
   .site-nav__link {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
     font-weight: 700;
     font-size: 0.92rem;
     text-decoration: none;
@@ -97,7 +126,64 @@ const isActive = (href: string) =>
     color: var(--deep-purple);
   }
 
-  /* Mobiles Menü */
+  .caret {
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 5px solid currentColor;
+    transition: transform 0.2s ease;
+  }
+  .has-sub:hover .caret,
+  .has-sub:focus-within .caret {
+    transform: rotate(180deg);
+  }
+
+  /* ---- Untermenü (Desktop: aufklappen bei Hover/Fokus) ---- */
+  .subnav {
+    position: absolute;
+    top: calc(100% + 0.35rem);
+    left: 0;
+    min-width: 11rem;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding: 0.4rem;
+    border-radius: var(--radius-sm);
+    background: var(--lavender);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-6px);
+    transition:
+      opacity 0.18s ease,
+      transform 0.18s ease,
+      visibility 0.18s;
+  }
+  .has-sub:hover .subnav,
+  .has-sub:focus-within .subnav {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  .subnav__link {
+    display: block;
+    padding: 0.5rem 0.8rem;
+    border-radius: var(--radius-pill);
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--white);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .subnav__link:hover {
+    background: color-mix(in srgb, var(--white) 22%, transparent);
+  }
+  .subnav__link.is-active {
+    background: var(--lime);
+    color: var(--deep-purple);
+  }
+
+  /* ---- Mobiles Menü ---- */
   .nav-toggle {
     display: none;
     flex-direction: column;
@@ -132,16 +218,35 @@ const isActive = (href: string) =>
     .site-nav.is-open {
       display: block;
     }
-    .site-nav ul {
+    .site-nav > ul {
       flex-direction: column;
       gap: 0.15rem;
       padding: 0.5rem clamp(1.25rem, 5vw, 2.5rem);
       justify-content: flex-start;
     }
     .site-nav__link {
-      display: block;
+      display: flex;
       font-size: 1.05rem;
       padding: 0.7rem 1rem;
+    }
+    .caret {
+      display: none;
+    }
+    /* Untermenü ist mobil dauerhaft sichtbar, nur eingerückt */
+    .subnav {
+      position: static;
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+      box-shadow: none;
+      background: none;
+      display: flex;
+      padding: 0 0 0.35rem 1rem;
+    }
+    .subnav__link {
+      font-size: 0.98rem;
+      padding: 0.5rem 1rem;
+      opacity: 0.85;
     }
   }
 </style>

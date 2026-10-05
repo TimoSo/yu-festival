@@ -1,118 +1,641 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { events } from '../data/site';
 import BrandText from '../components/BrandText.astro';
+import { tracks, days, events, ongoing } from '../data/site';
 
-const categories = ['Diskurs', 'Performance & Musik', 'Workshop'] as const;
-const accents: Record<(typeof categories)[number], string> = {
-  Diskurs: 'var(--lavender)',
-  'Performance & Musik': 'var(--coral)',
-  Workshop: 'var(--lime)',
-};
+// Farbe je Kategorie, pro Track eigene Zuordnung
+function accentOf(trackId: string, category: string): string {
+  const track = tracks.find((t) => t.id === trackId);
+  const cat = track?.categories.find((c) => c.name === category);
+  return cat?.accent ?? 'var(--lavender)';
+}
 ---
 
 <BaseLayout
   title="Programm"
-  description="Das Programm des YU Festivals: Diskurs, Performance & Musik und Workshops – mit Kurzbeschreibungen und Gast-Bios."
+  description="Das Programm des YU Festivals: Festival, Konferenz und Hackathon – mit Zeitplan und Details zu jedem Programmpunkt."
 >
-  <section class="section section--lavender">
+  <section class="section programm">
     <div class="container">
-      <p class="eyebrow">Programm</p>
-      <h1>Programm</h1>
-      <p class="lead">
-        Je ein Drittel Diskurs, Performance &amp; Musik und Workshops. Klick auf
-        eine Veranstaltung für Details und Gast-Infos.
-      </p>
-    </div>
-  </section>
+      <h1 class="visually-hidden">Programm</h1>
 
-  {
-    categories.map((cat) => {
-      const items = events.filter((e) => e.category === cat);
-      return (
-        <section class="section cat" style={`--cat: ${accents[cat]}`}>
-          <div class="container">
-            <h2 class="cat__head">
-              <span class="cat__bar" />
-              {cat}
-            </h2>
-            <div class="grid grid--3" style="margin-top: 1.75rem;">
-              {items.map((event) => (
-                <a class="event-card" href={`/programm/${event.slug}`}>
-                  <div class="media-placeholder event-card__media">Bild folgt</div>
-                  <h3><BrandText text={event.title} /></h3>
-                  {event.guest && (
-                    <p class="event-card__guest">mit {event.guest}</p>
-                  )}
-                  <p class="event-card__desc">{event.description}</p>
-                  <span class="event-card__more">Mehr →</span>
-                </a>
+      <!-- Filterleiste: schaltet zwischen den drei Bereichen um -->
+      <div class="switch-bar">
+        <div class="switch" role="tablist" aria-label="Programmbereich wählen">
+          <span class="switch__thumb" aria-hidden="true"></span>
+          <span class="switch__ghost" aria-hidden="true"></span>
+          {
+            tracks.map((track, i) => (
+              <button
+                type="button"
+                class="switch__btn"
+                role="tab"
+                id={`tab-${track.id}`}
+                data-track={track.id}
+                aria-controls={`panel-${track.id}`}
+                aria-selected={i === 0 ? 'true' : 'false'}
+                tabindex={i === 0 ? 0 : -1}
+              >
+                {track.label}
+              </button>
+            ))
+          }
+        </div>
+      </div>
+
+      <!-- Durchgehende Arbeiten: gelten für alle Bereiche -->
+      <section class="ongoing" aria-label="Durchgehend">
+        <p class="ongoing__label">Durchgehend</p>
+        <div class="ongoing__grid">
+          {
+            ongoing.map((item) => (
+              <article class="ev ev--ongoing">
+                <button
+                  type="button"
+                  class="ev__head"
+                  aria-expanded="false"
+                  aria-controls={`body-${item.id}`}
+                >
+                  <span class="ev__meta">
+                    <span class="tag ev__tag">{item.period}</span>
+                    <span class="ev__title">{item.title}</span>
+                  </span>
+                  <span class="ev__plus" aria-hidden="true" />
+                </button>
+                <div class="ev__wrap">
+                  <div class="ev__body" id={`body-${item.id}`} role="region">
+                    <p>{item.description}</p>
+                    {item.location && (
+                      <p class="ev__detail">
+                        <strong>Ort:</strong> {item.location}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </article>
+            ))
+          }
+        </div>
+      </section>
+
+      <!-- Je Bereich ein Zeitplan -->
+      {
+        tracks.map((track, ti) => (
+          <div
+            class="track"
+            id={`panel-${track.id}`}
+            role="tabpanel"
+            aria-labelledby={`tab-${track.id}`}
+            data-track={track.id}
+            hidden={ti !== 0}
+          >
+            <p class="track__intro">{track.intro}</p>
+
+            <div class="legend">
+              {track.categories.map((cat) => (
+                <span class="legend__item">
+                  <span class="legend__dot" style={`background:${cat.accent}`} />
+                  {cat.name}
+                </span>
               ))}
             </div>
+
+            {days.map((day) => {
+              const dayEvents = events.filter(
+                (e) => e.track === track.id && e.day === day.nr
+              );
+              if (dayEvents.length === 0) return null;
+              return (
+                <section class="day">
+                  <h2 class="day__head">
+                    {day.label}
+                    <span class="day__date">{day.date}</span>
+                  </h2>
+
+                  <ol class="timeline">
+                    {dayEvents.map((event) => (
+                      <li
+                        class="row"
+                        style={`--cat:${accentOf(track.id, event.category)}`}
+                      >
+                        <span class="row__time">{event.time}</span>
+                        <span class="row__rail" aria-hidden="true">
+                          <span class="row__dot" />
+                        </span>
+
+                        <article class="ev">
+                          <button
+                            type="button"
+                            class="ev__head"
+                            aria-expanded="false"
+                            aria-controls={`body-${event.id}`}
+                          >
+                            <span class="ev__meta">
+                              <span class="tag ev__tag">{event.category}</span>
+                              <span class="ev__title">
+                                <BrandText text={event.title} />
+                              </span>
+                            </span>
+                            <span class="ev__plus" aria-hidden="true" />
+                          </button>
+
+                          <div class="ev__wrap">
+                            <div
+                              class="ev__body"
+                              id={`body-${event.id}`}
+                              role="region"
+                            >
+                              <p>{event.description}</p>
+                              {event.guest && (
+                                <p class="ev__detail">
+                                  <strong>Mit:</strong>{' '}
+                                  <BrandText text={event.guest} />
+                                </p>
+                              )}
+                              {event.bio && <p class="ev__detail">{event.bio}</p>}
+                              {event.location && (
+                                <p class="ev__detail">
+                                  <strong>Ort:</strong> {event.location}
+                                </p>
+                              )}
+                              {event.partner && (
+                                <p class="ev__detail">
+                                  <strong>In Kooperation mit:</strong>{' '}
+                                  <BrandText text={event.partner} />
+                                </p>
+                              )}
+                            </div>
+                          </div>
+                        </article>
+                      </li>
+                    ))}
+                  </ol>
+                </section>
+              );
+            })}
           </div>
-        </section>
-      );
-    })
-  }
+        ))
+      }
+    </div>
+  </section>
 </BaseLayout>
 
 <style>
-  .cat {
-    padding-block: clamp(2.5rem, 6vw, 4rem);
+  .programm {
+    padding-top: clamp(2rem, 5vw, 3.5rem);
   }
 
-  .cat__head {
+  /* ---------- Filterleiste (iOS-artiger Umschalter) ---------- */
+  .switch-bar {
     display: flex;
-    align-items: center;
+    justify-content: center;
+    margin-bottom: clamp(2.5rem, 6vw, 4rem);
+  }
+
+  .switch {
+    position: relative;
+    display: inline-flex;
+    gap: 0.25rem;
+    padding: 0.4rem;
+    border-radius: var(--radius-pill);
+    background: color-mix(in srgb, var(--lavender) 14%, var(--white));
+    /* leichte, zum Cursor entgegengesetzte Verschiebung (per JS gesetzt) */
+    transform: translate(var(--shift-x, 0px), var(--shift-y, 0px));
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    max-width: 100%;
+  }
+
+  /* aktive Pille */
+  .switch__thumb,
+  .switch__ghost {
+    position: absolute;
+    top: 0.4rem;
+    left: 0;
+    height: calc(100% - 0.8rem);
+    border-radius: var(--radius-pill);
+    /* Breite/Position kommen per JS */
+    width: var(--thumb-w, 0px);
+    transform: translateX(var(--thumb-x, 0px));
+    transition:
+      transform 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+      width 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 0.25s ease;
+    pointer-events: none;
+  }
+  .switch__thumb {
+    background: var(--lavender);
+    z-index: 0;
+  }
+  /* Vorschau beim Überfahren – deutet die Bewegung an */
+  .switch__ghost {
+    background: var(--lavender);
+    opacity: 0;
+    width: var(--ghost-w, 0px);
+    transform: translateX(var(--ghost-x, 0px));
+    z-index: 0;
+  }
+  .switch.has-ghost .switch__ghost {
+    opacity: 0.28;
+  }
+
+  .switch__btn {
+    position: relative;
+    z-index: 1;
+    appearance: none;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    font-family: var(--font-sans);
+    font-weight: 900;
+    font-size: clamp(0.9rem, 2vw, 1.05rem);
+    letter-spacing: 0.02em;
+    color: var(--deep-purple);
+    padding: 0.7rem clamp(1rem, 3vw, 1.9rem);
+    border-radius: var(--radius-pill);
+    transition: color 0.3s ease;
+    white-space: nowrap;
+  }
+  .switch__btn[aria-selected='true'] {
+    color: var(--white);
+  }
+
+  /* ---------- Durchgehende Arbeiten ---------- */
+  .ongoing {
+    margin-bottom: clamp(2.5rem, 6vw, 4rem);
+  }
+  .ongoing__label {
+    font-weight: 900;
+    font-size: 0.8rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--deep-purple);
+    margin: 0 0 0.9rem;
+  }
+  .ongoing__grid {
+    display: grid;
     gap: 1rem;
+  }
+  @media (min-width: 760px) {
+    .ongoing__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  .ev--ongoing {
+    --cat: var(--deep-purple);
+  }
+
+  /* ---------- Zeitplan ---------- */
+  .track__intro {
+    font-weight: 900;
+    font-size: clamp(1.05rem, 2vw, 1.25rem);
+    max-width: 60ch;
+    margin: 0 0 1.5rem;
+  }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    margin-bottom: 2.5rem;
+    font-weight: 900;
+    font-size: 0.9rem;
+  }
+  .legend__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .legend__dot {
+    width: 1.1rem;
+    height: 1.1rem;
+    border-radius: var(--radius-pill);
+  }
+
+  .day {
+    margin-bottom: clamp(2rem, 5vw, 3rem);
+  }
+  .day__head {
+    display: flex;
+    align-items: baseline;
+    gap: 0.9rem;
+    font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+    margin-bottom: 1.25rem;
     color: var(--deep-purple);
   }
-  .cat__bar {
-    display: inline-block;
-    width: 3.5rem;
-    height: 1rem;
+  .day__date {
+    font-family: var(--font-sans);
+    font-weight: 900;
+    font-size: 0.85rem;
+    text-transform: none;
+    letter-spacing: 0.04em;
+    color: var(--lavender);
+  }
+
+  .timeline {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 4.5rem 1.75rem 1fr;
+    gap: 1rem;
+    align-items: stretch;
+  }
+  .row__time {
+    font-weight: 900;
+    text-align: right;
+    color: var(--deep-purple);
+    padding-top: 1.05rem;
+  }
+
+  /* durchgehende Linie + Punkt */
+  .row__rail {
+    position: relative;
+    display: flex;
+    justify-content: center;
+  }
+  .row__rail::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--deep-purple) 18%, transparent);
+  }
+  .row:first-child .row__rail::before {
+    top: 1.1rem;
+  }
+  .row:last-child .row__rail::before {
+    bottom: auto;
+    height: 1.1rem;
+  }
+  .row__dot {
+    position: relative;
+    margin-top: 1rem;
+    width: 1.25rem;
+    height: 1.25rem;
     border-radius: var(--radius-pill);
     background: var(--cat);
     flex-shrink: 0;
   }
 
-  .event-card {
-    display: flex;
-    flex-direction: column;
+  /* ---------- Aufklappbarer Programmpunkt ---------- */
+  .ev {
     border: var(--border-w) solid var(--cat);
     border-radius: var(--radius);
-    padding: 1rem;
-    text-decoration: none;
-    color: var(--black);
     background: var(--white);
-    transition: transform 0.15s ease, background 0.15s ease;
+    margin-bottom: 0.75rem;
+    overflow: hidden;
+    transition: background 0.2s ease;
   }
-  .event-card:hover {
-    transform: translate(-3px, -3px);
-    background: color-mix(in srgb, var(--cat) 14%, var(--white));
+  .ev:hover {
+    background: color-mix(in srgb, var(--cat) 10%, var(--white));
   }
 
-  .event-card__media {
-    aspect-ratio: 16 / 10;
-    margin-bottom: 1rem;
+  .ev__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    width: 100%;
+    appearance: none;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    text-align: left;
+    padding: 0.9rem 1.2rem;
+    font-family: var(--font-sans);
+    color: var(--black);
+  }
+  .ev__meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
+  }
+  .ev__tag {
     background: var(--cat);
     color: var(--deep-purple);
   }
+  .ev--ongoing .ev__tag {
+    color: var(--white);
+  }
+  .ev__title {
+    font-weight: 900;
+    font-size: 1.1rem;
+    line-height: 1.25;
+  }
 
-  .event-card h3 {
-    margin-bottom: 0.35rem;
+  .ev__plus {
+    position: relative;
+    flex-shrink: 0;
+    width: 2rem;
+    height: 2rem;
+    border-radius: var(--radius-pill);
+    background: var(--cat);
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
   }
-  .event-card__guest {
-    font-weight: 900;
+  .ev__plus::before,
+  .ev__plus::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0.85rem;
+    height: 3px;
+    border-radius: 999px;
+    background: var(--deep-purple);
+    transform: translate(-50%, -50%);
+  }
+  .ev--ongoing .ev__plus::before,
+  .ev--ongoing .ev__plus::after {
+    background: var(--white);
+  }
+  .ev__plus::after {
+    transform: translate(-50%, -50%) rotate(90deg);
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .ev.is-open .ev__plus::after {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+
+  /* Aufklappen ueber die Hoehe: die Werte setzt das Skript anhand der
+     tatsaechlichen Inhaltshoehe. Der verbreitete 0fr-/1fr-Grid-Trick
+     funktioniert hier nicht - overflow:hidden setzt die Mindesthoehe
+     des Grid-Elements auf 0, wodurch die Zeile auch im offenen
+     Zustand zusammenfaellt. */
+  .ev__wrap {
+    height: 0;
+    overflow: hidden;
+    /* CSS kann nicht von bzw. auf height:auto animieren. Deshalb misst
+       das Skript die tatsaechliche Inhaltshoehe und animiert per
+       Web Animations API (laesst sich bei schnellem Klicken sauber
+       abbrechen). */
+  }
+  .ev__body {
+    padding: 0 1.2rem 1.2rem;
+  }
+  .ev__body > :first-child {
+    margin-top: 0;
+  }
+  .ev__detail {
+    margin: 0.5rem 0 0;
+  }
+  .ev__detail strong {
     color: var(--lavender);
-    margin: 0 0 0.5rem;
   }
-  .event-card__desc {
-    flex-grow: 1;
-    margin-bottom: 0.75rem;
+
+  @media (max-width: 560px) {
+    .row {
+      grid-template-columns: 3.2rem 1.25rem 1fr;
+      gap: 0.6rem;
+    }
+    .ev__head {
+      padding: 0.8rem 1rem;
+    }
   }
-  .event-card__more {
-    font-weight: 900;
-    color: var(--deep-purple);
+
+  @media (prefers-reduced-motion: reduce) {
+    .switch,
+    .switch__thumb,
+    .switch__ghost,
+    .ev__wrap,
+    .ev__plus,
+    .ev__plus::after {
+      transition: none;
+    }
   }
 </style>
+
+<script>
+  // ---------- Umschalter ----------
+  const switchEl = document.querySelector<HTMLElement>('.switch');
+  const buttons = Array.from(
+    document.querySelectorAll<HTMLButtonElement>('.switch__btn')
+  );
+  const panels = Array.from(
+    document.querySelectorAll<HTMLElement>('.track')
+  );
+
+  function moveThumb(btn: HTMLElement, prefix: 'thumb' | 'ghost') {
+    if (!switchEl) return;
+    switchEl.style.setProperty(`--${prefix}-w`, `${btn.offsetWidth}px`);
+    switchEl.style.setProperty(`--${prefix}-x`, `${btn.offsetLeft}px`);
+  }
+
+  function activate(id: string) {
+    buttons.forEach((b) => {
+      const on = b.dataset.track === id;
+      b.setAttribute('aria-selected', String(on));
+      b.tabIndex = on ? 0 : -1;
+      if (on) moveThumb(b, 'thumb');
+    });
+    panels.forEach((p) => {
+      p.hidden = p.dataset.track !== id;
+    });
+  }
+
+  if (switchEl && buttons.length) {
+    const active =
+      buttons.find((b) => b.getAttribute('aria-selected') === 'true') ??
+      buttons[0];
+    moveThumb(active, 'thumb');
+    // nach dem Laden der Schriften kann sich die Breite noch aendern
+    document.fonts?.ready.then(() => moveThumb(
+      buttons.find((b) => b.getAttribute('aria-selected') === 'true') ?? buttons[0],
+      'thumb'
+    ));
+    window.addEventListener('resize', () => {
+      const cur =
+        buttons.find((b) => b.getAttribute('aria-selected') === 'true') ??
+        buttons[0];
+      moveThumb(cur, 'thumb');
+    });
+
+    buttons.forEach((btn) => {
+      btn.addEventListener('click', () => activate(btn.dataset.track!));
+
+      // Hover deutet die Bewegung schon an
+      btn.addEventListener('mouseenter', () => {
+        if (btn.getAttribute('aria-selected') === 'true') {
+          switchEl.classList.remove('has-ghost');
+          return;
+        }
+        moveThumb(btn, 'ghost');
+        switchEl.classList.add('has-ghost');
+      });
+
+      // Pfeiltasten wie bei Tabs ueblich
+      btn.addEventListener('keydown', (e) => {
+        if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+        e.preventDefault();
+        const i = buttons.indexOf(btn);
+        const next =
+          e.key === 'ArrowRight'
+            ? buttons[(i + 1) % buttons.length]
+            : buttons[(i - 1 + buttons.length) % buttons.length];
+        activate(next.dataset.track!);
+        next.focus();
+      });
+    });
+
+    switchEl.addEventListener('mouseleave', () => {
+      switchEl.classList.remove('has-ghost');
+      switchEl.style.setProperty('--shift-x', '0px');
+      switchEl.style.setProperty('--shift-y', '0px');
+    });
+
+    // leichte, zum Cursor entgegengesetzte Verschiebung der ganzen Leiste
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+    switchEl.addEventListener('mousemove', (e) => {
+      if (reduced.matches) return;
+      const r = switchEl.getBoundingClientRect();
+      const dx = (e.clientX - (r.left + r.width / 2)) / (r.width / 2);
+      const dy = (e.clientY - (r.top + r.height / 2)) / (r.height / 2);
+      switchEl.style.setProperty('--shift-x', `${(-dx * 7).toFixed(2)}px`);
+      switchEl.style.setProperty('--shift-y', `${(-dy * 4).toFixed(2)}px`);
+    });
+  }
+
+  // ---------- Aufklappen der Programmpunkte ----------
+  const DAUER = 400;
+  const KURVE = 'cubic-bezier(0.22, 1, 0.36, 1)';
+  const wenigerBewegung = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  document.querySelectorAll<HTMLButtonElement>('.ev__head').forEach((head) => {
+    head.addEventListener('click', () => {
+      const card = head.closest<HTMLElement>('.ev');
+      const wrap = card?.querySelector<HTMLElement>('.ev__wrap');
+      const body = card?.querySelector<HTMLElement>('.ev__body');
+      if (!card || !wrap || !body) return;
+
+      const oeffnen = !card.classList.contains('is-open');
+      card.classList.toggle('is-open', oeffnen);
+      head.setAttribute('aria-expanded', String(oeffnen));
+
+      const von = wrap.getBoundingClientRect().height;
+      const nach = oeffnen ? body.getBoundingClientRect().height : 0;
+
+      // laufende Animation abbrechen, damit schnelles Klicken nicht hakt
+      wrap.getAnimations().forEach((a) => a.cancel());
+      wrap.style.height = `${nach}px`;
+
+      if (wenigerBewegung.matches) {
+        if (oeffnen) wrap.style.height = 'auto';
+        return;
+      }
+
+      const anim = wrap.animate(
+        [{ height: `${von}px` }, { height: `${nach}px` }],
+        { duration: DAUER, easing: KURVE }
+      );
+      anim.onfinish = () => {
+        // offen auf auto stellen, damit Umbrueche beim Verkleinern passen
+        if (card.classList.contains('is-open')) wrap.style.height = 'auto';
+      };
+    });
+  });
+</script>
