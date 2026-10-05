@@ -1,20 +1,17 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import RichText from '../components/RichText.astro';
+import PageHeader from '../components/PageHeader.astro';
 import { faq } from '../data/site';
 ---
 
 <BaseLayout title="FAQ" description="Häufig gestellte Fragen zum YU Festival.">
-  <section class="section section--lime">
-    <div class="container narrow">
-      <p class="eyebrow">FAQ</p>
-      <h1>Häufige Fragen</h1>
-      <p class="lead">
-        Die wichtigsten Antworten auf einen Blick. Fehlt etwas? Dann schreibt
-        uns gerne.
-      </p>
-    </div>
-  </section>
+  <PageHeader
+    tone="lime"
+    eyebrow="FAQ"
+    title="Häufige Fragen"
+    lead="Die wichtigsten Antworten auf einen Blick. Fehlt etwas? Dann schreibt uns gerne."
+  />
 
   <section class="section">
     <div class="container narrow">

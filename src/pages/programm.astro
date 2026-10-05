@@ -51,20 +51,6 @@ function eventsOf(trackId: string, day: number) {
         </div>
       </div>
 
-      <!-- Durchgehende Ausstellungen: gelten für alle Bereiche -->
-      <section class="ongoing" aria-labelledby="ongoing-label">
-        <p class="ongoing__label" id="ongoing-label">
-          Ausstellungen · durchgehend an allen vier Tagen
-        </p>
-        <div class="ongoing__grid">
-          {
-            ongoing.map((item) => (
-              <EventCard item={item} tag={item.period} variant="ongoing" />
-            ))
-          }
-        </div>
-      </section>
-
       <!-- Je Bereich ein Zeitplan -->
       {
         tracks.map((track, ti) => (
@@ -153,6 +139,23 @@ function eventsOf(trackId: string, day: number) {
           </div>
         ))
       }
+
+      <!-- Ausstellungen laufen an allen vier Tagen und gelten für alle
+           Bereiche. Sie stehen bewusst unter dem Zeitplan, damit das
+           Programm zuerst kommt. -->
+      <section class="day ongoing" aria-labelledby="ongoing-head">
+        <h2 class="day__head" id="ongoing-head">
+          Ausstellungen
+          <span class="day__date">durchgehend an allen vier Tagen</span>
+        </h2>
+        <div class="ongoing__grid">
+          {
+            ongoing.map((item) => (
+              <EventCard item={item} tag={item.period} variant="ongoing" />
+            ))
+          }
+        </div>
+      </section>
     </div>
   </section>
 </BaseLayout>
@@ -234,17 +237,11 @@ function eventsOf(trackId: string, day: number) {
     color: var(--white);
   }
 
-  /* ---------- Ausstellungen ---------- */
+  /* ---------- Ausstellungen (unter dem Zeitplan) ---------- */
   .ongoing {
-    margin-bottom: clamp(2.5rem, 6vw, 4rem);
-  }
-  .ongoing__label {
-    font-weight: 900;
-    font-size: 0.8rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--deep-purple);
-    margin: 0 0 0.9rem;
+    margin-top: clamp(1rem, 3vw, 2rem);
+    padding-top: clamp(2rem, 5vw, 3rem);
+    border-top: 4px solid color-mix(in srgb, var(--deep-purple) 12%, transparent);
   }
   .ongoing__grid {
     display: grid;

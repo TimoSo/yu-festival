@@ -1,0 +1,53 @@
+---
+// Einheitlicher Seitenkopf für Unterseiten. Alle Köpfe, die diese
+// Komponente nutzen, sind gleich hoch – unabhängig davon, wie lang
+// Titel und Einleitung sind:
+//  - der Titel ist so bemessen, dass er immer in eine Zeile passt
+//    (Maßstab: „Häufige Fragen“, das breiteste Wort)
+//  - für die Einleitung ist fester Platz reserviert
+//    (Desktop 2 Zeilen, Handy 3 Zeilen, unter 350 px 4 Zeilen)
+// Längere Einleitungen funktionieren weiterhin, machen den Kopf
+// dann aber höher als die anderen.
+interface Props {
+  eyebrow: string;
+  title: string;
+  lead: string;
+  tone: 'lavender' | 'lime' | 'coral' | 'purple';
+}
+const { eyebrow, title, lead, tone } = Astro.props;
+---
+
+<section class={`section section--${tone} page-head`}>
+  <div class="container narrow">
+    <p class="eyebrow">{eyebrow}</p>
+    <h1 class="page-head__title">{title}</h1>
+    <p class="lead page-head__lead">{lead}</p>
+  </div>
+</section>
+
+<style>
+  /* „Häufige Fragen“ läuft in Blob etwa 9-mal so breit wie die
+     Schriftgröße. 9vw passt in jeder Breite in eine Zeile – auch dann,
+     wenn der Browser eine sichtbare Scrollleiste (~17 px) einblendet. */
+  .page-head__title {
+    font-size: clamp(1.75rem, 9vw, 4.5rem);
+  }
+
+  /* Platz für 3 Zeilen reservieren (Zeilenhöhe der .lead = 1.3) */
+  .page-head__lead {
+    min-height: calc(3 * 1.3em);
+    margin-bottom: 0;
+  }
+  @media (min-width: 760px) {
+    .page-head__lead {
+      min-height: calc(2 * 1.3em);
+    }
+  }
+  /* sehr schmale Geräte: die FAQ-Einleitung braucht unter 350 px
+     eine vierte Zeile, also für alle vier Zeilen reservieren */
+  @media (max-width: 349px) {
+    .page-head__lead {
+      min-height: calc(4 * 1.3em);
+    }
+  }
+</style>
