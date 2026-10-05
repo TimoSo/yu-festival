@@ -1,36 +1,40 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { partners } from '../data/site';
+import RichText from '../components/RichText.astro';
+import { partners, kooperation } from '../data/site';
 ---
 
 <BaseLayout
   title="Partner"
-  description="Die Kooperationspartner des YU Festivals – u. a. kiU und KoLab."
+  description="Die Partner des YU Festivals: KoLab, ATEM Biennial, VKII Ruhrbezirk e. V., storyLab kiU und Mono Listening Café."
 >
   <section class="section section--coral">
     <div class="container">
       <p class="eyebrow">In Kooperation mit</p>
       <h1>Partner</h1>
-      <p class="lead">
-        Das YU Festival entsteht gemeinsam mit starken Partnern aus Kultur und
-        digitaler Produktion.
-      </p>
+      <p class="lead">{kooperation[0]}</p>
     </div>
   </section>
 
   <section class="section">
     <div class="container">
-      <div class="grid grid--2">
+      <div class="partner-grid">
         {
           partners.map((partner) => (
             <article class="partner-card">
-              <div class="partner-logo">{partner.name}</div>
+              <div class="partner-logo">{partner.short}</div>
               <div>
-                <h3 class="brand-name">{partner.name}</h3>
-                <p class="tag">{partner.role}</p>
-                <p style="margin-top: 0.75rem;">{partner.description}</p>
+                <h2 class="partner-name">{partner.name}</h2>
+                {partner.full && <p class="partner-full">{partner.full}</p>}
+                {partner.text.length > 0 && (
+                  <div class="partner-text">
+                    <RichText paras={partner.text} />
+                  </div>
+                )}
                 {partner.url && (
-                  <a href={partner.url} rel="noopener">Website →</a>
+                  <a href={partner.url} target="_blank" rel="noopener noreferrer">
+                    Website →
+                  </a>
                 )}
               </div>
             </article>
@@ -42,9 +46,14 @@ import { partners } from '../data/site';
 </BaseLayout>
 
 <style>
+  .partner-grid {
+    display: grid;
+    gap: 1.5rem;
+  }
+
   .partner-card {
     display: grid;
-    grid-template-columns: 6rem 1fr;
+    grid-template-columns: 6rem minmax(0, 1fr);
     gap: 1.5rem;
     align-items: start;
     border: var(--border-w) solid var(--lavender);
@@ -58,11 +67,33 @@ import { partners } from '../data/site';
     border-radius: var(--radius-sm);
     background: var(--lavender);
     color: var(--white);
-    /* bewusst nicht Blob: sonst wird aus "kiU" ein "KIU" */
+    font-weight: 900;
+    font-size: 1.15rem;
+    text-align: center;
+    padding: 0.25rem;
+  }
+  /* Partnernamen bewusst in Helvetica Rounded statt Blob:
+     Blob ist unicase und wuerde z. B. aus "kiU" ein "KIU" machen */
+  .partner-name {
     font-family: var(--font-sans);
     font-weight: 900;
-    font-size: 1.3rem;
+    font-size: clamp(1.3rem, 2.6vw, 1.7rem);
+    line-height: 1.2;
+    text-transform: none;
+    margin-bottom: 0.25rem;
   }
+  .partner-full {
+    font-weight: 900;
+    color: var(--lavender);
+    margin: 0 0 0.9rem;
+  }
+  .partner-text {
+    max-width: 70ch;
+  }
+  .partner-text :global(p) {
+    margin: 0 0 0.85rem;
+  }
+
   @media (max-width: 480px) {
     .partner-card {
       grid-template-columns: 1fr;

@@ -1,0 +1,330 @@
+---
+// Aufklappbarer Programmpunkt: Kopf mit Kategorie, Titel und Kurzinfos,
+// darunter der ausführliche Teil (Text, Personen, Ort, Anmeldung).
+import RichText from './RichText.astro';
+import { anmeldung, type Inhalt } from '../data/programm';
+
+interface Props {
+  item: Inhalt;
+  /** Text der Pille oben links (Kategorie bzw. Zeitraum) */
+  tag: string;
+  variant?: 'event' | 'ongoing';
+}
+
+const { item, tag, variant = 'event' } = Astro.props;
+const bodyId = `body-${item.id}`;
+const betreff = encodeURIComponent(`Anmeldung: ${item.title}`);
+---
+
+<article class:list={['ev', { 'ev--ongoing': variant === 'ongoing' }]}>
+  <button
+    type="button"
+    class="ev__head"
+    aria-expanded="false"
+    aria-controls={bodyId}
+  >
+    <span class="ev__meta">
+      <span class="tag ev__tag">{tag}</span>
+      <span class="ev__title">{item.title}</span>
+      {item.by && <span class="ev__by">{item.by}</span>}
+      {
+        (item.location || item.registration) && (
+          <span class="ev__facts">
+            {item.location && <span class="ev__fact">{item.location}</span>}
+            {item.registration && (
+              <span class="ev__fact ev__fact--anmeldung">Anmeldung erforderlich</span>
+            )}
+          </span>
+        )
+      }
+    </span>
+    <span class="ev__plus" aria-hidden="true"></span>
+  </button>
+
+  <div class="ev__wrap">
+    <div class="ev__body" id={bodyId} role="region" aria-label={item.title}>
+      {item.note && <p class="ev__note">{item.note}</p>}
+
+      <RichText paras={item.text} />
+
+      {
+        item.sections?.map((abschnitt) => (
+          <section class="ev__section">
+            <h4 class="ev__label">{abschnitt.label}</h4>
+            {abschnitt.text && <RichText paras={abschnitt.text} />}
+            {abschnitt.people?.map((person) => (
+              <div class="ev__person">
+                <p class="ev__name">{person.name}</p>
+                {person.bio && <RichText paras={person.bio} />}
+              </div>
+            ))}
+          </section>
+        ))
+      }
+
+      {item.outro && <RichText paras={item.outro} />}
+
+      {
+        item.location && (
+          <p class="ev__detail">
+            <strong>Ort:</strong> {item.location}
+          </p>
+        )
+      }
+
+      {
+        item.link && (
+          <p class="ev__detail">
+            <a href={item.link.href} target="_blank" rel="noopener noreferrer">
+              {item.link.label} →
+            </a>
+          </p>
+        )
+      }
+
+      {
+        item.registration === true && (
+          <div class="ev__anmeldung">
+            <RichText paras={[anmeldung.text]} />
+            <a
+              class="btn btn--primary btn--on-white ev__mail"
+              href={`mailto:${anmeldung.email}?subject=${betreff}`}
+            >
+              Per E-Mail anmelden
+            </a>
+          </div>
+        )
+      }
+      {
+        item.registration === false && (
+          <p class="ev__detail">
+            <strong>{anmeldung.keine}</strong>
+          </p>
+        )
+      }
+    </div>
+  </div>
+</article>
+
+<style>
+  .ev {
+    border: var(--border-w) solid var(--cat, var(--lavender));
+    border-radius: var(--radius);
+    background: var(--white);
+    margin-bottom: 0.75rem;
+    overflow: hidden;
+    transition: background 0.2s ease;
+  }
+  .ev:hover {
+    background: color-mix(in srgb, var(--cat, var(--lavender)) 10%, var(--white));
+  }
+  .ev--ongoing {
+    --cat: var(--deep-purple);
+  }
+
+  /* ---------- Kopf ---------- */
+  .ev__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    width: 100%;
+    appearance: none;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    text-align: left;
+    padding: 0.9rem 1.2rem;
+    font-family: var(--font-sans);
+    color: var(--black);
+  }
+  .ev__meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.35rem;
+  }
+  .ev__tag {
+    background: var(--cat, var(--lavender));
+    color: var(--deep-purple);
+  }
+  .ev--ongoing .ev__tag {
+    color: var(--white);
+  }
+  .ev__title {
+    font-weight: 900;
+    font-size: 1.1rem;
+    line-height: 1.25;
+  }
+  .ev__by {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--lavender);
+  }
+  .ev__facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 0.5rem;
+    margin-top: 0.15rem;
+  }
+  .ev__fact {
+    font-weight: 700;
+    font-size: 0.8rem;
+    padding: 0.15rem 0.6rem;
+    border-radius: var(--radius-pill);
+    background: color-mix(in srgb, var(--deep-purple) 8%, var(--white));
+    color: var(--deep-purple);
+  }
+  .ev__fact--anmeldung {
+    background: var(--deep-purple);
+    color: var(--white);
+  }
+
+  /* Plus-/Minus-Symbol */
+  .ev__plus {
+    position: relative;
+    flex-shrink: 0;
+    align-self: flex-start;
+    margin-top: 0.15rem;
+    width: 2rem;
+    height: 2rem;
+    border-radius: var(--radius-pill);
+    background: var(--cat, var(--lavender));
+  }
+  .ev__plus::before,
+  .ev__plus::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0.85rem;
+    height: 3px;
+    border-radius: 999px;
+    background: var(--deep-purple);
+    transform: translate(-50%, -50%);
+  }
+  .ev--ongoing .ev__plus::before,
+  .ev--ongoing .ev__plus::after {
+    background: var(--white);
+  }
+  .ev__plus::after {
+    transform: translate(-50%, -50%) rotate(90deg);
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .ev.is-open .ev__plus::after {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+
+  /* ---------- Aufklappbereich ----------
+     CSS kann nicht von bzw. auf height:auto animieren. Deshalb misst das
+     Skript die tatsaechliche Inhaltshoehe und animiert per Web Animations
+     API (laesst sich bei schnellem Klicken sauber abbrechen). */
+  .ev__wrap {
+    height: 0;
+    overflow: hidden;
+  }
+  .ev__body {
+    padding: 0 1.2rem 1.2rem;
+    max-width: 70ch;
+  }
+  .ev__body :global(p) {
+    margin: 0 0 0.85rem;
+  }
+  .ev__note {
+    display: inline-block;
+    font-weight: 900;
+    font-size: 0.9rem;
+    padding: 0.35rem 0.8rem;
+    border-radius: var(--radius-sm);
+    background: var(--lime);
+    color: var(--deep-purple);
+  }
+  .ev__section {
+    margin-top: 1.4rem;
+  }
+  .ev__label {
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--lavender);
+    margin: 0 0 0.6rem;
+  }
+  .ev__person {
+    margin-bottom: 0.9rem;
+  }
+  .ev__name {
+    font-weight: 900;
+    margin-bottom: 0.25rem !important;
+  }
+  .ev__detail strong {
+    color: var(--lavender);
+  }
+  .ev__anmeldung {
+    margin-top: 1.4rem;
+    padding: 1rem 1.2rem;
+    border-radius: var(--radius-sm);
+    background: color-mix(in srgb, var(--lavender) 12%, var(--white));
+  }
+  .ev__mail {
+    margin-top: 0.25rem;
+    font-size: 0.95rem;
+    padding: 0.7rem 1.4rem;
+  }
+
+  @media (max-width: 560px) {
+    .ev__head {
+      padding: 0.8rem 1rem;
+    }
+    .ev__body {
+      padding: 0 1rem 1rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ev__plus::after {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  // Aufklappen/Zuklappen. Astro bindet das Skript nur einmal ein,
+  // auch wenn die Komponente viele Male auf der Seite steht.
+  const DAUER = 400;
+  const KURVE = 'cubic-bezier(0.22, 1, 0.36, 1)';
+  const wenigerBewegung = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  document.querySelectorAll<HTMLButtonElement>('.ev__head').forEach((head) => {
+    head.addEventListener('click', () => {
+      const card = head.closest<HTMLElement>('.ev');
+      const wrap = card?.querySelector<HTMLElement>('.ev__wrap');
+      const body = card?.querySelector<HTMLElement>('.ev__body');
+      if (!card || !wrap || !body) return;
+
+      const oeffnen = !card.classList.contains('is-open');
+      card.classList.toggle('is-open', oeffnen);
+      head.setAttribute('aria-expanded', String(oeffnen));
+
+      const von = wrap.getBoundingClientRect().height;
+      const nach = oeffnen ? body.getBoundingClientRect().height : 0;
+
+      // laufende Animation abbrechen, damit schnelles Klicken nicht hakt
+      wrap.getAnimations().forEach((a) => a.cancel());
+      wrap.style.height = `${nach}px`;
+
+      if (wenigerBewegung.matches) {
+        if (oeffnen) wrap.style.height = 'auto';
+        return;
+      }
+
+      const anim = wrap.animate(
+        [{ height: `${von}px` }, { height: `${nach}px` }],
+        { duration: DAUER, easing: KURVE }
+      );
+      anim.onfinish = () => {
+        // offen auf auto stellen, damit Umbrueche beim Verkleinern passen
+        if (card.classList.contains('is-open')) wrap.style.height = 'auto';
+      };
+    });
+  });
+</script>

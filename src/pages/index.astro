@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
 import Deco from '../components/Deco.astro';
-import { pillars, partners } from '../data/site';
+import { landing, pillars, partners } from '../data/site';
 ---
 
 <BaseLayout>
@@ -12,20 +12,16 @@ import { pillars, partners } from '../data/site';
   <section class="section">
     <div class="container narrow">
       <p class="eyebrow">Worum es geht</p>
-      <h2>Digitale Medien gestalten</h2>
-      <p class="lead">
-        Das YU Festival wirft einen positiven, aufgeschlossenen Blick auf
-        Digitalität. Den kritischen Blick vergessen wir nicht – unser Fokus liegt
-        aber auf den Gestaltungsmöglichkeiten, die das Individuum und das „Wir"
-        als Kollektivgedanken haben.
-      </p>
+      <h2>Digitale Räume gestalten</h2>
+      <p class="lead">{landing.worum.lead}</p>
+      <p>{landing.worum.text}</p>
     </div>
   </section>
 
   <!-- Die drei Säulen -->
   <section class="section section--lime">
     <div class="container">
-      <p class="eyebrow">Drei Säulen, je ein Drittel</p>
+      <p class="eyebrow">Drei Säulen</p>
       <h2>Diskurs · Performance und Musik · Workshops</h2>
       <div class="grid grid--3" style="margin-top: 2.5rem;">
         {
@@ -37,6 +33,9 @@ import { pillars, partners } from '../data/site';
           ))
         }
       </div>
+      <p style="margin-top: 2.5rem;">
+        <a class="btn btn--primary" href="/programm">Zum Programm</a>
+      </p>
     </div>
   </section>
 
@@ -53,17 +52,18 @@ import { pillars, partners } from '../data/site';
         </div>
       </div>
 
-      <div class="grid grid--2" style="margin-top: 2rem;">
+      <ul class="partner-list">
         {
           partners.map((partner) => (
-            <article class="card">
-              <h3 class="brand-name">{partner.name}</h3>
-              <p class="tag">{partner.role}</p>
-              <p style="margin-top: 0.75rem;">{partner.description}</p>
-            </article>
+            <li class="card partner-chip">
+              <span class="partner-chip__name">{partner.name}</span>
+              {partner.full && (
+                <span class="partner-chip__full">{partner.full}</span>
+              )}
+            </li>
           ))
         }
-      </div>
+      </ul>
 
       <p style="margin-top: 2.5rem;">
         <a class="btn btn--ghost" href="/partner">Alle Partner ansehen</a>
@@ -85,5 +85,33 @@ import { pillars, partners } from '../data/site';
   }
   .partner-squiggle {
     color: var(--deep-purple);
+  }
+
+  .partner-list {
+    list-style: none;
+    display: grid;
+    gap: 1rem;
+    margin: 2rem 0 0;
+    padding: 0;
+  }
+  @media (min-width: 760px) {
+    .partner-list {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  .partner-chip {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 1.25rem 1.5rem;
+  }
+  .partner-chip__name {
+    font-weight: 900;
+    font-size: 1.2rem;
+  }
+  .partner-chip__full {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--lavender);
   }
 </style>

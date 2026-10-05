@@ -1,40 +1,25 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { site } from '../data/site';
+import { site, about } from '../data/site';
 ---
 
 <BaseLayout
   title="About"
-  description="Über das YU Festival – Haltung, Themen und Idee."
+  description="Über das YU Festival „New Communities“ – wie wollen wir digital zusammenleben?"
 >
   <section class="section section--lavender">
     <div class="container narrow">
       <p class="eyebrow">About</p>
       <h1>Über das Festival</h1>
-      <p class="lead">
-        Das YU Festival ist ein Festival für digitale Medien. Es wirft einen
-        positiven, optimistischen und aufgeschlossenen Blick auf Digitalität –
-        ohne den kritischen Blick zu verlieren.
-      </p>
+      <p class="lead">{about.lead}</p>
     </div>
   </section>
 
   <section class="section">
     <div class="container narrow">
-      <h2>Unsere Haltung</h2>
-      <p>
-        Im Zentrum stehen die Gestaltungsmöglichkeiten, die digitale Medien
-        eröffnen – für das Individuum genauso wie für das „Wir" als
-        Kollektivgedanken. Wir gehen kreativ, experimentell und verspielt mit
-        digitalen Elementen um und fragen: Wie wollen wir das Digitale gestalten?
-      </p>
-
-      <h2 style="margin-top: 2.5rem;">Drei Säulen</h2>
-      <p>
-        Inhaltlich teilt sich das Festival zu je einem Drittel in Diskurs,
-        Performance &amp; Musik und Workshops. So treffen Reflexion,
-        künstlerischer Ausdruck und eigenes Gestalten aufeinander.
-      </p>
+      <h2>New Communities</h2>
+      <p class="lead about__frage">{about.frage}</p>
+      {about.text.map((absatz) => <p>{absatz}</p>)}
     </div>
   </section>
 
@@ -44,7 +29,10 @@ import { site } from '../data/site';
       <dl class="facts">
         <div><dt>Termin</dt><dd>{site.date}</dd></div>
         <div><dt>Ort</dt><dd>{site.location}</dd></div>
-        <div><dt>Eintritt</dt><dd>frei</dd></div>
+        <div>
+          <dt>Eintritt</dt>
+          <dd>frei – für einige Veranstaltungen ist eine Anmeldung nötig</dd>
+        </div>
       </dl>
 
       <p style="margin-top: 2.5rem;">
@@ -55,6 +43,10 @@ import { site } from '../data/site';
 </BaseLayout>
 
 <style>
+  .about__frage {
+    color: var(--lavender);
+    margin-bottom: 1.5rem;
+  }
   .facts {
     display: grid;
     gap: 0.75rem;
@@ -63,7 +55,7 @@ import { site } from '../data/site';
   .facts > div {
     display: flex;
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: 0.25rem 1rem;
     border-bottom: 3px solid color-mix(in srgb, var(--deep-purple) 25%, transparent);
     padding-bottom: 0.6rem;
   }

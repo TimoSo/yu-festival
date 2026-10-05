@@ -37,13 +37,17 @@ B:\YU_Festival
 ├── src/
 │   ├── components/
 │   │   ├── Logo.astro       # Logo-Komponente (variant/width/label)
-│   │   ├── BrandText.astro  # schützt Eigennamen vor der unicase-Schrift
+│   │   ├── EventCard.astro  # aufklappbarer Programmpunkt
+│   │   ├── RichText.astro   # Absätze mit automatisch verlinkten Mails/URLs
 │   │   ├── Deco.astro       # Gestaltungselemente: Mäander, Zahn-Kapsel, Pille
 │   │   ├── Header.astro     # Logo + Navigation (mobil + aktiver Reiter)
 │   │   ├── Footer.astro
 │   │   └── Hero.astro
 │   ├── data/
-│   │   └── site.ts          # ★ zentrale Inhalte: Navigation, Programm, Partner, Team …
+│   │   ├── site.ts          # ★ Texte: Start, About, Team, Partner, FAQ, Kontakt
+│   │   └── programm.ts      # ★ das komplette Programm (Bereiche, Tage, Punkte)
+│   ├── lib/
+│   │   └── linkify.ts       # erkennt E-Mail-Adressen und URLs im Text
 │   ├── layouts/
 │   │   └── BaseLayout.astro # Grundgerüst (head, Fonts, Header, Footer)
 │   ├── pages/               # ★ jede Datei = eine URL/ein Reiter
@@ -64,16 +68,25 @@ B:\YU_Festival
 
 ## Häufige Aufgaben
 
-- **Texte/Programm ändern:** vieles steht zentral in `src/data/site.ts`
-  (Navigation, Säulen, Programm, Partner, Team, Impressum, Kontakt).
+- **Texte ändern:** Start, About, Team, Partner, FAQ, Impressum und Kontakt
+  stehen in `src/data/site.ts`, das Programm in `src/data/programm.ts`.
+  E-Mail-Adressen und URLs in den Texten werden automatisch verlinkt.
 - **Programm:** `/programm` hat drei Bereiche (`tracks`): Festival, Konferenz,
   Hackathon – jeder mit eigenen drei Kategorien und Farben. Die Filterleiste
   oben schaltet um; ein Klick auf einen Programmpunkt klappt ihn auf.
-- **Programmpunkt hinzufügen:** Eintrag im `events`-Array ergänzen, mit
-  `track` (festival/konferenz/hackathon), `day` (1–4), `time` und `category`
-  (muss zu den Kategorien des Tracks passen, sonst fehlt die Farbe).
-- **Durchgehende Arbeiten** (Installationen, die alle vier Tage laufen) stehen
-  im Array `ongoing` und erscheinen über dem Zeitplan – in allen Bereichen.
+- **Programmpunkt hinzufügen:** Eintrag im `events`-Array in
+  `src/data/programm.ts` ergänzen – mit `track` (festival/konferenz/hackathon),
+  `day` (1 = Do 22.10. … 4 = So 25.10.), `start`/`end` und `category` (muss zu
+  den Kategorien des Bereichs passen, sonst fehlt die Farbe). Innerhalb eines
+  Tages wird automatisch nach Uhrzeit sortiert.
+- **Anmeldung:** `registration: true` zeigt „Anmeldung erforderlich“ samt
+  Mail-Button (Betreff wird mit dem Titel vorbefüllt), `false` zeigt
+  ausdrücklich „keine Anmeldung erforderlich“.
+- **Texte, die mehrfach vorkommen** (z. B. „Unter Haut“ läuft viermal, Bios,
+  Hackathon-Hinweis) stehen oben in `programm.ts` einmal als Konstante –
+  Korrekturen also nur dort.
+- **Ausstellungen** (alle vier Tage) stehen im Array `ongoing` und erscheinen
+  über dem Zeitplan – in allen Bereichen.
 - **Fußleisten-Logos:** Dateien nach `public/images/partner/` legen
   (Dateinamen siehe README dort). Fehlt eine Datei, steht der Name als
   Platzhalter da.
@@ -126,14 +139,10 @@ Zwei Eigenheiten von Blob, die man kennen muss:
   Programmpunkte, Zwischenüberschriften (h3/h4) – steht in Helvetica Rounded.
   Blob ermüdet als Lesetext und ihm fehlen Zeichen wie `&` und `@`.
 - **Blob ist unicase**: Kleinbuchstaben werden als Großbuchstaben gezeichnet.
-  Eigennamen wie „kiU“ oder „KoLab“ würden dadurch falsch geschrieben. Dagegen
-  gibt es zwei Werkzeuge:
-  - Klasse `.brand-name` – stellt ein ganzes Element auf Helvetica Rounded um
-    (z. B. Partnernamen).
-  - Komponente `<BrandText text="..." />` – lässt den Text in Blob, setzt aber
-    enthaltene Eigennamen einzeln in Helvetica Rounded. Wird bei Event-Titeln
-    genutzt, damit aus „kiU Talk“ kein „KIU TALK“ wird. Welche Namen geschützt
-    sind, ergibt sich automatisch aus `partners` in `src/data/site.ts`.
+  Eigennamen wie „kiU“ oder „KoLab“ würden dadurch falsch geschrieben. Da Blob
+  nur noch in großen Überschriften steht, betrifft das kaum noch etwas –
+  Partnernamen sind deshalb bewusst in Helvetica Rounded gesetzt. Für Einzelfälle
+  gibt es die Klasse `.brand-name`.
 - **Blob fehlen einige Zeichen**: `ß`, `&`, `%`, `@`, `€`, `§` und die
   typografischen Anführungszeichen. Für solche Zeichen greift automatisch
   Helvetica Rounded (steht als Fallback in `--font-display`). Sichtbar z. B.

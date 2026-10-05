@@ -1,28 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-
-const faqs: { q: string; a: string }[] = [
-  {
-    q: 'Was kostet der Eintritt?',
-    a: 'Nichts – das YU Festival ist kostenlos. Tickets braucht ihr nicht.',
-  },
-  {
-    q: 'Worum geht es beim YU Festival?',
-    a: 'Um digitale Medien: mit kritischem Blick, aber mit Fokus auf die Gestaltungsmöglichkeiten, die das Individuum und das „Wir" als Kollektiv haben. Inhaltlich teilt es sich in Diskurs, Performance & Musik und Workshops.',
-  },
-  {
-    q: 'Muss ich mich für Workshops anmelden?',
-    a: 'Platzhalter: Hier kommt die Info zur Anmeldung für Workshops (z. B. ob und wo man sich registrieren muss).',
-  },
-  {
-    q: 'Wo und wann findet das Festival statt?',
-    a: 'Platzhalter: Ort und Termin werden hier ergänzt, sobald sie feststehen.',
-  },
-  {
-    q: 'Wer steckt hinter dem Festival?',
-    a: 'Platzhalter: Veranstalter:innen und Partner – u. a. das kiU und das KoLab, das Digitale Koproduktionslabor der Stadt Dortmund.',
-  },
-];
+import RichText from '../components/RichText.astro';
+import { faq } from '../data/site';
 ---
 
 <BaseLayout title="FAQ" description="Häufig gestellte Fragen zum YU Festival.">
@@ -31,8 +10,8 @@ const faqs: { q: string; a: string }[] = [
       <p class="eyebrow">FAQ</p>
       <h1>Häufige Fragen</h1>
       <p class="lead">
-        Die wichtigsten Antworten auf einen Blick. Fehlt etwas? Dann ergänzen wir
-        es hier.
+        Die wichtigsten Antworten auf einen Blick. Fehlt etwas? Dann schreibt
+        uns gerne.
       </p>
     </div>
   </section>
@@ -41,10 +20,12 @@ const faqs: { q: string; a: string }[] = [
     <div class="container narrow">
       <div class="faq-list">
         {
-          faqs.map((item) => (
+          faq.map((item) => (
             <details class="faq-item">
               <summary>{item.q}</summary>
-              <p>{item.a}</p>
+              <div class="faq-item__answer">
+                <RichText paras={item.a} />
+              </div>
             </details>
           ))
         }
@@ -101,8 +82,10 @@ const faqs: { q: string; a: string }[] = [
     transform: rotate(45deg);
   }
 
-  .faq-item p {
-    margin: 0;
-    padding-bottom: 1.5rem;
+  .faq-item__answer {
+    padding-bottom: 0.6rem;
+  }
+  .faq-item__answer :global(p) {
+    margin: 0 0 0.9rem;
   }
 </style>

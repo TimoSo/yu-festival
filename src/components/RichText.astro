@@ -1,0 +1,30 @@
+---
+// Gibt Absaetze aus und verlinkt darin E-Mail-Adressen und URLs.
+import { linkify } from '../lib/linkify';
+
+interface Props {
+  paras: string[];
+  class?: string;
+}
+const { paras, class: className } = Astro.props;
+---
+
+{
+  paras.map((para) => (
+    <p class={className}>
+      {linkify(para).map((teil) =>
+        teil.href ? (
+          <a
+            href={teil.href}
+            target={teil.extern ? '_blank' : undefined}
+            rel={teil.extern ? 'noopener noreferrer' : undefined}
+          >
+            {teil.text}
+          </a>
+        ) : (
+          teil.text
+        )
+      )}
+    </p>
+  ))
+}

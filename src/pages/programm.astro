@@ -1,19 +1,27 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import BrandText from '../components/BrandText.astro';
-import { tracks, days, events, ongoing } from '../data/site';
+import EventCard from '../components/EventCard.astro';
+import RichText from '../components/RichText.astro';
+import { tracks, days, events, ongoing, anmeldung } from '../data/programm';
 
-// Farbe je Kategorie, pro Track eigene Zuordnung
+// Farbe je Kategorie, pro Bereich eigene Zuordnung
 function accentOf(trackId: string, category: string): string {
   const track = tracks.find((t) => t.id === trackId);
   const cat = track?.categories.find((c) => c.name === category);
   return cat?.accent ?? 'var(--lavender)';
 }
+
+// Programmpunkte eines Tages, nach Beginn sortiert
+function eventsOf(trackId: string, day: number) {
+  return events
+    .filter((e) => e.track === trackId && e.day === day)
+    .sort((a, b) => a.start.localeCompare(b.start));
+}
 ---
 
 <BaseLayout
   title="Programm"
-  description="Das Programm des YU Festivals: Festival, Konferenz und Hackathon – mit Zeitplan und Details zu jedem Programmpunkt."
+  description="Das Programm des YU Festivals vom 22. bis 25. Oktober 2026 im Dortmunder U: Festival, Konferenz und Hackathon."
 >
   <section class="section programm">
     <div class="container">
@@ -43,36 +51,15 @@ function accentOf(trackId: string, category: string): string {
         </div>
       </div>
 
-      <!-- Durchgehende Arbeiten: gelten für alle Bereiche -->
-      <section class="ongoing" aria-label="Durchgehend">
-        <p class="ongoing__label">Durchgehend</p>
+      <!-- Durchgehende Ausstellungen: gelten für alle Bereiche -->
+      <section class="ongoing" aria-labelledby="ongoing-label">
+        <p class="ongoing__label" id="ongoing-label">
+          Ausstellungen · durchgehend an allen vier Tagen
+        </p>
         <div class="ongoing__grid">
           {
             ongoing.map((item) => (
-              <article class="ev ev--ongoing">
-                <button
-                  type="button"
-                  class="ev__head"
-                  aria-expanded="false"
-                  aria-controls={`body-${item.id}`}
-                >
-                  <span class="ev__meta">
-                    <span class="tag ev__tag">{item.period}</span>
-                    <span class="ev__title">{item.title}</span>
-                  </span>
-                  <span class="ev__plus" aria-hidden="true" />
-                </button>
-                <div class="ev__wrap">
-                  <div class="ev__body" id={`body-${item.id}`} role="region">
-                    <p>{item.description}</p>
-                    {item.location && (
-                      <p class="ev__detail">
-                        <strong>Ort:</strong> {item.location}
-                      </p>
-                    )}
-                  </div>
-                </div>
-              </article>
+              <EventCard item={item} tag={item.period} variant="ongoing" />
             ))
           }
         </div>
@@ -89,7 +76,38 @@ function accentOf(trackId: string, category: string): string {
             data-track={track.id}
             hidden={ti !== 0}
           >
-            <p class="track__intro">{track.intro}</p>
+            <div class="track__intro">
+              {track.intro.title && (
+                <h2 class="track__title">{track.intro.title}</h2>
+              )}
+              {track.intro.meta && <p class="track__meta">{track.intro.meta}</p>}
+              <RichText paras={track.intro.text} />
+              {track.intro.link && (
+                <p>
+                  <a
+                    class="track__link"
+                    href={track.intro.link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {track.intro.link.label} →
+                  </a>
+                </p>
+              )}
+              {track.intro.registration && (
+                <div class="track__anmeldung">
+                  <RichText paras={[anmeldung.text]} />
+                  <a
+                    class="btn btn--primary btn--on-white"
+                    href={`mailto:${anmeldung.email}?subject=${encodeURIComponent(
+                      `Anmeldung: ${track.label}`
+                    )}`}
+                  >
+                    Per E-Mail anmelden
+                  </a>
+                </div>
+              )}
+            </div>
 
             <div class="legend">
               {track.categories.map((cat) => (
@@ -101,14 +119,12 @@ function accentOf(trackId: string, category: string): string {
             </div>
 
             {days.map((day) => {
-              const dayEvents = events.filter(
-                (e) => e.track === track.id && e.day === day.nr
-              );
+              const dayEvents = eventsOf(track.id, day.nr);
               if (dayEvents.length === 0) return null;
               return (
                 <section class="day">
                   <h2 class="day__head">
-                    {day.label}
+                    {day.weekday}
                     <span class="day__date">{day.date}</span>
                   </h2>
 
@@ -118,55 +134,16 @@ function accentOf(trackId: string, category: string): string {
                         class="row"
                         style={`--cat:${accentOf(track.id, event.category)}`}
                       >
-                        <span class="row__time">{event.time}</span>
+                        <span class="row__time">
+                          <span class="row__start">{event.start}</span>
+                          {event.end && (
+                            <span class="row__end">–{event.end}</span>
+                          )}
+                        </span>
                         <span class="row__rail" aria-hidden="true">
                           <span class="row__dot" />
                         </span>
-
-                        <article class="ev">
-                          <button
-                            type="button"
-                            class="ev__head"
-                            aria-expanded="false"
-                            aria-controls={`body-${event.id}`}
-                          >
-                            <span class="ev__meta">
-                              <span class="tag ev__tag">{event.category}</span>
-                              <span class="ev__title">
-                                <BrandText text={event.title} />
-                              </span>
-                            </span>
-                            <span class="ev__plus" aria-hidden="true" />
-                          </button>
-
-                          <div class="ev__wrap">
-                            <div
-                              class="ev__body"
-                              id={`body-${event.id}`}
-                              role="region"
-                            >
-                              <p>{event.description}</p>
-                              {event.guest && (
-                                <p class="ev__detail">
-                                  <strong>Mit:</strong>{' '}
-                                  <BrandText text={event.guest} />
-                                </p>
-                              )}
-                              {event.bio && <p class="ev__detail">{event.bio}</p>}
-                              {event.location && (
-                                <p class="ev__detail">
-                                  <strong>Ort:</strong> {event.location}
-                                </p>
-                              )}
-                              {event.partner && (
-                                <p class="ev__detail">
-                                  <strong>In Kooperation mit:</strong>{' '}
-                                  <BrandText text={event.partner} />
-                                </p>
-                              )}
-                            </div>
-                          </div>
-                        </article>
+                        <EventCard item={event} tag={event.category} />
                       </li>
                     ))}
                   </ol>
@@ -205,7 +182,6 @@ function accentOf(trackId: string, category: string): string {
     max-width: 100%;
   }
 
-  /* aktive Pille */
   .switch__thumb,
   .switch__ghost {
     position: absolute;
@@ -213,7 +189,6 @@ function accentOf(trackId: string, category: string): string {
     left: 0;
     height: calc(100% - 0.8rem);
     border-radius: var(--radius-pill);
-    /* Breite/Position kommen per JS */
     width: var(--thumb-w, 0px);
     transform: translateX(var(--thumb-x, 0px));
     transition:
@@ -259,7 +234,7 @@ function accentOf(trackId: string, category: string): string {
     color: var(--white);
   }
 
-  /* ---------- Durchgehende Arbeiten ---------- */
+  /* ---------- Ausstellungen ---------- */
   .ongoing {
     margin-bottom: clamp(2.5rem, 6vw, 4rem);
   }
@@ -274,22 +249,46 @@ function accentOf(trackId: string, category: string): string {
   .ongoing__grid {
     display: grid;
     gap: 1rem;
+    align-items: start;
   }
   @media (min-width: 760px) {
     .ongoing__grid {
       grid-template-columns: repeat(2, 1fr);
     }
   }
-  .ev--ongoing {
-    --cat: var(--deep-purple);
-  }
 
-  /* ---------- Zeitplan ---------- */
+  /* ---------- Bereichs-Einleitung ---------- */
   .track__intro {
+    max-width: 70ch;
+    margin-bottom: 1.75rem;
+  }
+  .track__title {
+    font-family: var(--font-sans);
     font-weight: 900;
-    font-size: clamp(1.05rem, 2vw, 1.25rem);
-    max-width: 60ch;
-    margin: 0 0 1.5rem;
+    font-size: clamp(1.3rem, 3vw, 1.75rem);
+    line-height: 1.2;
+    text-transform: none;
+    color: var(--deep-purple);
+    margin-bottom: 0.6rem;
+  }
+  .track__meta {
+    display: inline-block;
+    font-weight: 900;
+    font-size: 0.9rem;
+    padding: 0.35rem 0.9rem;
+    border-radius: var(--radius-pill);
+    background: color-mix(in srgb, var(--lavender) 14%, var(--white));
+    color: var(--deep-purple);
+  }
+  .track__link {
+    font-weight: 900;
+    color: var(--lavender);
+  }
+  .track__anmeldung {
+    margin-top: 1rem;
+    padding: 1rem 1.2rem;
+    border-radius: var(--radius-sm);
+    background: color-mix(in srgb, var(--lavender) 12%, var(--white));
   }
 
   .legend {
@@ -311,13 +310,15 @@ function accentOf(trackId: string, category: string): string {
     border-radius: var(--radius-pill);
   }
 
+  /* ---------- Zeitplan ---------- */
   .day {
     margin-bottom: clamp(2rem, 5vw, 3rem);
   }
   .day__head {
     display: flex;
+    flex-wrap: wrap;
     align-items: baseline;
-    gap: 0.9rem;
+    gap: 0.4rem 0.9rem;
     font-size: clamp(1.5rem, 3.5vw, 2.2rem);
     margin-bottom: 1.25rem;
     color: var(--deep-purple);
@@ -339,15 +340,25 @@ function accentOf(trackId: string, category: string): string {
 
   .row {
     display: grid;
-    grid-template-columns: 4.5rem 1.75rem 1fr;
+    grid-template-columns: 4.5rem 1.75rem minmax(0, 1fr);
     gap: 1rem;
     align-items: stretch;
   }
   .row__time {
-    font-weight: 900;
-    text-align: right;
-    color: var(--deep-purple);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
     padding-top: 1.05rem;
+    color: var(--deep-purple);
+    line-height: 1.2;
+  }
+  .row__start {
+    font-weight: 900;
+  }
+  .row__end {
+    font-weight: 700;
+    font-size: 0.8rem;
+    opacity: 0.7;
   }
 
   /* durchgehende Linie + Punkt */
@@ -382,129 +393,20 @@ function accentOf(trackId: string, category: string): string {
     flex-shrink: 0;
   }
 
-  /* ---------- Aufklappbarer Programmpunkt ---------- */
-  .ev {
-    border: var(--border-w) solid var(--cat);
-    border-radius: var(--radius);
-    background: var(--white);
-    margin-bottom: 0.75rem;
-    overflow: hidden;
-    transition: background 0.2s ease;
-  }
-  .ev:hover {
-    background: color-mix(in srgb, var(--cat) 10%, var(--white));
-  }
-
-  .ev__head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    width: 100%;
-    appearance: none;
-    border: 0;
-    background: none;
-    cursor: pointer;
-    text-align: left;
-    padding: 0.9rem 1.2rem;
-    font-family: var(--font-sans);
-    color: var(--black);
-  }
-  .ev__meta {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.4rem;
-  }
-  .ev__tag {
-    background: var(--cat);
-    color: var(--deep-purple);
-  }
-  .ev--ongoing .ev__tag {
-    color: var(--white);
-  }
-  .ev__title {
-    font-weight: 900;
-    font-size: 1.1rem;
-    line-height: 1.25;
-  }
-
-  .ev__plus {
-    position: relative;
-    flex-shrink: 0;
-    width: 2rem;
-    height: 2rem;
-    border-radius: var(--radius-pill);
-    background: var(--cat);
-    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-  .ev__plus::before,
-  .ev__plus::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0.85rem;
-    height: 3px;
-    border-radius: 999px;
-    background: var(--deep-purple);
-    transform: translate(-50%, -50%);
-  }
-  .ev--ongoing .ev__plus::before,
-  .ev--ongoing .ev__plus::after {
-    background: var(--white);
-  }
-  .ev__plus::after {
-    transform: translate(-50%, -50%) rotate(90deg);
-    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-  .ev.is-open .ev__plus::after {
-    transform: translate(-50%, -50%) rotate(0deg);
-  }
-
-  /* Aufklappen ueber die Hoehe: die Werte setzt das Skript anhand der
-     tatsaechlichen Inhaltshoehe. Der verbreitete 0fr-/1fr-Grid-Trick
-     funktioniert hier nicht - overflow:hidden setzt die Mindesthoehe
-     des Grid-Elements auf 0, wodurch die Zeile auch im offenen
-     Zustand zusammenfaellt. */
-  .ev__wrap {
-    height: 0;
-    overflow: hidden;
-    /* CSS kann nicht von bzw. auf height:auto animieren. Deshalb misst
-       das Skript die tatsaechliche Inhaltshoehe und animiert per
-       Web Animations API (laesst sich bei schnellem Klicken sauber
-       abbrechen). */
-  }
-  .ev__body {
-    padding: 0 1.2rem 1.2rem;
-  }
-  .ev__body > :first-child {
-    margin-top: 0;
-  }
-  .ev__detail {
-    margin: 0.5rem 0 0;
-  }
-  .ev__detail strong {
-    color: var(--lavender);
-  }
-
   @media (max-width: 560px) {
     .row {
-      grid-template-columns: 3.2rem 1.25rem 1fr;
+      grid-template-columns: 3.2rem 1.25rem minmax(0, 1fr);
       gap: 0.6rem;
     }
-    .ev__head {
-      padding: 0.8rem 1rem;
+    .row__start {
+      font-size: 0.9rem;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
     .switch,
     .switch__thumb,
-    .switch__ghost,
-    .ev__wrap,
-    .ev__plus,
-    .ev__plus::after {
+    .switch__ghost {
       transition: none;
     }
   }
@@ -516,15 +418,17 @@ function accentOf(trackId: string, category: string): string {
   const buttons = Array.from(
     document.querySelectorAll<HTMLButtonElement>('.switch__btn')
   );
-  const panels = Array.from(
-    document.querySelectorAll<HTMLElement>('.track')
-  );
+  const panels = Array.from(document.querySelectorAll<HTMLElement>('.track'));
 
   function moveThumb(btn: HTMLElement, prefix: 'thumb' | 'ghost') {
     if (!switchEl) return;
     switchEl.style.setProperty(`--${prefix}-w`, `${btn.offsetWidth}px`);
     switchEl.style.setProperty(`--${prefix}-x`, `${btn.offsetLeft}px`);
   }
+
+  const aktiverButton = () =>
+    buttons.find((b) => b.getAttribute('aria-selected') === 'true') ??
+    buttons[0];
 
   function activate(id: string) {
     buttons.forEach((b) => {
@@ -539,21 +443,10 @@ function accentOf(trackId: string, category: string): string {
   }
 
   if (switchEl && buttons.length) {
-    const active =
-      buttons.find((b) => b.getAttribute('aria-selected') === 'true') ??
-      buttons[0];
-    moveThumb(active, 'thumb');
+    moveThumb(aktiverButton(), 'thumb');
     // nach dem Laden der Schriften kann sich die Breite noch aendern
-    document.fonts?.ready.then(() => moveThumb(
-      buttons.find((b) => b.getAttribute('aria-selected') === 'true') ?? buttons[0],
-      'thumb'
-    ));
-    window.addEventListener('resize', () => {
-      const cur =
-        buttons.find((b) => b.getAttribute('aria-selected') === 'true') ??
-        buttons[0];
-      moveThumb(cur, 'thumb');
-    });
+    document.fonts?.ready.then(() => moveThumb(aktiverButton(), 'thumb'));
+    window.addEventListener('resize', () => moveThumb(aktiverButton(), 'thumb'));
 
     buttons.forEach((btn) => {
       btn.addEventListener('click', () => activate(btn.dataset.track!));
@@ -599,43 +492,4 @@ function accentOf(trackId: string, category: string): string {
       switchEl.style.setProperty('--shift-y', `${(-dy * 4).toFixed(2)}px`);
     });
   }
-
-  // ---------- Aufklappen der Programmpunkte ----------
-  const DAUER = 400;
-  const KURVE = 'cubic-bezier(0.22, 1, 0.36, 1)';
-  const wenigerBewegung = window.matchMedia('(prefers-reduced-motion: reduce)');
-
-  document.querySelectorAll<HTMLButtonElement>('.ev__head').forEach((head) => {
-    head.addEventListener('click', () => {
-      const card = head.closest<HTMLElement>('.ev');
-      const wrap = card?.querySelector<HTMLElement>('.ev__wrap');
-      const body = card?.querySelector<HTMLElement>('.ev__body');
-      if (!card || !wrap || !body) return;
-
-      const oeffnen = !card.classList.contains('is-open');
-      card.classList.toggle('is-open', oeffnen);
-      head.setAttribute('aria-expanded', String(oeffnen));
-
-      const von = wrap.getBoundingClientRect().height;
-      const nach = oeffnen ? body.getBoundingClientRect().height : 0;
-
-      // laufende Animation abbrechen, damit schnelles Klicken nicht hakt
-      wrap.getAnimations().forEach((a) => a.cancel());
-      wrap.style.height = `${nach}px`;
-
-      if (wenigerBewegung.matches) {
-        if (oeffnen) wrap.style.height = 'auto';
-        return;
-      }
-
-      const anim = wrap.animate(
-        [{ height: `${von}px` }, { height: `${nach}px` }],
-        { duration: DAUER, easing: KURVE }
-      );
-      anim.onfinish = () => {
-        // offen auf auto stellen, damit Umbrueche beim Verkleinern passen
-        if (card.classList.contains('is-open')) wrap.style.height = 'auto';
-      };
-    });
-  });
 </script>
