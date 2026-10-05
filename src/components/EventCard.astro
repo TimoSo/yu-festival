@@ -302,10 +302,23 @@ const betreff = encodeURIComponent(`Anmeldung: ${item.title}`);
       if (!card || !wrap || !body) return;
 
       const oeffnen = !card.classList.contains('is-open');
+      // aktuelle Hoehe messen, BEVOR sich das Layout aendert
+      const von = wrap.getBoundingClientRect().height;
+
+      // Signal an die Umgebung: Wer das Layout anpassen will (z. B. die
+      // Ausstellungen, die beim Oeffnen auf volle Breite gehen), tut das
+      // jetzt – synchron, damit die Zielhoehe unten schon bei der neuen
+      // Breite gemessen wird.
+      card.dispatchEvent(
+        new CustomEvent('ev:beforetoggle', {
+          bubbles: true,
+          detail: { open: oeffnen },
+        })
+      );
+
       card.classList.toggle('is-open', oeffnen);
       head.setAttribute('aria-expanded', String(oeffnen));
 
-      const von = wrap.getBoundingClientRect().height;
       const nach = oeffnen ? body.getBoundingClientRect().height : 0;
 
       // laufende Animation abbrechen, damit schnelles Klicken nicht hakt
