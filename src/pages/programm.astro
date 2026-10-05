@@ -66,7 +66,13 @@ function eventsOf(trackId: string, day: number) {
               {track.intro.title && (
                 <h2 class="track__title">{track.intro.title}</h2>
               )}
-              {track.intro.meta && <p class="track__meta">{track.intro.meta}</p>}
+              {track.intro.meta && (
+                <p class="track__meta">
+                  {track.intro.meta.map((zeile) => (
+                    <span class="track__meta-zeile">{zeile}</span>
+                  ))}
+                </p>
+              )}
               <RichText paras={track.intro.text} />
               {track.intro.link && (
                 <p>
@@ -274,13 +280,21 @@ function eventsOf(trackId: string, day: number) {
     margin-bottom: 0.6rem;
   }
   .track__meta {
-    display: inline-block;
+    display: inline-flex;
+    flex-direction: column;
+    gap: 0.2rem;
     font-weight: 900;
     font-size: 0.9rem;
-    padding: 0.35rem 0.9rem;
-    border-radius: var(--radius-pill);
+    line-height: 1.45;
+    padding: 0.65rem 1.3rem;
+    /* Radius = halbe Höhe einer EINZELNEN Zeile (0.9rem × 1.45 +
+       2 × 0.65rem ≈ 2.6rem). Einzeilig ergibt das eine Pille,
+       mehrzeilig ein weich abgerundetes Rechteck – egal ob die Zeilen
+       aus den Daten kommen oder durch Umbruch auf dem Handy entstehen. */
+    border-radius: 1.3rem;
     background: color-mix(in srgb, var(--lavender) 14%, var(--white));
     color: var(--deep-purple);
+    margin-bottom: 1rem;
   }
   .track__link {
     font-weight: 900;
@@ -395,13 +409,24 @@ function eventsOf(trackId: string, day: number) {
     flex-shrink: 0;
   }
 
+  /* Handy: Uhrzeiten linksbündig an der gleichen Kante wie die
+     Tagesüberschrift, Spalte nur so breit wie die breiteste Zeit
+     (~41 px gemessen) – der gewonnene Platz geht an die Karten. */
   @media (max-width: 560px) {
     .row {
-      grid-template-columns: 3.2rem 1.25rem minmax(0, 1fr);
-      gap: 0.6rem;
+      grid-template-columns: 2.65rem 1rem minmax(0, 1fr);
+      gap: 0.5rem;
+    }
+    .row__time {
+      align-items: flex-start;
     }
     .row__start {
       font-size: 0.9rem;
+    }
+    .row__dot {
+      width: 1rem;
+      height: 1rem;
+      margin-top: 1.125rem; /* Mitte bleibt auf gleicher Höhe */
     }
   }
 

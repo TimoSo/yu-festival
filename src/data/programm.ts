@@ -157,6 +157,11 @@ const JENNIFER_EICKELMANN: Person = {
   ],
 };
 
+// Geschützte Zeichen für die Eckdaten-Pille: Zusammengehöriges soll
+// beim Umbruch auf dem Handy nicht auseinandergerissen werden.
+const NB = '\u00A0'; // geschütztes Leerzeichen
+const WJ = '\u2060'; // verhindert einen Umbruch nach dem Gedankenstrich
+
 // ------------------------------------------------------------
 //  Bereiche (Tracks)
 // ------------------------------------------------------------
@@ -167,7 +172,8 @@ export const tracks: {
   categories: { name: string; accent: string }[];
   intro: {
     title?: string;
-    meta?: string;
+    /** Eckdaten, jede Angabe in einer eigenen Zeile */
+    meta?: string[];
     text: string[];
     link?: { label: string; href: string };
     registration?: boolean;
@@ -182,7 +188,7 @@ export const tracks: {
       { name: 'Workshop', accent: 'var(--lime)' },
     ],
     intro: {
-      meta: '22.–25. Oktober 2026 · Dortmunder U',
+      meta: [`22.–${WJ}25.${NB}Oktober${NB}2026${NB}· Dortmunder${NB}U`],
       text: [
         'Performances, Workshops, Talks und Musik an vier Tagen. Für manche Veranstaltungen ist eine Anmeldung nötig – das steht jeweils beim Programmpunkt.',
       ],
@@ -198,7 +204,11 @@ export const tracks: {
     ],
     intro: {
       title: 'Wie wollen wir digital miteinander leben? Die YU Konferenz 2026',
-      meta: 'Freitag, 23. Oktober 2026 · Block 1: 10:00–13:30 Uhr · Block 2 (Praxisworkshops): 14:15–16:00 Uhr',
+      meta: [
+        `Freitag, 23.${NB}Oktober${NB}2026`,
+        `Block${NB}1: 10:00–${WJ}13:30${NB}Uhr`,
+        `Block${NB}2 (Praxisworkshops): 14:15–${WJ}16:00${NB}Uhr`,
+      ],
       text: [
         'Auf der diesjährigen YU Konferenz fragen wir uns: Wie prägen digitale Entwicklungen unser Verständnis von Gemeinschaft und Gesellschaft? Wer setzt die Regeln im digitalen Raum? Wie beeinflusst das Digitale unser Bild von uns selbst und voneinander? Und wie können wir demokratische Werte auch im digitalen Raum stärken und bewahren?',
         'Die YU Konferenz lädt dazu ein, bestehende Perspektiven zu hinterfragen, unterschiedliche Stimmen miteinander ins Gespräch zu bringen und gemeinsam darüber nachzudenken, wie wir digitale Räume und Gemeinschaften in Zukunft gestalten wollen.',
@@ -220,7 +230,7 @@ export const tracks: {
     ],
     intro: {
       title: 'Hackathon „Connections“',
-      meta: 'im Rahmen der KoLab Days x ATEM Biennale und des YU Festivals',
+      meta: [`im Rahmen der KoLab${NB}Days x ATEM${NB}Biennale und des YU${NB}Festivals`],
       text: [
         'Nach den Kick-off-Workshops kann im Workspace über mehrere Tage weitergearbeitet werden: Ideen werden vertieft, ausprobiert und gemeinsam weiterentwickelt. So entsteht Schritt für Schritt eine kollektiv entwickelte VR-Installation – zu sehen beim Showcase am Sonntag.',
       ],

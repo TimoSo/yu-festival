@@ -25,9 +25,8 @@ ci/
 
 # Lizenzpflichtige Schriftdateien – bewusst NICHT im Repo.
 # "Helvetica Rounded LT Std" und "Blob Regular" sind kommerziell. Einchecken
-# wuerde sie ueber GitHub verteilen; in public/ waeren sie zusaetzlich auf der
-# Live-Seite frei herunterladbar. Quelldateien liegen in design/fonts/
-# (wird nicht ausgeliefert). Details: design/fonts/README.md
+# wuerde sie ueber GitHub verteilen. Die Quelldateien liegen in ci/Fonts/;
+# ausgeliefert werden nur die daraus erzeugten WOFF2 in public/fonts/.
 *.otf
 *.ttf
 
