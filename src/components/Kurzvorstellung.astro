@@ -1,0 +1,625 @@
+---
+// Kurzvorstellung: Text links, rechts schwebende Profil-Blasen.
+// Ein Klick verwandelt eine Blase in eine Karte mit Kurzbio; die anderen
+// werden weggeschoben. Bewegung und Verwandlung steuert das Skript unten.
+import fs from 'node:fs';
+import path from 'node:path';
+import { kurzvorstellung, spotlight } from '../data/site';
+
+// Foto nur verwenden, wenn die Datei schon existiert – sonst Initialen
+const hatFoto = (p?: string) =>
+  !!p && fs.existsSync(path.join(process.cwd(), 'public', p));
+
+// Initialen aus Vor- und Nachname. Titel („Dr.“) und Mittelinitialen
+// („C.“) enden auf einen Punkt und werden übersprungen.
+function initialen(name: string) {
+  const woerter = name.split(' ').filter((t) => !t.endsWith('.'));
+  const erst = woerter[0]?.[0] ?? '';
+  const letzt = woerter.length > 1 ? woerter[woerter.length - 1][0] : '';
+  return (erst + letzt).toUpperCase();
+}
+---
+
+<section class="section section--purple kv">
+  <div class="container kv__inner">
+    <div class="kv__text">
+      <p class="eyebrow">{kurzvorstellung.eyebrow}</p>
+      <h2>{kurzvorstellung.titel}</h2>
+      <p class="lead">{kurzvorstellung.text}</p>
+      <p class="kv__hinweis">{kurzvorstellung.hinweis}</p>
+      <a class="btn btn--primary" href="/programm">Zum Programm</a>
+    </div>
+
+    <div class="kv__feld" data-kv-feld>
+      {
+        spotlight.map((person, i) => (
+          <div class="blase" data-blase style={`--ring:${person.farbe}`}>
+            <span class="blase__rahmen" aria-hidden="true" />
+            <span class="blase__bild" aria-hidden="true">
+              {hatFoto(person.foto) ? (
+                <img src={person.foto} alt="" loading="lazy" />
+              ) : (
+                <span class="blase__initialen">{initialen(person.name)}</span>
+              )}
+            </span>
+
+            <div class="blase__inhalt" id={`kv-person-${i}`} aria-hidden="true">
+              <span class="blase__platz" />
+              <div class="blase__kopf">
+                <p class="blase__name">{person.name}</p>
+                <p class="blase__rolle">{person.rolle}</p>
+              </div>
+              <p class="blase__bio">{person.bio}</p>
+              <p class="blase__wann">{person.wann}</p>
+            </div>
+
+            <button
+              type="button"
+              class="blase__knopf"
+              aria-expanded="false"
+              aria-controls={`kv-person-${i}`}
+            >
+              <span class="visually-hidden">{person.name} – Kurzvorstellung</span>
+            </button>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .kv__inner {
+    display: grid;
+    /* minmax(0, …): lange Wörter dürfen die Spalte nicht aufdrücken */
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2.5rem;
+    align-items: center;
+  }
+  @media (min-width: 900px) {
+    .kv__inner {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+      gap: 3rem;
+    }
+  }
+  .kv__hinweis {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    margin-bottom: 1.75rem;
+  }
+
+  /* ---------- Feld mit den Blasen ---------- */
+  .kv__feld {
+    position: relative;
+    height: 32rem; /* wird vom Skript passend gesetzt */
+    touch-action: pan-y; /* Scrollen auf dem Handy nicht blockieren */
+    --karte-b: 360px;
+    --bild-gross: 84px;
+  }
+
+  .blase {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 7rem;
+    height: 7rem;
+    border-radius: 50%;
+    /* Der Karteninhalt liegt in voller Breite bereit – ohne Zuschnitt
+       würde er bei Blasen am Rand über den Bildschirm hinausragen. */
+    overflow: hidden;
+    will-change: transform, width, height;
+  }
+
+  /* Ohne JavaScript: einfache Reihe aus Kreisen statt schwebender Blasen */
+  .kv__feld:not(.ist-bereit) {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    gap: 1rem;
+    height: auto;
+  }
+  .kv__feld:not(.ist-bereit) .blase {
+    position: relative;
+  }
+  .kv__feld:not(.ist-bereit) .blase__rahmen {
+    border-radius: 50%;
+  }
+  .kv__feld:not(.ist-bereit) .blase__bild {
+    inset: 8px;
+    border-radius: 50%;
+  }
+
+  /* Farbiger Ring, wird beim Öffnen zum Kartenrahmen */
+  .blase__rahmen {
+    position: absolute;
+    inset: 0;
+    border: 4px solid var(--ring);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0);
+  }
+
+  /* Bild als eigenes Element: Kreis → abgerundetes Rechteck oben links */
+  .blase__bild {
+    position: absolute;
+    left: 8px;
+    top: 8px;
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+    background: var(--lavender);
+    container-type: size;
+  }
+  .blase__bild img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .blase__initialen {
+    font-weight: 900;
+    font-size: 34cqmin;
+    letter-spacing: 0.02em;
+    color: var(--white);
+    user-select: none;
+  }
+
+  /* Inhalt der Karte: liegt in Endbreite bereit, wird eingeblendet */
+  .blase__inhalt {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: var(--karte-b);
+    padding: 12px;
+    display: grid;
+    grid-template-columns: var(--bild-gross) minmax(0, 1fr);
+    column-gap: 14px;
+    row-gap: 10px;
+    align-items: center;
+    color: var(--black);
+    opacity: 0;
+    pointer-events: none;
+  }
+  .blase__platz {
+    width: var(--bild-gross);
+    height: var(--bild-gross);
+  }
+  .blase__kopf {
+    min-width: 0;
+  }
+  .blase__inhalt p {
+    margin: 0;
+  }
+  .blase__name {
+    font-weight: 900;
+    font-size: 1.1rem;
+    line-height: 1.2;
+    color: var(--deep-purple);
+  }
+  .blase__rolle {
+    margin-top: 0.25rem !important;
+    font-weight: 700;
+    font-size: 0.85rem;
+    line-height: 1.3;
+    color: var(--lavender);
+  }
+  .blase__bio {
+    grid-column: 1 / -1;
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+  .blase__wann {
+    grid-column: 1 / -1;
+    justify-self: start;
+    font-weight: 900;
+    font-size: 0.8rem;
+    padding: 0.3rem 0.8rem;
+    border-radius: var(--radius-pill);
+    background: color-mix(in srgb, var(--lavender) 14%, var(--white));
+    color: var(--deep-purple);
+  }
+
+  /* Unsichtbarer Knopf über der ganzen Blase – macht sie klick- und
+     tastaturbedienbar. Der Fokusrahmen folgt der Form über :has(). */
+  .blase__knopf {
+    position: absolute;
+    inset: 0;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    cursor: pointer;
+    border-radius: 50%;
+  }
+  .blase__knopf:focus-visible {
+    outline: none;
+  }
+  /* Fokusrahmen am äußeren Element: wird nicht vom Zuschnitt erfasst
+     und folgt dessen Eckenradius */
+  .blase:has(.blase__knopf:focus-visible) {
+    outline: 3px solid var(--white);
+    outline-offset: 4px;
+  }
+</style>
+
+<script>
+  // ------------------------------------------------------------
+  //  Schwebende Blasen: kleine Physik-Simulation
+  //  Jede Blase hängt an einer weichen Feder an ihrem Platz, driftet
+  //  leicht, weicht dem Mauszeiger aus und stößt andere Blasen ab.
+  //  Beim Öffnen wächst sie per Feder (mit leichtem Überschwingen) zur
+  //  Karte; die übrigen schrumpfen etwas und werden weggeschoben.
+  // ------------------------------------------------------------
+
+  type Koerper = {
+    el: HTMLElement;
+    rahmen: HTMLElement;
+    bild: HTMLElement;
+    inhalt: HTMLElement;
+    knopf: HTMLButtonElement;
+    heim: [number, number];
+    x: number;
+    y: number;
+    vx: number;
+    vy: number;
+    p: number; // Verwandlung Kreis (0) → Karte (1)
+    pv: number;
+    pz: number;
+    s: number; // Skalierung (andere schrumpfen, wenn eine offen ist)
+    sv: number;
+    phase: number;
+    tempo: number;
+    w: number;
+    h: number;
+    karteH: number;
+  };
+
+  // Ruheplätze als Anteil von Breite/Höhe des Feldes
+  const HEIM: [number, number][] = [
+    [0.24, 0.24],
+    [0.72, 0.2],
+    [0.47, 0.52],
+    [0.2, 0.8],
+    [0.76, 0.77],
+  ];
+  const RADIUS = 28; // Eckenradius der Karte
+  const RAND_ZU = 8; // Abstand Bild ↔ Außenkante, geschlossen
+  const RAND_AUF = 12; // dito, geöffnet → Bildradius 28 − 12 = 16
+  const ABSTAND = 10; // Mindestabstand zwischen den Blasen
+
+  const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v));
+  const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+  const weich = (a: number, b: number, t: number) => {
+    const x = clamp((t - a) / (b - a), 0, 1);
+    return x * x * (3 - 2 * x);
+  };
+
+  document.querySelectorAll<HTMLElement>('[data-kv-feld]').forEach(starte);
+
+  function starte(feld: HTMLElement) {
+    const ruhig = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const koerper: Koerper[] = Array.from(
+      feld.querySelectorAll<HTMLElement>('[data-blase]')
+    ).map((el, i) => ({
+      el,
+      rahmen: el.querySelector<HTMLElement>('.blase__rahmen')!,
+      bild: el.querySelector<HTMLElement>('.blase__bild')!,
+      inhalt: el.querySelector<HTMLElement>('.blase__inhalt')!,
+      knopf: el.querySelector<HTMLButtonElement>('.blase__knopf')!,
+      heim: HEIM[i % HEIM.length],
+      x: 0,
+      y: 0,
+      vx: 0,
+      vy: 0,
+      p: 0,
+      pv: 0,
+      pz: 0,
+      s: 1,
+      sv: 0,
+      phase: i * 1.7,
+      tempo: 0.35 + i * 0.07,
+      w: 0,
+      h: 0,
+      karteH: 0,
+    }));
+    if (!koerper.length) return;
+
+    let W = 0;
+    let H = 0;
+    let D = 0; // Durchmesser einer geschlossenen Blase
+    let KB = 0; // Kartenbreite
+    let BG = 0; // Bildgröße in der Karte
+    let offen: Koerper | null = null;
+    let maus: { x: number; y: number } | null = null;
+    let bereit = false;
+
+    function messen() {
+      const alteW = W || 1;
+      const alteH = H || 1;
+      W = feld.clientWidth;
+      D = clamp(W * 0.2, 76, 124);
+      KB = Math.min(W - 12, 360);
+      BG = W < 420 ? 72 : 84;
+      feld.style.setProperty('--karte-b', `${KB}px`);
+      feld.style.setProperty('--bild-gross', `${BG}px`);
+      koerper.forEach((k) => (k.karteH = k.inhalt.offsetHeight));
+      const hoechsteKarte = Math.max(...koerper.map((k) => k.karteH));
+      // genug Höhe, dass über und unter einer offenen Karte Blasen Platz haben
+      H = Math.max(W < 600 ? 460 : 520, hoechsteKarte + D * 1.6);
+      feld.style.height = `${H}px`;
+      // Positionen bei Größenänderung mitskalieren und SOFORT neu zeichnen –
+      // nicht erst im nächsten Frame (der kommt z. B. bei reduzierter
+      // Bewegung oder unsichtbarem Feld nicht). Sonst ragt eine Blase am
+      // Rand kurz über die Seite, wenn etwa eine Scrollleiste auftaucht.
+      if (!bereit) return;
+      koerper.forEach((k) => {
+        k.x *= W / alteW;
+        k.y *= H / alteH;
+        const q = Math.max(0, k.p);
+        const d = D * k.s;
+        k.w = lerp(d, KB, q);
+        k.h = lerp(d, k.karteH, q);
+        begrenzen(k);
+        zeichnen(k);
+      });
+    }
+
+    function heimX(k: Koerper) {
+      return clamp(k.heim[0] * W, D / 2 + 4, W - D / 2 - 4);
+    }
+    function heimY(k: Koerper) {
+      return clamp(k.heim[1] * H, D / 2 + 4, H - D / 2 - 4);
+    }
+
+    // ---------- Öffnen / Schließen ----------
+    function oeffnen(k: Koerper) {
+      offen = k;
+      k.pz = 1;
+      k.knopf.setAttribute('aria-expanded', 'true');
+      k.inhalt.setAttribute('aria-hidden', 'false');
+      wecken();
+    }
+    function schliessen(k: Koerper) {
+      if (offen === k) offen = null;
+      k.pz = 0;
+      k.knopf.setAttribute('aria-expanded', 'false');
+      k.inhalt.setAttribute('aria-hidden', 'true');
+      wecken();
+    }
+    koerper.forEach((k) =>
+      k.knopf.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (offen === k) {
+          schliessen(k);
+        } else {
+          if (offen) schliessen(offen);
+          oeffnen(k);
+        }
+      })
+    );
+    // Klick ins Leere schließt die offene Karte
+    feld.addEventListener('click', (e) => {
+      if (offen && e.target === feld) schliessen(offen);
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && offen) {
+        const k = offen;
+        schliessen(k);
+        k.knopf.focus();
+      }
+    });
+
+    // ---------- Mauszeiger (nur Maus/Stift, nicht beim Wischen) ----------
+    feld.addEventListener('pointermove', (e) => {
+      if (e.pointerType === 'touch') return;
+      const r = feld.getBoundingClientRect();
+      maus = { x: e.clientX - r.left, y: e.clientY - r.top };
+    });
+    feld.addEventListener('pointerleave', () => (maus = null));
+
+    // ---------- Kollisionen ----------
+    function kollisionen() {
+      for (let i = 0; i < koerper.length; i++) {
+        for (let j = i + 1; j < koerper.length; j++) {
+          const a = koerper[i];
+          const b = koerper[j];
+          const aKreis = a.p < 0.5;
+          const bKreis = b.p < 0.5;
+
+          if (aKreis && bKreis) {
+            // Kreis gegen Kreis: beide gleich weit auseinander
+            let dx = b.x - a.x;
+            let dy = b.y - a.y;
+            let d = Math.hypot(dx, dy);
+            const min = a.w / 2 + b.w / 2 + ABSTAND;
+            if (d < min) {
+              if (d < 0.01) {
+                dx = 1;
+                dy = 0;
+                d = 1;
+              }
+              const halb = (min - d) / 2;
+              a.x -= (dx / d) * halb;
+              a.y -= (dy / d) * halb;
+              b.x += (dx / d) * halb;
+              b.y += (dy / d) * halb;
+            }
+          } else if (aKreis !== bKreis) {
+            // Kreis gegen Karte: nur der Kreis weicht aus
+            const karte = aKreis ? b : a;
+            const kreis = aKreis ? a : b;
+            const hx = karte.w / 2;
+            const hy = karte.h / 2;
+            const nx = clamp(kreis.x, karte.x - hx, karte.x + hx);
+            const ny = clamp(kreis.y, karte.y - hy, karte.y + hy);
+            const dx = kreis.x - nx;
+            const dy = kreis.y - ny;
+            const d = Math.hypot(dx, dy);
+            const r = kreis.w / 2 + ABSTAND;
+            if (d < r) {
+              if (d < 0.01) {
+                // Mittelpunkt innerhalb der Karte: zur nächsten Kante
+                const l = kreis.x - (karte.x - hx);
+                const re = karte.x + hx - kreis.x;
+                const o = kreis.y - (karte.y - hy);
+                const u = karte.y + hy - kreis.y;
+                const m = Math.min(l, re, o, u);
+                if (m === l) kreis.x = karte.x - hx - r;
+                else if (m === re) kreis.x = karte.x + hx + r;
+                else if (m === o) kreis.y = karte.y - hy - r;
+                else kreis.y = karte.y + hy + r;
+              } else {
+                kreis.x += (dx / d) * (r - d);
+                kreis.y += (dy / d) * (r - d);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    function begrenzen(k: Koerper) {
+      const hx = k.w / 2 + 2;
+      const hy = k.h / 2 + 2;
+      k.x = clamp(k.x, hx, Math.max(hx, W - hx));
+      k.y = clamp(k.y, hy, Math.max(hy, H - hy));
+    }
+
+    // ---------- Darstellung ----------
+    function zeichnen(k: Koerper) {
+      const q = Math.max(0, k.p);
+      const qc = Math.min(1, q);
+      const d = D * k.s;
+      const s = k.el.style;
+      s.width = `${k.w}px`;
+      s.height = `${k.h}px`;
+      s.transform = `translate3d(${k.x - k.w / 2}px, ${k.y - k.h / 2}px, 0)`;
+      s.zIndex = qc > 0.02 ? '3' : '1';
+
+      const radius = `${lerp(d / 2, RADIUS, qc)}px`;
+      s.borderRadius = radius;
+      k.rahmen.style.borderRadius = radius;
+      k.knopf.style.borderRadius = radius;
+      k.rahmen.style.backgroundColor = `rgba(255,255,255,${Math.min(1, qc * 1.5)})`;
+
+      // Bild: geschlossen zentrierter Kreis, offen Rechteck oben links,
+      // Radius passend zur Ecke (Kartenradius minus Randabstand)
+      const groesse = lerp(d - 2 * RAND_ZU, BG, qc);
+      const rand = lerp(RAND_ZU, RAND_AUF, qc);
+      const b = k.bild.style;
+      b.width = `${groesse}px`;
+      b.height = `${groesse}px`;
+      b.left = `${rand}px`;
+      b.top = `${rand}px`;
+      b.borderRadius = `${lerp((d - 2 * RAND_ZU) / 2, RADIUS - RAND_AUF, qc)}px`;
+
+      k.inhalt.style.opacity = String(weich(0.6, 1, qc));
+    }
+
+    // ---------- Simulationsschritt ----------
+    let zuletzt = performance.now();
+    const start = zuletzt;
+    let rafId = 0;
+    let sichtbar = false;
+
+    function schritt(jetzt: number) {
+      const dt = Math.min(48, jetzt - zuletzt) / 16.667; // 1 = ein Frame bei 60 fps
+      zuletzt = jetzt;
+      const t = (jetzt - start) / 1000;
+      const ruhe = ruhig.matches;
+
+      for (const k of koerper) {
+        // Größe: offene Karte 1, andere schrumpfen leicht, wenn eine offen ist
+        const sZiel = offen && k !== offen ? 0.72 : 1;
+        // Verwandlung per Feder – leichtes Überschwingen wirkt wie ein „Plopp“
+        if (ruhe) {
+          k.s = sZiel;
+          k.p = k.pz;
+        } else {
+          k.sv += (sZiel - k.s) * 0.08 * dt;
+          k.sv *= Math.pow(0.78, dt);
+          k.s += k.sv * dt;
+          k.pv += (k.pz - k.p) * 0.09 * dt;
+          k.pv *= Math.pow(0.7, dt); // ~5 % Überschwingen
+          k.p += k.pv * dt;
+        }
+        const q = Math.max(0, k.p);
+        const d = D * k.s;
+        k.w = lerp(d, KB, q);
+        k.h = lerp(d, k.karteH, q);
+
+        // Zielposition
+        let zx: number;
+        let zy: number;
+        if (k === offen) {
+          zx = W / 2;
+          zy = H / 2;
+        } else {
+          zx = heimX(k);
+          zy = heimY(k);
+          if (!ruhe) {
+            zx += Math.sin(t * k.tempo + k.phase) * 10;
+            zy += Math.cos(t * k.tempo * 0.8 + k.phase * 1.3) * 10;
+            if (maus) {
+              const dx = zx - maus.x;
+              const dy = zy - maus.y;
+              const dist = Math.hypot(dx, dy);
+              const reichweite = 150;
+              if (dist < reichweite && dist > 0.01) {
+                const f = 1 - dist / reichweite;
+                const weg = 34 * f * f;
+                zx += (dx / dist) * weg;
+                zy += (dy / dist) * weg;
+              }
+            }
+          }
+        }
+
+        // Feder zur Zielposition
+        if (ruhe) {
+          k.x = zx;
+          k.y = zy;
+        } else {
+          k.vx += (zx - k.x) * 0.045 * dt;
+          k.vy += (zy - k.y) * 0.045 * dt;
+          const daempfung = Math.pow(0.84, dt);
+          k.vx *= daempfung;
+          k.vy *= daempfung;
+          k.x += k.vx * dt;
+          k.y += k.vy * dt;
+        }
+      }
+
+      for (let n = 0; n < 3; n++) kollisionen();
+      koerper.forEach(begrenzen);
+      koerper.forEach(zeichnen);
+
+      rafId = sichtbar ? requestAnimationFrame(schritt) : 0;
+    }
+
+    function wecken() {
+      if (!rafId && sichtbar) {
+        zuletzt = performance.now();
+        rafId = requestAnimationFrame(schritt);
+      }
+    }
+
+    // ---------- Start ----------
+    messen();
+    koerper.forEach((k) => {
+      k.x = heimX(k);
+      k.y = heimY(k);
+      k.w = D;
+      k.h = D;
+      zeichnen(k);
+    });
+    feld.classList.add('ist-bereit');
+    bereit = true;
+    document.fonts?.ready.then(messen);
+    new ResizeObserver(() => messen()).observe(feld);
+
+    // nur rechnen, solange das Feld zu sehen ist
+    new IntersectionObserver((eintraege) => {
+      sichtbar = eintraege.some((e) => e.isIntersecting);
+      if (sichtbar) wecken();
+    }).observe(feld);
+  }
+</script>

@@ -122,6 +122,24 @@ h2 {
   letter-spacing: 0.005em;
 }
 
+/* Schmale Bildschirme: lange deutsche Woerter (z. B. „Kurzvorstellung“,
+   „Unterstuetzungsmoeglichkeiten“) trennen statt ueberlaufen. Zuerst mit
+   Bindestrich (Silbentrennung), als letzte Notloesung auch ohne. */
+@media (max-width: 480px) {
+  h1,
+  h2,
+  h3,
+  h4,
+  p,
+  li,
+  dd,
+  summary {
+    hyphens: auto;
+    hyphenate-limit-chars: 10 4 4;
+    overflow-wrap: anywhere;
+  }
+}
+
 /* Kleinere Ueberschriften in Helvetica Rounded – deutlich lesbarer */
 h3,
 h4 {
@@ -278,13 +296,23 @@ img {
   display: grid;
   gap: 1.5rem;
 }
+/* minmax(0, 1fr): Spalten wachsen nie über ihren Anteil hinaus. Mit
+   reinem 1fr würde ein langes Wort die Spalte aufdrücken und die Seite
+   seitlich überlaufen lassen (z. B. bei 768 px in den Säulen-Karten). */
 @media (min-width: 760px) {
   .grid--2 {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .grid--3 {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
+}
+
+/* Karten sind schmal: lange Wörter dort trennen statt überlaufen */
+.card :is(p, h3, h4) {
+  hyphens: auto;
+  hyphenate-limit-chars: 10 4 4;
+  overflow-wrap: break-word;
 }
 
 .card {

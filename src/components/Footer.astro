@@ -10,6 +10,14 @@ const year = new Date().getFullYear();
 // zeigen wir den Namen als Text – kein kaputtes Bild.
 const hasFile = (p?: string) =>
   !!p && fs.existsSync(path.join(process.cwd(), 'public', p));
+
+// Pixelmaße aus dem PNG-Kopf lesen, damit der Browser die Breite schon
+// vor dem (verzögerten) Laden kennt – sonst springt die Logozeile.
+function pngMasse(p?: string): { width?: number; height?: number } {
+  if (!p || !p.endsWith('.png') || !hasFile(p)) return {};
+  const kopf = fs.readFileSync(path.join(process.cwd(), 'public', p)).subarray(0, 24);
+  return { width: kopf.readUInt32BE(16), height: kopf.readUInt32BE(20) };
+}
 ---
 
 <footer class="site-footer">
@@ -53,6 +61,8 @@ const hasFile = (p?: string) =>
                       src={item.logo}
                       alt={item.name}
                       loading="lazy"
+                      {...pngMasse(item.logo)}
+                      style={item.hoehe ? `--h:${item.hoehe}` : undefined}
                     />
                   ) : (
                     <span class="logobar__fallback">{item.name}</span>
@@ -145,14 +155,21 @@ const hasFile = (p?: string) =>
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 1.25rem 2.5rem;
+    gap: 1.5rem 2.75rem;
     margin: 0;
     padding: 0;
   }
   .logobar__img {
-    height: 2.6rem;
+    /* Höhe je Logo aus site.ts, gleicht unterschiedliche Proportionen aus */
+    height: var(--h, 2rem);
     width: auto;
+    max-width: 100%;
     object-fit: contain;
+  }
+  @media (max-width: 560px) {
+    .logobar__img {
+      height: calc(var(--h, 2rem) * 0.8);
+    }
   }
   /* Platzhalter, solange die Logodatei fehlt */
   .logobar__fallback {

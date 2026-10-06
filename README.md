@@ -28,7 +28,9 @@ B:\YU_Festival
 │   ├── favicon.svg              # YU-Signet auf Lavendel
 │   ├── fonts/                   # CI-Schriften als WOFF2
 │   └── images/
-│       ├── partner/             # Logos für die Fußleiste (siehe README dort)
+│       ├── foerderer/           # Fußleisten-Logos, weiß aufbereitet (Web-Versionen)
+│       ├── YU_EinFestivalVon_Logos/ # Originale dieser Logos (schwarz)
+│       ├── kurzvorstellung/     # Profilfotos für die Kurzvorstellung (folgen)
 │       └── logo/                # Logo als Vektor, 4 Varianten
 │           ├── logo-primary.svg     # Badge: YU + FESTIVAL im Rahmen
 │           ├── logo-horizontal.svg  # Querformat (Header)
@@ -38,6 +40,8 @@ B:\YU_Festival
 │   ├── components/
 │   │   ├── Logo.astro       # Logo-Komponente (variant/width/label)
 │   │   ├── EventCard.astro  # aufklappbarer Programmpunkt
+│   │   ├── Kurzvorstellung.astro # schwebende Profil-Blasen auf der Startseite
+│   │   ├── PageHeader.astro # gleich hoher Seitenkopf (Kontakt, FAQ, Partner)
 │   │   ├── RichText.astro   # Absätze mit automatisch verlinkten Mails/URLs
 │   │   ├── Deco.astro       # Gestaltungselemente: Mäander, Zahn-Kapsel, Pille
 │   │   ├── Header.astro     # Logo + Navigation (mobil + aktiver Reiter)
@@ -86,10 +90,16 @@ B:\YU_Festival
   Hackathon-Hinweis) stehen oben in `programm.ts` einmal als Konstante –
   Korrekturen also nur dort.
 - **Ausstellungen** (alle vier Tage) stehen im Array `ongoing` und erscheinen
-  über dem Zeitplan – in allen Bereichen.
-- **Fußleisten-Logos:** Dateien nach `public/images/partner/` legen
-  (Dateinamen siehe README dort). Fehlt eine Datei, steht der Name als
-  Platzhalter da.
+  unter dem Zeitplan – in allen Bereichen.
+- **Fußleisten-Logos** („Ein Festival von“): weiße, zugeschnittene Versionen
+  liegen in `public/images/foerderer/`, die Originale in
+  `public/images/YU_EinFestivalVon_Logos/`. Die Höhe je Logo steht in
+  `footerLogos` in `src/data/site.ts` (gleicht die Proportionen optisch aus).
+- **Kurzvorstellung (Startseite):** Personen im Array `spotlight` in
+  `src/data/site.ts`. Fotos unter dem dort angegebenen Namen nach
+  `public/images/kurzvorstellung/` legen (z. B. `nhi-le.jpg`) – sie erscheinen
+  dann automatisch, bis dahin zeigen die Kreise Initialen. Quadratische Fotos
+  funktionieren am besten.
 - **Logo einsetzen:** `<Logo variant="horizontal" width="200px" />`. Das SVG ist
   einfarbig (`fill="currentColor"`) – die Farbe kommt vom `color` des
   Elternelements.

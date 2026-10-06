@@ -23,11 +23,12 @@ function eventsOf(trackId: string, day: number) {
   title="Programm"
   description="Das Programm des YU Festivals vom 22. bis 25. Oktober 2026 im Dortmunder U: Festival, Konferenz und Hackathon."
 >
-  <section class="section programm">
-    <div class="container">
-      <h1 class="visually-hidden">Programm</h1>
+  <h1 class="visually-hidden">Programm</h1>
 
-      <!-- Filterleiste: schaltet zwischen den drei Bereichen um -->
+  <!-- Filterleiste: Hauptmechanismus der Seite, deshalb auf einem Band
+       in der zweiten Signalfarbe über die volle Breite -->
+  <div class="switch-band">
+    <div class="container">
       <div class="switch-bar">
         <div class="switch" role="tablist" aria-label="Programmbereich wählen">
           <span class="switch__thumb" aria-hidden="true"></span>
@@ -50,7 +51,11 @@ function eventsOf(trackId: string, day: number) {
           }
         </div>
       </div>
+    </div>
+  </div>
 
+  <section class="section programm">
+    <div class="container">
       <!-- Je Bereich ein Zeitplan -->
       {
         tracks.map((track, ti) => (
@@ -171,20 +176,26 @@ function eventsOf(trackId: string, day: number) {
     padding-top: clamp(2rem, 5vw, 3.5rem);
   }
 
-  /* ---------- Filterleiste (iOS-artiger Umschalter) ---------- */
+  /* ---------- Filterleiste (iOS-artiger Umschalter) ----------
+     Band in Lime über die volle Breite, darauf die weiße Pille. */
+  .switch-band {
+    background: var(--lime);
+    padding-block: clamp(1.25rem, 3vw, 2rem);
+  }
   .switch-bar {
     display: flex;
     justify-content: center;
-    margin-bottom: clamp(2.5rem, 6vw, 4rem);
   }
 
   .switch {
+    --pad: 0.45rem;
     position: relative;
     display: inline-flex;
     gap: 0.25rem;
-    padding: 0.4rem;
+    padding: var(--pad);
     border-radius: var(--radius-pill);
-    background: color-mix(in srgb, var(--lavender) 14%, var(--white));
+    background: var(--white);
+    box-shadow: 0 8px 22px color-mix(in srgb, var(--deep-purple) 20%, transparent);
     /* leichte, zum Cursor entgegengesetzte Verschiebung (per JS gesetzt) */
     transform: translate(var(--shift-x, 0px), var(--shift-y, 0px));
     transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
@@ -194,9 +205,9 @@ function eventsOf(trackId: string, day: number) {
   .switch__thumb,
   .switch__ghost {
     position: absolute;
-    top: 0.4rem;
+    top: var(--pad);
     left: 0;
-    height: calc(100% - 0.8rem);
+    height: calc(100% - 2 * var(--pad));
     border-radius: var(--radius-pill);
     width: var(--thumb-w, 0px);
     transform: translateX(var(--thumb-x, 0px));
@@ -231,16 +242,35 @@ function eventsOf(trackId: string, day: number) {
     cursor: pointer;
     font-family: var(--font-sans);
     font-weight: 900;
-    font-size: clamp(0.9rem, 2vw, 1.05rem);
+    font-size: clamp(0.95rem, 2.2vw, 1.15rem);
     letter-spacing: 0.02em;
     color: var(--deep-purple);
-    padding: 0.7rem clamp(1rem, 3vw, 1.9rem);
+    padding: 0.8rem clamp(1.1rem, 3.5vw, 2.3rem);
     border-radius: var(--radius-pill);
     transition: color 0.3s ease;
     white-space: nowrap;
   }
   .switch__btn[aria-selected='true'] {
     color: var(--white);
+  }
+  /* Handy: Pille über die ganze Breite, Bereiche teilen sich den Platz */
+  @media (max-width: 560px) {
+    .switch {
+      width: 100%;
+    }
+    .switch__btn {
+      flex: 1;
+      padding-inline: 0.4rem;
+    }
+  }
+  @media (max-width: 400px) {
+    .switch {
+      --pad: 0.35rem;
+    }
+    .switch__btn {
+      font-size: 0.85rem;
+      padding: 0.75rem 0.2rem;
+    }
   }
 
   /* ---------- Ausstellungen (unter dem Zeitplan) ---------- */

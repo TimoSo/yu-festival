@@ -78,6 +78,72 @@ export const pillars: { title: string; text: string; accent: string }[] = [
 ];
 
 // ------------------------------------------------------------
+//  KURZVORSTELLUNG (Startseite)
+//  Fotos: Datei unter `foto` ablegen (public/images/kurzvorstellung/),
+//  dann erscheint sie automatisch. Bis dahin zeigt der Kreis Initialen.
+//  `farbe` ist die Farbe des Rings bzw. später des Kartenrahmens.
+// ------------------------------------------------------------
+
+export const kurzvorstellung = {
+  eyebrow: 'Wer dabei ist',
+  titel: 'Kurzvorstellung',
+  text: 'Vier Tage, drei Formate, viele Perspektiven: Beim YU Festival treffen Wissenschaft, Kunst und Community aufeinander – in Keynote und Podium, Performances und Ausstellungen, Workshops und einem Hackathon. Lernt einige der Menschen kennen, die das Programm prägen.',
+  hinweis: 'Ein Klick auf einen Kreis verrät mehr.',
+};
+
+export const spotlight: {
+  name: string;
+  /** was die Person auf dem Festival macht */
+  rolle: string;
+  wann: string;
+  /** Kurzbio, 1–2 Sätze */
+  bio: string;
+  foto?: string;
+  farbe: string;
+}[] = [
+  {
+    name: 'Dr. Jennifer Eickelmann',
+    rolle: 'Keynote der YU Konferenz',
+    wann: 'Freitag, 23.10. · ab 10:00 Uhr',
+    bio: 'Juniorprofessorin für Digitale Transformation in Kultur und Gesellschaft an der FernUniversität in Hagen. Sie forscht zu digitaler Öffentlichkeit, digitaler Gewalt und generativer KI.',
+    foto: '/images/kurzvorstellung/jennifer-eickelmann.jpg',
+    farbe: 'var(--lime)',
+  },
+  {
+    name: 'Nhi Le',
+    rolle: 'Podium der YU Konferenz',
+    wann: 'Freitag, 23.10. · Block 1',
+    bio: 'Journalistin, Moderatorin und Autorin mit den Schwerpunkten digitale Medienkultur, Pop und Politik. Die ZEIT zählt sie zu den 100 wichtigsten jungen Ostdeutschen.',
+    foto: '/images/kurzvorstellung/nhi-le.jpg',
+    farbe: 'var(--coral)',
+  },
+  {
+    name: 'Sam Hopkins',
+    rolle: 'Ausstellung BAZE und Talk „Community Visions“',
+    wann: '22.–25.10. im Foyer · Talk Samstag, 18:00 Uhr',
+    bio: 'Künstler und Lehrender an der Kunsthochschule für Medien Köln. Mit BAZE bringt er die Wärme der Nachbarschaft ins digitale Leben – als Offline-Sammlung zum Stöbern und Teilen.',
+    foto: '/images/kurzvorstellung/sam-hopkins.jpg',
+    farbe: 'var(--lavender)',
+  },
+  {
+    name: 'Julie C. Stamm',
+    rolle: 'Performance „Unter Haut“ und Movement-Workshop',
+    wann: 'Donnerstag bis Sonntag im Foyer',
+    bio: 'Arbeitet an der Schnittstelle von Choreografie und Medienkunst und untersucht, wie digitale Tracking-Technologien unsere Bewegungen und kollektiven Choreografien mitformen.',
+    foto: '/images/kurzvorstellung/julie-c-stamm.jpg',
+    farbe: 'var(--lime)',
+  },
+  {
+    name: 'Camilla Scholz',
+    rolle: 'Ausstellung „Collective Mess“, Creative Coding und Coding Jam',
+    wann: '22.–25.10. · Workshops Donnerstag und Samstag',
+    bio: 'Medienkünstlerin und Creative Technologist aus Dortmund. Mit Creative Coding und Physical Computing entwickelt sie interaktive Installationen und immersive Erlebnisse.',
+    foto: '/images/kurzvorstellung/camilla-scholz.jpg',
+    farbe: 'var(--coral)',
+  },
+];
+
+// ------------------------------------------------------------
 //  ABOUT
 // ------------------------------------------------------------
 
@@ -177,28 +243,23 @@ export const partners: {
   },
 ];
 
-// Logos für die Fußleiste, in zwei Zeilen.
-// `logo` zeigt auf eine Datei in public/images/partner/.
-// Fehlt die Datei, zeigt die Fußleiste automatisch den Namen als Text.
+// Logos in der Fußleiste („Ein Festival von“).
+// Die Dateien in public/images/foerderer/ sind weiße, zugeschnittene
+// Web-Versionen der Originale aus public/images/YU_EinFestivalVon_Logos/.
+// `hoehe` gleicht die sehr unterschiedlichen Proportionen optisch aus
+// (breite Wortmarken niedriger, das fast quadratische Logo höher).
+// Fehlt eine Datei, zeigt die Fußleiste den Namen als Text.
 export const footerLogos: {
   heading: string;
-  items: { name: string; logo?: string; url?: string }[];
+  items: { name: string; logo?: string; hoehe?: string; url?: string }[];
 }[] = [
   {
     heading: 'Ein Festival von',
     items: [
-      { name: 'Dortmunder U', logo: '/images/partner/dortmunder-u.svg' },
-      { name: 'Digitale Kultur', logo: '/images/partner/digitale-kultur.svg' },
-      { name: 'Smart City Dortmund', logo: '/images/partner/smart-city.svg' },
-    ],
-  },
-  {
-    heading: 'Partner',
-    items: [
-      { name: 'storyLab kiU', logo: '/images/partner/kiu.svg' },
-      { name: 'KoLab', logo: '/images/partner/kolab.svg' },
-      { name: 'VKII Ruhrbezirk e. V.', logo: '/images/partner/vkii.svg' },
-      { name: 'ATEM Biennial', logo: '/images/partner/atem.svg' },
+      { name: 'Dortmunder U', logo: '/images/foerderer/dortmunder-u.png', hoehe: '1.6rem' },
+      { name: 'digitale kultur', logo: '/images/foerderer/digitale-kultur.png', hoehe: '3.4rem' },
+      { name: 'Smart City Dortmund', logo: '/images/foerderer/smart-city.png', hoehe: '1.9rem' },
+      { name: 'Stadt Dortmund', logo: '/images/foerderer/stadt-dortmund.png', hoehe: '2.1rem' },
     ],
   },
 ];

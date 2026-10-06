@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
 import Deco from '../components/Deco.astro';
+import Kurzvorstellung from '../components/Kurzvorstellung.astro';
 import { landing, pillars, partners } from '../data/site';
 ---
 
@@ -17,6 +18,8 @@ import { landing, pillars, partners } from '../data/site';
       <p>{landing.worum.text}</p>
     </div>
   </section>
+
+  <Kurzvorstellung />
 
   <!-- Die drei Säulen -->
   <section class="section section--lime">
