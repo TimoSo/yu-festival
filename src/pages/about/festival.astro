@@ -1,11 +1,11 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import { site, about } from '../data/site';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { site, about } from '../../data/site';
 ---
 
 <BaseLayout
-  title="About"
-  description="Über das YU Festival „New Communities“ – wie wollen wir digital zusammenleben?"
+  title="Über das Festival"
+  description="Über das YU Festival – wie wollen wir digital zusammenleben?"
 >
   <section class="section section--lavender">
     <div class="container narrow">
@@ -17,7 +17,7 @@ import { site, about } from '../data/site';
 
   <section class="section">
     <div class="container narrow">
-      <h2>New Communities</h2>
+      <h2>{about.titel}</h2>
       <p class="lead about__frage">{about.frage}</p>
       {about.text.map((absatz) => <p>{absatz}</p>)}
     </div>

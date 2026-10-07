@@ -58,7 +58,7 @@ export const days: { nr: number; weekday: string; date: string }[] = [
 
 export const anmeldung = {
   email: contact.email,
-  text: `Für diese Veranstaltung ist eine Anmeldung erforderlich. 😊 Wenn Sie gerne dabei sein möchten, schreiben Sie uns einfach eine E-Mail an ${contact.email}. Wir freuen uns auf Ihre Anmeldung!`,
+  text: `Für diese Veranstaltung ist eine Anmeldung erforderlich. 😊 Wenn ihr gerne dabei sein möchtet, schreibt uns einfach eine E-Mail an ${contact.email}. Wir freuen uns auf eure Anmeldung!`,
   keine: 'Es ist keine Anmeldung erforderlich.',
 };
 
@@ -138,7 +138,7 @@ const CAMILO_SANDOVAL: Person = {
 };
 
 const INSTALLATION_EINLADUNG =
-  'Wir laden Sie herzlich ein, die im Rahmen des YU Festivals vom 22. bis 25. Oktober 2026 im Foyer des Dortmunder U präsentierte Kunstinstallation zu besuchen und das entstehende digitale Medienkunstprojekt selbst zu erleben. Als interaktives Projekt lädt die Installation dazu ein, sich einzubringen, Verbindungen zu entdecken und Teil des entstehenden digitalen Projekts zu werden.';
+  'Wir laden euch herzlich ein, die im Rahmen des YU Festivals vom 22. bis 25. Oktober 2026 im Foyer des Dortmunder U präsentierte Kunstinstallation zu besuchen und das entstehende digitale Medienkunstprojekt selbst zu erleben. Als interaktives Projekt lädt die Installation dazu ein, sich einzubringen, Verbindungen zu entdecken und Teil des entstehenden digitalen Projekts zu werden.';
 
 const HACKATHON_HINWEIS =
   'Dieser Workshop ist Teil des Hackathons „Connections“ im Rahmen der KoLab Days x ATEM Biennale und des YU Festivals. Nach dem Workshop kann im Workspace über mehrere Tage weitergearbeitet werden. Hier können die entstandenen Ideen vertieft, ausprobiert und gemeinsam weiterentwickelt werden. So entsteht Schritt für Schritt eine kollektiv entstandene VR-Installation.';
@@ -164,12 +164,25 @@ const WJ = '\u2060'; // verhindert einen Umbruch nach dem Gedankenstrich
 
 // ------------------------------------------------------------
 //  Bereiche (Tracks)
+//  Jeder Bereich hat EINE Leitfarbe, abgestimmt mit dem Instagram-Feed:
+//  Festival Coral, Konferenz Deep Purple, Hackathon Lavender.
+//  Schwarz/Weiß ist im Feed den Info-Posts vorbehalten, Lime der
+//  Anmeldung (Farbe für „besondere Aufmerksamkeit“).
+//  Die Kategorie eines Programmpunkts (Workshop, Podium …) steht als
+//  Text auf der Pille, sie hat keine eigene Farbe.
 // ------------------------------------------------------------
 
 export const tracks: {
   id: TrackId;
   label: string;
-  categories: { name: string; accent: string }[];
+  farbe: {
+    /** Rahmen, Punkte, Pillen und Umschalter */
+    flaeche: string;
+    /** Schrift auf dieser Fläche – auf Kontrast achten */
+    schrift: string;
+    /** Akzent für Text auf Weiß (Coral ist dafür zu hell) */
+    text: string;
+  };
   intro: {
     title?: string;
     /** Eckdaten, jede Angabe in einer eigenen Zeile */
@@ -182,11 +195,7 @@ export const tracks: {
   {
     id: 'festival',
     label: 'Festival',
-    categories: [
-      { name: 'Diskurs', accent: 'var(--lavender)' },
-      { name: 'Performance und Musik', accent: 'var(--coral)' },
-      { name: 'Workshop', accent: 'var(--lime)' },
-    ],
+    farbe: { flaeche: 'var(--coral)', schrift: 'var(--black)', text: 'var(--deep-purple)' },
     intro: {
       meta: [`22.–${WJ}25.${NB}Oktober${NB}2026${NB}· Dortmunder${NB}U`],
       text: [
@@ -197,11 +206,7 @@ export const tracks: {
   {
     id: 'konferenz',
     label: 'Konferenz',
-    categories: [
-      { name: 'Präsentation', accent: 'var(--coral)' },
-      { name: 'Podium', accent: 'var(--lavender)' },
-      { name: 'Workshop', accent: 'var(--lime)' },
-    ],
+    farbe: { flaeche: 'var(--deep-purple)', schrift: 'var(--white)', text: 'var(--deep-purple)' },
     intro: {
       title: 'Wie wollen wir digital miteinander leben? Die YU Konferenz 2026',
       meta: [
@@ -223,11 +228,7 @@ export const tracks: {
   {
     id: 'hackathon',
     label: 'Hackathon',
-    categories: [
-      { name: 'Workshop', accent: 'var(--lime)' },
-      { name: 'Coding Jam', accent: 'var(--lavender)' },
-      { name: 'Showcase', accent: 'var(--coral)' },
-    ],
+    farbe: { flaeche: 'var(--lavender)', schrift: 'var(--white)', text: 'var(--lavender)' },
     intro: {
       title: 'Hackathon „Connections“',
       meta: [`im Rahmen der KoLab${NB}Days x ATEM${NB}Biennale und des YU${NB}Festivals`],

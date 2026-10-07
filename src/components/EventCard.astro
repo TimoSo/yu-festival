@@ -32,7 +32,7 @@ const betreff = encodeURIComponent(`Anmeldung: ${item.title}`);
           <span class="ev__facts">
             {item.location && <span class="ev__fact">{item.location}</span>}
             {item.registration && (
-              <span class="ev__fact ev__fact--anmeldung">Anmeldung erforderlich</span>
+              <span class="pill-anmeldung">Anmeldung erforderlich</span>
             )}
           </span>
         )
@@ -84,10 +84,10 @@ const betreff = encodeURIComponent(`Anmeldung: ${item.title}`);
 
       {
         item.registration === true && (
-          <div class="ev__anmeldung">
+          <div class="anmeldung ev__anmeldung">
             <RichText paras={[anmeldung.text]} />
             <a
-              class="btn btn--primary btn--on-white ev__mail"
+              class="btn btn--anmelden"
               href={`mailto:${anmeldung.email}?subject=${betreff}`}
             >
               Per E-Mail anmelden
@@ -118,9 +118,6 @@ const betreff = encodeURIComponent(`Anmeldung: ${item.title}`);
   .ev:hover {
     background: color-mix(in srgb, var(--cat, var(--lavender)) 10%, var(--white));
   }
-  .ev--ongoing {
-    --cat: var(--deep-purple);
-  }
 
   /* ---------- Kopf ---------- */
   .ev__head {
@@ -144,12 +141,11 @@ const betreff = encodeURIComponent(`Anmeldung: ${item.title}`);
     align-items: flex-start;
     gap: 0.35rem;
   }
+  /* Farben kommen vom Bereich (--cat, --cat-ink, --cat-text), siehe
+     `farbe` in programm.ts */
   .ev__tag {
     background: var(--cat, var(--lavender));
-    color: var(--deep-purple);
-  }
-  .ev--ongoing .ev__tag {
-    color: var(--white);
+    color: var(--cat-ink, var(--white));
   }
   .ev__title {
     font-weight: 900;
@@ -159,7 +155,7 @@ const betreff = encodeURIComponent(`Anmeldung: ${item.title}`);
   .ev__by {
     font-weight: 700;
     font-size: 0.95rem;
-    color: var(--lavender);
+    color: var(--cat-text, var(--lavender));
   }
   .ev__facts {
     display: flex;
@@ -174,10 +170,6 @@ const betreff = encodeURIComponent(`Anmeldung: ${item.title}`);
     border-radius: var(--radius-pill);
     background: color-mix(in srgb, var(--deep-purple) 8%, var(--white));
     color: var(--deep-purple);
-  }
-  .ev__fact--anmeldung {
-    background: var(--deep-purple);
-    color: var(--white);
   }
 
   /* Plus-/Minus-Symbol */
@@ -200,12 +192,8 @@ const betreff = encodeURIComponent(`Anmeldung: ${item.title}`);
     width: 0.85rem;
     height: 3px;
     border-radius: 999px;
-    background: var(--deep-purple);
+    background: var(--cat-ink, var(--white));
     transform: translate(-50%, -50%);
-  }
-  .ev--ongoing .ev__plus::before,
-  .ev--ongoing .ev__plus::after {
-    background: var(--white);
   }
   .ev__plus::after {
     transform: translate(-50%, -50%) rotate(90deg);
@@ -246,7 +234,7 @@ const betreff = encodeURIComponent(`Anmeldung: ${item.title}`);
     font-size: 0.8rem;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--lavender);
+    color: var(--cat-text, var(--lavender));
     margin: 0 0 0.6rem;
   }
   .ev__person {
@@ -257,18 +245,10 @@ const betreff = encodeURIComponent(`Anmeldung: ${item.title}`);
     margin-bottom: 0.25rem !important;
   }
   .ev__detail strong {
-    color: var(--lavender);
+    color: var(--cat-text, var(--lavender));
   }
   .ev__anmeldung {
     margin-top: 1.4rem;
-    padding: 1rem 1.2rem;
-    border-radius: var(--radius-sm);
-    background: color-mix(in srgb, var(--lavender) 12%, var(--white));
-  }
-  .ev__mail {
-    margin-top: 0.25rem;
-    font-size: 0.95rem;
-    padding: 0.7rem 1.4rem;
   }
 
   @media (max-width: 560px) {

@@ -58,7 +58,7 @@ B:\YU_Festival
 │   │   ├── index.astro           # Start                  → /
 │   │   ├── programm.astro        # Programm mit Zeitplan  → /programm
 │   │   ├── partner.astro         # Partner                → /partner
-│   │   ├── about.astro           # About › Festival       → /about
+│   │   ├── about/festival.astro  # About › Festival       → /about/festival
 │   │   ├── about/team.astro      # About › Team           → /about/team
 │   │   ├── faq.astro             # FAQ                    → /faq
 │   │   ├── kontakt.astro         # Kontakt                → /kontakt
@@ -76,21 +76,28 @@ B:\YU_Festival
   stehen in `src/data/site.ts`, das Programm in `src/data/programm.ts`.
   E-Mail-Adressen und URLs in den Texten werden automatisch verlinkt.
 - **Programm:** `/programm` hat drei Bereiche (`tracks`): Festival, Konferenz,
-  Hackathon – jeder mit eigenen drei Kategorien und Farben. Die Filterleiste
-  oben schaltet um; ein Klick auf einen Programmpunkt klappt ihn auf.
+  Hackathon. Jeder Bereich hat eine Leitfarbe (`farbe`), abgestimmt mit dem
+  Instagram-Feed: Festival Coral, Konferenz Deep Purple, Hackathon Lavender.
+  Die Filterleiste oben schaltet um, der Schieber nimmt die Farbe des Bereichs
+  an; ein Klick auf einen Programmpunkt klappt ihn auf.
 - **Programmpunkt hinzufügen:** Eintrag im `events`-Array in
   `src/data/programm.ts` ergänzen – mit `track` (festival/konferenz/hackathon),
-  `day` (1 = Do 22.10. … 4 = So 25.10.), `start`/`end` und `category` (muss zu
-  den Kategorien des Bereichs passen, sonst fehlt die Farbe). Innerhalb eines
-  Tages wird automatisch nach Uhrzeit sortiert.
+  `day` (1 = Do 22.10. … 4 = So 25.10.), `start`/`end` und `category` (steht
+  als Text auf der Pille, z. B. „Workshop“). Innerhalb eines Tages wird
+  automatisch nach Uhrzeit sortiert.
 - **Anmeldung:** `registration: true` zeigt „Anmeldung erforderlich“ samt
   Mail-Button (Betreff wird mit dem Titel vorbefüllt), `false` zeigt
-  ausdrücklich „keine Anmeldung erforderlich“.
+  ausdrücklich „keine Anmeldung erforderlich“. Alles rund um die Anmeldung
+  ist in Lime gehalten (`.anmeldung`, `.btn--anmelden`, `.pill-anmeldung`
+  in `global.css`) – Lime ist die Farbe für „besondere Aufmerksamkeit“.
+- **Anrede:** durchgehend „du“ bzw. „ihr“, nie „Sie“.
 - **Texte, die mehrfach vorkommen** (z. B. „Unter Haut“ läuft viermal, Bios,
   Hackathon-Hinweis) stehen oben in `programm.ts` einmal als Konstante –
   Korrekturen also nur dort.
 - **Ausstellungen** (alle vier Tage) stehen im Array `ongoing` und erscheinen
-  unter dem Zeitplan – in allen Bereichen.
+  im Bereich Festival ganz oben, vor dem ersten Tag.
+- **Partner:** Jeder Partner hat eine `id`. Die Kacheln auf der Startseite
+  springen damit direkt zum Partner auf `/partner` (z. B. `/partner#kolab`).
 - **Fußleisten-Logos** („Ein Festival von“): weiße, zugeschnittene Versionen
   liegen in `public/images/foerderer/`, die Originale in
   `public/images/YU_EinFestivalVon_Logos/`. Die Höhe je Logo steht in

@@ -58,11 +58,14 @@ import { landing, pillars, partners } from '../data/site';
       <ul class="partner-list">
         {
           partners.map((partner) => (
-            <li class="card partner-chip">
-              <span class="partner-chip__name">{partner.name}</span>
-              {partner.full && (
-                <span class="partner-chip__full">{partner.full}</span>
-              )}
+            <li>
+              <a class="card partner-chip" href={`/partner#${partner.id}`}>
+                <span class="partner-chip__name">{partner.name}</span>
+                {partner.full && (
+                  <span class="partner-chip__full">{partner.full}</span>
+                )}
+                <span class="partner-chip__mehr" aria-hidden="true">Mehr erfahren →</span>
+              </a>
             </li>
           ))
         }
@@ -102,11 +105,17 @@ import { landing, pillars, partners } from '../data/site';
       grid-template-columns: repeat(3, 1fr);
     }
   }
+  /* Jede Kachel springt zum Partner auf der Partnerseite */
   .partner-chip {
     display: flex;
     flex-direction: column;
     gap: 0.2rem;
+    height: 100%;
     padding: 1.25rem 1.5rem;
+    text-decoration: none;
+  }
+  .partner-chip:hover {
+    box-shadow: 6px 6px 0 var(--deep-purple);
   }
   .partner-chip__name {
     font-weight: 900;
@@ -116,5 +125,12 @@ import { landing, pillars, partners } from '../data/site';
     font-weight: 700;
     font-size: 0.9rem;
     color: var(--lavender);
+  }
+  .partner-chip__mehr {
+    margin-top: auto;
+    padding-top: 0.6rem;
+    font-weight: 900;
+    font-size: 0.85rem;
+    color: var(--deep-purple);
   }
 </style>

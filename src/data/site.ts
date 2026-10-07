@@ -33,9 +33,9 @@ export const nav: {
   { label: 'Partner', href: '/partner' },
   {
     label: 'About',
-    href: '/about',
+    href: '/about/festival',
     children: [
-      { label: 'Festival', href: '/about' },
+      { label: 'Festival', href: '/about/festival' },
       { label: 'Team', href: '/about/team' },
     ],
   },
@@ -149,14 +149,13 @@ export const spotlight: {
 
 export const about = {
   lead: 'Das YU Festival ist ein Festival für digitale Medien. Es wirft einen positiven, optimistischen und aufgeschlossenen Blick auf Digitalität – ohne den kritischen Blick zu verlieren.',
+  titel: 'Mitreden, mitmachen, mitgestalten',
   frage:
     'Wie wollen wir in Zukunft digital zusammenleben? Und wie können wir digitale Räume gemeinsam gestalten?',
   text: [
-    'Das YU Festival „New Communities“ lädt dazu ein, genau darüber nachzudenken, zu diskutieren und Dinge auszuprobieren. Denn ein großer Teil unseres Lebens findet heute auch digital statt: Wir informieren uns online, tauschen uns in sozialen Netzwerken aus, spielen, lernen, arbeiten und bleiben über Messenger mit anderen verbunden. Dabei entstehen neue Gemeinschaften, neue Formen von Nähe und Zugehörigkeit, aber auch neue Konflikte, Ausschlüsse und Machtstrukturen.',
-    'Das Festival richtet den Blick auf die Menschen und Communities, die digitale Räume mit Leben füllen. Wir fragen, wie digitale Gemeinschaften inklusiver, respektvoller und demokratischer gestaltet werden können. Welche Möglichkeiten bieten digitale Räume für Beteiligung und Vernetzung? Wer wird gehört und wer bleibt unsichtbar? Und wie können wir selbst aktiv mitgestalten, wie wir miteinander digital leben wollen?',
-    'Das YU Festival ist ein Ort zum Ausprobieren, Mitmachen und Begegnen. Workshops, Gespräche, künstlerische Arbeiten, Performances und interaktive Formate eröffnen unterschiedliche Zugänge zu den Themen. Wissenschaftliche, kulturelle und kreative Perspektiven treffen aufeinander und bringen neue Ideen ins Gespräch.',
-    'Wir wollen digitale Räume nicht einfach hinnehmen, wie sie sind. Wir wollen sie hinterfragen, neu denken und gemeinsam gestalten – kritisch, kreativ, experimentell und manchmal auch spielerisch.',
-    'Das YU Festival bringt unterschiedliche Menschen, Communities und Perspektiven zusammen. Egal, ob ihr bereits tief in digitalen Themen steckt oder einfach neugierig seid: Kommt vorbei, lernt neue Menschen kennen, probiert etwas aus und werdet Teil des Gesprächs über unsere gemeinsame digitale Zukunft.',
+    'Das YU Festival lädt dazu ein, genau darüber nachzudenken, zu diskutieren und Dinge auszuprobieren. Denn ein großer Teil unseres Lebens findet heute digital statt: Wir informieren uns online, tauschen uns in sozialen Netzwerken aus, spielen, lernen, arbeiten und bleiben über Messenger verbunden. Dabei entstehen neue Gemeinschaften und neue Formen von Nähe – aber auch neue Konflikte, Ausschlüsse und Machtstrukturen.',
+    'Das Festival richtet den Blick auf die Menschen und Communities, die digitale Räume mit Leben füllen. Wie werden digitale Gemeinschaften inklusiver, respektvoller und demokratischer? Wer wird gehört und wer bleibt unsichtbar? Workshops, Gespräche, künstlerische Arbeiten und Performances eröffnen dazu ganz unterschiedliche Zugänge – wissenschaftlich, kulturell und kreativ.',
+    'Wir wollen digitale Räume nicht einfach hinnehmen, wie sie sind, sondern sie gemeinsam neu denken – kritisch, kreativ und manchmal auch spielerisch. Egal, ob ihr schon tief in digitalen Themen steckt oder einfach neugierig seid: Kommt vorbei, probiert etwas aus und werdet Teil des Gesprächs über unsere gemeinsame digitale Zukunft.',
   ],
 };
 
@@ -197,6 +196,8 @@ export const vkiiText = [
 ];
 
 export const partners: {
+  /** Anker auf der Partnerseite (/partner#id) – Ziel der Kacheln auf Start */
+  id: string;
   name: string;
   /** Kurzform für die Logo-Kachel */
   short: string;
@@ -206,6 +207,7 @@ export const partners: {
   url?: string;
 }[] = [
   {
+    id: 'kolab',
     name: 'KoLab',
     short: 'KoLab',
     full: 'Digitales Koproduktionslabor',
@@ -216,6 +218,7 @@ export const partners: {
     ],
   },
   {
+    id: 'atem',
     name: 'ATEM Biennial',
     short: 'ATEM',
     full: 'Alternative Thoughts on the Emerging Metaverse',
@@ -226,17 +229,20 @@ export const partners: {
     ],
   },
   {
+    id: 'vkii',
     name: 'VKII Ruhrbezirk e. V.',
     short: 'VKII',
     text: vkiiText,
   },
   {
+    id: 'kiu',
     name: 'storyLab kiU',
     short: 'kiU',
     full: 'Fachhochschule Dortmund',
     text: [],
   },
   {
+    id: 'mono',
     name: 'Mono Listening Café',
     short: 'Mono',
     text: [],

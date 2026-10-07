@@ -2,9 +2,11 @@
 import { nav } from '../data/site';
 import Logo from './Logo.astro';
 
-const path = Astro.url.pathname;
+// ohne abschließenden Schrägstrich vergleichen (/about/team/ = /about/team)
+const roh = Astro.url.pathname;
+const path = roh.length > 1 && roh.endsWith('/') ? roh.slice(0, -1) : roh;
 const isActive = (href: string) =>
-  href === '/' ? path === '/' : path.startsWith(href);
+  href === '/' ? path === '/' : path === href || path.startsWith(href + '/');
 ---
 
 <header class="site-header">
@@ -31,7 +33,11 @@ const isActive = (href: string) =>
                 href={item.href}
                 class:list={[
                   'site-nav__link',
-                  { 'is-active': isActive(item.href) },
+                  {
+                    'is-active':
+                      isActive(item.href) ||
+                      !!item.children?.some((child) => isActive(child.href)),
+                  },
                 ]}
                 aria-current={isActive(item.href) ? 'page' : undefined}
               >

@@ -291,6 +291,42 @@ img {
   border-color: var(--section-accent);
 }
 
+/* --- Anmeldung: Lime ist die Farbe für „besondere Aufmerksamkeit“ ---
+   Kasten, Hinweis-Pille und Button tragen alle Lime, damit die
+   Anmeldung überall sofort als Handlungsaufforderung erkennbar ist. */
+.anmeldung {
+  padding: 1rem 1.2rem 1.2rem;
+  border: 3px solid var(--lime);
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--lime) 28%, var(--white));
+  color: var(--black);
+}
+.anmeldung p {
+  margin: 0 0 0.85rem;
+}
+.btn--anmelden {
+  background: var(--lime);
+  color: var(--deep-purple);
+  border-color: var(--deep-purple);
+  border-width: 3px;
+  font-size: 0.95rem;
+  padding: 0.7rem 1.4rem;
+}
+.btn--anmelden:hover {
+  background: var(--deep-purple);
+  color: var(--lime);
+}
+.pill-anmeldung {
+  display: inline-block;
+  font-weight: 900;
+  font-size: 0.8rem;
+  padding: 0.15rem 0.65rem;
+  border-radius: var(--radius-pill);
+  background: var(--lime);
+  color: var(--deep-purple);
+  box-shadow: inset 0 0 0 2px var(--deep-purple);
+}
+
 /* --- Karten --- */
 .grid {
   display: grid;

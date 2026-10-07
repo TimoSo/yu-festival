@@ -4,12 +4,9 @@ import EventCard from '../components/EventCard.astro';
 import RichText from '../components/RichText.astro';
 import { tracks, days, events, ongoing, anmeldung } from '../data/programm';
 
-// Farbe je Kategorie, pro Bereich eigene Zuordnung
-function accentOf(trackId: string, category: string): string {
-  const track = tracks.find((t) => t.id === trackId);
-  const cat = track?.categories.find((c) => c.name === category);
-  return cat?.accent ?? 'var(--lavender)';
-}
+// Leitfarbe eines Bereichs als CSS-Variablen (siehe `farbe` in programm.ts)
+const farbVars = (f: (typeof tracks)[number]['farbe']) =>
+  `--cat:${f.flaeche};--cat-ink:${f.schrift};--cat-text:${f.text}`;
 
 // Programmpunkte eines Tages, nach Beginn sortiert
 function eventsOf(trackId: string, day: number) {
@@ -30,7 +27,12 @@ function eventsOf(trackId: string, day: number) {
   <div class="switch-band">
     <div class="container">
       <div class="switch-bar">
-        <div class="switch" role="tablist" aria-label="Programmbereich wählen">
+        <div
+          class="switch"
+          role="tablist"
+          aria-label="Programmbereich wählen"
+          style={`--thumb-bg:${tracks[0].farbe.flaeche}`}
+        >
           <span class="switch__thumb" aria-hidden="true"></span>
           <span class="switch__ghost" aria-hidden="true"></span>
           {
@@ -44,6 +46,7 @@ function eventsOf(trackId: string, day: number) {
                 aria-controls={`panel-${track.id}`}
                 aria-selected={i === 0 ? 'true' : 'false'}
                 tabindex={i === 0 ? 0 : -1}
+                style={`--farbe:${track.farbe.flaeche};--auf-farbe:${track.farbe.schrift}`}
               >
                 {track.label}
               </button>
@@ -66,6 +69,7 @@ function eventsOf(trackId: string, day: number) {
             aria-labelledby={`tab-${track.id}`}
             data-track={track.id}
             hidden={ti !== 0}
+            style={farbVars(track.farbe)}
           >
             <div class="track__intro">
               {track.intro.title && (
@@ -92,10 +96,10 @@ function eventsOf(trackId: string, day: number) {
                 </p>
               )}
               {track.intro.registration && (
-                <div class="track__anmeldung">
+                <div class="anmeldung track__anmeldung">
                   <RichText paras={[anmeldung.text]} />
                   <a
-                    class="btn btn--primary btn--on-white"
+                    class="btn btn--anmelden"
                     href={`mailto:${anmeldung.email}?subject=${encodeURIComponent(
                       `Anmeldung: ${track.label}`
                     )}`}
@@ -106,14 +110,22 @@ function eventsOf(trackId: string, day: number) {
               )}
             </div>
 
-            <div class="legend">
-              {track.categories.map((cat) => (
-                <span class="legend__item">
-                  <span class="legend__dot" style={`background:${cat.accent}`} />
-                  {cat.name}
-                </span>
-              ))}
-            </div>
+            {/* Ausstellungen laufen an allen vier Tagen im Foyer und gehören
+                zum Festival. Sie stehen dort ganz oben, vor dem ersten Tag,
+                damit sie trotz Dauerlaufzeit gesehen werden. */}
+            {track.id === 'festival' && (
+              <section class="day ongoing" aria-labelledby="ongoing-head">
+                <h2 class="day__head" id="ongoing-head">
+                  Ausstellungen
+                  <span class="day__date">durchgehend an allen vier Tagen</span>
+                </h2>
+                <div class="ongoing__grid">
+                  {ongoing.map((item) => (
+                    <EventCard item={item} tag={item.period} variant="ongoing" />
+                  ))}
+                </div>
+              </section>
+            )}
 
             {days.map((day) => {
               const dayEvents = eventsOf(track.id, day.nr);
@@ -127,10 +139,7 @@ function eventsOf(trackId: string, day: number) {
 
                   <ol class="timeline">
                     {dayEvents.map((event) => (
-                      <li
-                        class="row"
-                        style={`--cat:${accentOf(track.id, event.category)}`}
-                      >
+                      <li class="row">
                         <span class="row__time">
                           <span class="row__start">{event.start}</span>
                           {event.end && (
@@ -150,23 +159,6 @@ function eventsOf(trackId: string, day: number) {
           </div>
         ))
       }
-
-      <!-- Ausstellungen laufen an allen vier Tagen und gelten für alle
-           Bereiche. Sie stehen bewusst unter dem Zeitplan, damit das
-           Programm zuerst kommt. -->
-      <section class="day ongoing" aria-labelledby="ongoing-head">
-        <h2 class="day__head" id="ongoing-head">
-          Ausstellungen
-          <span class="day__date">durchgehend an allen vier Tagen</span>
-        </h2>
-        <div class="ongoing__grid">
-          {
-            ongoing.map((item) => (
-              <EventCard item={item} tag={item.period} variant="ongoing" />
-            ))
-          }
-        </div>
-      </section>
     </div>
   </section>
 </BaseLayout>
@@ -214,16 +206,18 @@ function eventsOf(trackId: string, day: number) {
     transition:
       transform 0.42s cubic-bezier(0.22, 1, 0.36, 1),
       width 0.42s cubic-bezier(0.22, 1, 0.36, 1),
-      opacity 0.25s ease;
+      opacity 0.25s ease,
+      background-color 0.42s ease;
     pointer-events: none;
   }
+  /* Der Schieber trägt die Leitfarbe des gewählten Bereichs */
   .switch__thumb {
-    background: var(--lavender);
+    background: var(--thumb-bg, var(--lavender));
     z-index: 0;
   }
   /* Vorschau beim Überfahren – deutet die Bewegung an */
   .switch__ghost {
-    background: var(--lavender);
+    background: var(--ghost-bg, var(--lavender));
     opacity: 0;
     width: var(--ghost-w, 0px);
     transform: translateX(var(--ghost-x, 0px));
@@ -251,7 +245,7 @@ function eventsOf(trackId: string, day: number) {
     white-space: nowrap;
   }
   .switch__btn[aria-selected='true'] {
-    color: var(--white);
+    color: var(--auf-farbe, var(--white));
   }
   /* Handy: Pille über die ganze Breite, Bereiche teilen sich den Platz */
   @media (max-width: 560px) {
@@ -273,12 +267,7 @@ function eventsOf(trackId: string, day: number) {
     }
   }
 
-  /* ---------- Ausstellungen (unter dem Zeitplan) ---------- */
-  .ongoing {
-    margin-top: clamp(1rem, 3vw, 2rem);
-    padding-top: clamp(2rem, 5vw, 3rem);
-    border-top: 4px solid color-mix(in srgb, var(--deep-purple) 12%, transparent);
-  }
+  /* ---------- Ausstellungen (Festival, vor dem ersten Tag) ---------- */
   .ongoing__grid {
     display: grid;
     gap: 1rem;
@@ -294,11 +283,14 @@ function eventsOf(trackId: string, day: number) {
   .ongoing__grid.has-open {
     grid-template-columns: 1fr;
   }
+  .ongoing__grid :global(.ev) {
+    margin-bottom: 0;
+  }
 
   /* ---------- Bereichs-Einleitung ---------- */
   .track__intro {
     max-width: 70ch;
-    margin-bottom: 1.75rem;
+    margin-bottom: clamp(2rem, 5vw, 2.75rem);
   }
   .track__title {
     font-family: var(--font-sans);
@@ -322,38 +314,16 @@ function eventsOf(trackId: string, day: number) {
        mehrzeilig ein weich abgerundetes Rechteck – egal ob die Zeilen
        aus den Daten kommen oder durch Umbruch auf dem Handy entstehen. */
     border-radius: 1.3rem;
-    background: color-mix(in srgb, var(--lavender) 14%, var(--white));
+    background: color-mix(in srgb, var(--cat) 14%, var(--white));
     color: var(--deep-purple);
     margin-bottom: 1rem;
   }
   .track__link {
     font-weight: 900;
-    color: var(--lavender);
+    color: var(--cat-text);
   }
   .track__anmeldung {
     margin-top: 1rem;
-    padding: 1rem 1.2rem;
-    border-radius: var(--radius-sm);
-    background: color-mix(in srgb, var(--lavender) 12%, var(--white));
-  }
-
-  .legend {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.25rem;
-    margin-bottom: 2.5rem;
-    font-weight: 900;
-    font-size: 0.9rem;
-  }
-  .legend__item {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  .legend__dot {
-    width: 1.1rem;
-    height: 1.1rem;
-    border-radius: var(--radius-pill);
   }
 
   /* ---------- Zeitplan ---------- */
@@ -375,7 +345,7 @@ function eventsOf(trackId: string, day: number) {
     font-size: 0.85rem;
     text-transform: none;
     letter-spacing: 0.04em;
-    color: var(--lavender);
+    color: var(--cat-text);
   }
 
   .timeline {
@@ -420,7 +390,7 @@ function eventsOf(trackId: string, day: number) {
     bottom: 0;
     width: 4px;
     border-radius: 999px;
-    background: color-mix(in srgb, var(--deep-purple) 18%, transparent);
+    background: color-mix(in srgb, var(--cat) 30%, transparent);
   }
   .row:first-child .row__rail::before {
     top: 1.1rem;
@@ -481,6 +451,8 @@ function eventsOf(trackId: string, day: number) {
     if (!switchEl) return;
     switchEl.style.setProperty(`--${prefix}-w`, `${btn.offsetWidth}px`);
     switchEl.style.setProperty(`--${prefix}-x`, `${btn.offsetLeft}px`);
+    // Leitfarbe des Bereichs übernehmen
+    switchEl.style.setProperty(`--${prefix}-bg`, btn.style.getPropertyValue('--farbe'));
   }
 
   const aktiverButton = () =>

@@ -22,7 +22,7 @@ import { partners, kooperation } from '../data/site';
       <div class="partner-grid">
         {
           partners.map((partner) => (
-            <article class="partner-card">
+            <article class="partner-card" id={partner.id}>
               <div class="partner-logo">{partner.short}</div>
               <div>
                 <h2 class="partner-name">{partner.name}</h2>
@@ -64,6 +64,25 @@ import { partners, kooperation } from '../data/site';
     border: var(--border-w) solid var(--lavender);
     border-radius: var(--radius);
     padding: 1.75rem;
+    /* Sprung von der Startseite: nicht unter dem festen Kopf landen */
+    scroll-margin-top: 6.5rem;
+  }
+  /* angesprungener Partner wird kurz hervorgehoben */
+  .partner-card:target {
+    animation: angesprungen 2.4s ease-out;
+  }
+  @keyframes angesprungen {
+    0%,
+    45% {
+      border-color: var(--coral);
+      background: color-mix(in srgb, var(--coral) 14%, var(--white));
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .partner-card:target {
+      animation: none;
+      border-color: var(--coral);
+    }
   }
   .partner-logo {
     display: grid;
