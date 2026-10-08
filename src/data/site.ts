@@ -48,10 +48,8 @@ export const nav: {
 // ------------------------------------------------------------
 
 export const landing = {
-  intro: [
+  intro:
     'Beim YU Festival stehen die Gestaltungsmöglichkeiten, die digitale Medien eröffnen, im Zentrum – für das Individuum genauso wie für das „Wir“ als Kollektivgedanken. Wir gehen kreativ, experimentell und verspielt mit digitalen Elementen um und fragen: Wie wollen wir das Digitale gestalten?',
-    'Das YU Festival wirft einen positiven, aufgeschlossenen Blick auf Digitalität. Den kritischen Blick vergessen wir nicht – unser Fokus liegt aber auf den Gestaltungsmöglichkeiten, die das Individuum und das „Wir“ als Kollektivgedanken haben.',
-  ],
   worum: {
     lead: 'Was wäre, wenn digitale Räume anders aussehen könnten? Offener, kreativer, gemeinschaftlicher? Wenn wir nicht nur Nutzer*innen wären, sondern selbst mitentscheiden und neue Formen des Miteinanders entwickeln würden?',
     text: 'Das YU Festival schafft Raum für genau diese Fragen – und für Ideen, die noch keine fertige Antwort haben.',
@@ -66,14 +64,14 @@ export const pillars: { title: string; text: string; accent: string }[] = [
     accent: 'var(--lavender)',
   },
   {
-    title: 'Performance und Musik',
-    text: 'Bühne frei für audiovisuelle Performances, Konzerte und Klangwelten, die digitale Medien erfahrbar machen.',
-    accent: 'var(--coral)',
-  },
-  {
     title: 'Workshops',
     text: 'Selbst gestalten, ausprobieren, mitmachen – von Zines über Creative Coding bis zur Zukunftswerkstatt.',
     accent: 'var(--lime)',
+  },
+  {
+    title: 'Digitale Kunst und Performances',
+    text: 'Audiovisuelle Performances, digitale Kunst und Installationen machen digitale Medien erlebbar.',
+    accent: 'var(--coral)',
   },
 ];
 
@@ -85,7 +83,7 @@ export const pillars: { title: string; text: string; accent: string }[] = [
 // ------------------------------------------------------------
 
 export const kurzvorstellung = {
-  eyebrow: 'Wer dabei ist',
+  eyebrow: 'Wer ist dabei',
   titel: 'Kurzvorstellung',
   text: 'Vier Tage, drei Formate, viele Perspektiven: Beim YU Festival treffen Wissenschaft, Kunst und Community aufeinander – in Keynote und Podium, Performances und Ausstellungen, Workshops und einem Hackathon. Lerne einige der Menschen kennen, die das Programm prägen.',
   hinweis: 'Ein Klick auf einen Kreis verrät mehr.',
@@ -99,14 +97,16 @@ export const spotlight: {
   /** Kurzbio, 1–2 Sätze */
   bio: string;
   foto?: string;
+  /** Bildnachweis, erscheint in der Karte und im Impressum */
+  fotoCredit?: string;
   farbe: string;
 }[] = [
   {
-    name: 'Dr. Jennifer Eickelmann',
-    rolle: 'Keynote der YU Konferenz',
-    wann: 'Freitag, 23.10. · ab 10:00 Uhr',
-    bio: 'Juniorprofessorin für Digitale Transformation in Kultur und Gesellschaft an der FernUniversität in Hagen. Sie forscht zu digitaler Öffentlichkeit, digitaler Gewalt und generativer KI.',
-    foto: '/images/kurzvorstellung/jennifer-eickelmann.jpg',
+    name: 'Darbyn Luisa Kalkuhl',
+    rolle: 'Workshop „Cyberfeministische Strategien“ und Talk „Community Visions“',
+    wann: 'Samstag, 24.10. · 14:00 und 18:00 Uhr',
+    bio: 'Intermediale_r Künstler_in zwischen Sozialwissenschaft, Medienkunst und performativer Kunst und Gründer_in des Queeren Theater Kollektivs. Darbyn entwickelt eine kritische KI-Methodik für Kunstschaffende.',
+    foto: '/images/personen/darbyn-luisa-kalkuhl.webp',
     farbe: 'var(--lime)',
   },
   {
@@ -114,23 +114,50 @@ export const spotlight: {
     rolle: 'Podium der YU Konferenz',
     wann: 'Freitag, 23.10. · Block 1',
     bio: 'Journalistin, Moderatorin und Autorin mit den Schwerpunkten digitale Medienkultur, Pop und Politik. Die ZEIT zählt sie zu den 100 wichtigsten jungen Ostdeutschen.',
-    foto: '/images/kurzvorstellung/nhi-le.jpg',
+    foto: '/images/personen/nhi-le.webp',
+    fotoCredit: 'Julia Sang Nguyen',
     farbe: 'var(--coral)',
   },
   {
-    name: 'Sam Hopkins',
-    rolle: 'Ausstellung BAZE und Talk „Community Visions“',
-    wann: '22.–25.10. im Foyer · Talk Samstag, 18:00 Uhr',
-    bio: 'Künstler und Lehrender an der Kunsthochschule für Medien Köln. Mit BAZE bringt er die Wärme der Nachbarschaft ins digitale Leben – als Offline-Sammlung zum Stöbern und Teilen.',
-    foto: '/images/kurzvorstellung/sam-hopkins.jpg',
+    name: 'Suraj Mailitafi',
+    rolle: 'Podium der YU Konferenz',
+    wann: 'Freitag, 23.10. · Block 1',
+    bio: 'Politischer Aktivist und Content Creator. Er setzt sich für Antirassismus, Antifaschismus und Chancengerechtigkeit ein und erreicht auf Instagram und TikTok monatlich bis zu 12 Millionen Menschen.',
+    foto: '/images/personen/suraj-mailitafi.webp',
+    fotoCredit: 'Johannes Bichmann',
     farbe: 'var(--lavender)',
   },
   {
-    name: 'Julie C. Stamm',
-    rolle: 'Performance „Unter Haut“ und Movement-Workshop',
-    wann: 'Donnerstag bis Sonntag im Foyer',
-    bio: 'Arbeitet an der Schnittstelle von Choreografie und Medienkunst und untersucht, wie digitale Tracking-Technologien unsere Bewegungen und kollektiven Choreografien mitformen.',
-    foto: '/images/kurzvorstellung/julie-c-stamm.jpg',
+    name: 'Camilo Sandoval',
+    rolle: 'Ausstellung „Collective Mess“, Creative Coding, Coding Jam und Talk „Community Visions“',
+    wann: '22.–25.10. · Workshops Donnerstag und Samstag',
+    bio: 'Multidisziplinärer Künstler mit Schwerpunkt auf experimenteller Informatik, lebt zwischen Köln und Bogotá. Unter dem Pseudonym Janus zeigt er audiovisuelle Performances.',
+    foto: '/images/personen/camilo-sandoval.webp',
+    farbe: 'var(--lime)',
+  },
+  {
+    name: 'Dr. Tong-Jin Smith',
+    rolle: 'Kurzvortrag „Mündig mit Medien“ und Podium der YU Konferenz',
+    wann: 'Freitag, 23.10. · Block 1',
+    bio: 'Professorin für Journalismus an der Media University of Applied Sciences in Berlin und Mitgründerin des Center for Media and Information Literacy an der FU Berlin. Sie forscht zu Medienmündigkeit und Nachrichtenkompetenz.',
+    foto: '/images/personen/tong-jin-smith.webp',
+    fotoCredit: 'Tim Gassauer',
+    farbe: 'var(--coral)',
+  },
+  {
+    name: 'Schnellhefter*innen',
+    rolle: 'Speed-Zine- und Zine-Workshops',
+    wann: 'Freitag bis Sonntag',
+    bio: 'Dortmunder Workshop-Kollektiv rund um die Do-it-yourself-Ästhetik der Zine-Kultur: Lisa Fischer, Max Rüthers und Luis F. Düllberg. Kunst und Gestaltung müssen für sie kein Profi-Terrain sein.',
+    foto: '/images/personen/schnellhefterinnen.webp',
+    farbe: 'var(--lavender)',
+  },
+  {
+    name: 'Dr. Jennifer Eickelmann',
+    rolle: 'Keynote und Podium der YU Konferenz',
+    wann: 'Freitag, 23.10. · ab 10:00 Uhr',
+    bio: 'Juniorprofessorin für Digitale Transformation in Kultur und Gesellschaft an der FernUniversität in Hagen. Sie forscht zu digitaler Öffentlichkeit, digitaler Gewalt und generativer KI.',
+    foto: '/images/personen/jennifer-eickelmann.webp',
     farbe: 'var(--lime)',
   },
   {
@@ -138,7 +165,7 @@ export const spotlight: {
     rolle: 'Ausstellung „Collective Mess“, Creative Coding und Coding Jam',
     wann: '22.–25.10. · Workshops Donnerstag und Samstag',
     bio: 'Medienkünstlerin und Creative Technologist aus Dortmund. Mit Creative Coding und Physical Computing entwickelt sie interaktive Installationen und immersive Erlebnisse.',
-    foto: '/images/kurzvorstellung/camilla-scholz.jpg',
+    foto: '/images/personen/camilla-scholz.webp',
     farbe: 'var(--coral)',
   },
 ];
@@ -184,6 +211,27 @@ export const team: { role: string; names: string }[] = [
   { role: 'Grafikdesign Social Media', names: 'Jana Canê' },
   { role: 'Webdesign', names: 'Timo Sodenkamp' },
   { role: 'CI und Logodesign', names: 'Marc Kemper' },
+];
+
+// Dank an alle, die das Festival unterstützen (Team-Seite)
+export const specialThanks = [
+  'Mirjam Gaffran',
+  'Judith Brinkmann',
+  'Daria Rothkegel',
+  'Regina Selter',
+  'Matthias Kozka',
+  'Laurin Bürmann',
+  'Michael Nguyen',
+  'Fabian Bentrup',
+  'Harald Opel',
+  'Tobias Biseke',
+  'Stephan Hauptmann',
+  'Kai Czerwonka',
+  'Armel Djiné',
+  'Matel Ba',
+  'Miu-Wah Lok',
+  'Ilka Wessel',
+  'Jannis Kötting',
 ];
 
 // ------------------------------------------------------------
@@ -247,7 +295,9 @@ export const partners: {
     id: 'mono',
     name: 'Mono Listening Café',
     short: 'Mono',
-    text: [],
+    text: [
+      'Das mono ist das Listening Café im Dortmunder Plattenladen Black Plastic. Hervorragender, klassischer Espresso trifft auf McIntosh-Verstärker und Tannoy-Lautsprecher – ein Ort, um im Alltag bewusst Musik verschiedenster Spielarten zu hören, Lesungen oder kleine Konzerte zu erleben oder mehrmals die Woche wechselnden DJs zuzuhören und -schauen. Oder um einfach nur einen Kaffee zu trinken und in Musikbüchern zu blättern.',
+    ],
   },
 ];
 
@@ -320,20 +370,3 @@ export const faq: { q: string; a: string[] }[] = [
     ],
   },
 ];
-
-// ------------------------------------------------------------
-//  IMPRESSUM – Pflichtangaben, bitte vor dem Launch ausfüllen
-// ------------------------------------------------------------
-
-export const impressum = {
-  anbieter: 'tba',
-  strasse: 'tba',
-  plz: 'tba',
-  ort: 'tba',
-  vertreten: 'tba',
-  email: contact.email,
-  telefon: 'tba',
-  registergericht: '',
-  registernummer: '',
-  ustId: '',
-};

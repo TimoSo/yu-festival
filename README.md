@@ -28,10 +28,11 @@ B:\YU_Festival
 │   ├── favicon.svg              # YU-Signet auf Lavendel
 │   ├── fonts/                   # CI-Schriften als WOFF2
 │   └── images/
-│       ├── header/              # Social-Media-Header (Originale + Web-Versionen)
+│       ├── header/              # Social-Media-Header (Originale) + Muster
+│       ├── personen/            # Porträts der Kurzvorstellung (400 × 400, WebP)
+│       ├── programm/            # Bilder in den Programmpunkten (WebP)
 │       ├── foerderer/           # Fußleisten-Logos, weiß aufbereitet (Web-Versionen)
 │       ├── YU_EinFestivalVon_Logos/ # Originale dieser Logos (schwarz)
-│       ├── kurzvorstellung/     # Profilfotos für die Kurzvorstellung (folgen)
 │       └── logo/                # Logo als Vektor, 4 Varianten
 │           ├── logo-primary.svg     # Badge: YU + FESTIVAL im Rahmen
 │           ├── logo-horizontal.svg  # Querformat (Header)
@@ -50,7 +51,8 @@ B:\YU_Festival
 │   │   └── Hero.astro
 │   ├── data/
 │   │   ├── site.ts          # ★ Texte: Start, About, Team, Partner, FAQ, Kontakt
-│   │   └── programm.ts      # ★ das komplette Programm (Bereiche, Tage, Punkte)
+│   │   ├── programm.ts      # ★ das komplette Programm (Bereiche, Tage, Punkte)
+│   │   └── impressum.ts     # ★ Impressum und Rechtstexte
 │   ├── lib/
 │   │   └── linkify.ts       # erkennt E-Mail-Adressen und URLs im Text
 │   ├── layouts/
@@ -73,8 +75,9 @@ B:\YU_Festival
 
 ## Häufige Aufgaben
 
-- **Texte ändern:** Start, About, Team, Partner, FAQ, Impressum und Kontakt
-  stehen in `src/data/site.ts`, das Programm in `src/data/programm.ts`.
+- **Texte ändern:** Start, About, Team, Partner, FAQ und Kontakt stehen in
+  `src/data/site.ts`, das Programm in `src/data/programm.ts`, Impressum und
+  Rechtstexte in `src/data/impressum.ts` (dort bewusst in der Sie-Form).
   E-Mail-Adressen und URLs in den Texten werden automatisch verlinkt.
 - **Programm:** `/programm` hat drei Bereiche (`tracks`): Festival, Konferenz,
   Hackathon. Jeder Bereich hat eine Leitfarbe (`farbe`), abgestimmt mit dem
@@ -105,16 +108,20 @@ B:\YU_Festival
   `footerLogos` in `src/data/site.ts` (gleicht die Proportionen optisch aus).
 - **Header (Grafik: Jana Canê):** Die Originale `YU_Header.png` (gestapelt) und
   `YU_Header2.png` (quer) liegen in `public/images/header/`. Daraus erzeugt:
-  `yu-header-quer-*.webp` (Titelbild der Startseite ab 760 px Breite),
-  `yu-header-gestapelt-*.webp` (Titelbild auf dem Handy, seitlich beschnitten,
-  damit das Logo groß bleibt) und `yu-muster.webp` (logofreier oberer Streifen
-  des queren Headers – Hintergrund der Seitenköpfe auf den Unterseiten, Klasse
-  `.section--muster` in `global.css`).
+  `yu-muster.webp` (logofreier oberer Streifen des queren Headers) – der
+  Hintergrund aller Seitenköpfe inklusive Startseite, Klasse `.section--muster`
+  in `global.css`.
 - **Kurzvorstellung (Startseite):** Personen im Array `spotlight` in
-  `src/data/site.ts`. Fotos unter dem dort angegebenen Namen nach
-  `public/images/kurzvorstellung/` legen (z. B. `nhi-le.jpg`) – sie erscheinen
-  dann automatisch, bis dahin zeigen die Kreise Initialen. Quadratische Fotos
-  funktionieren am besten.
+  `src/data/site.ts` (aktuell acht). Fotos als quadratischer Ausschnitt
+  (400 × 400 px) nach `public/images/personen/` – ohne Foto zeigt der Kreis
+  Initialen. `fotoCredit` erscheint in der Karte und im Impressum unter
+  „Bildnachweise“. Die Ruheplätze der Kreise stehen in `HEIM` in
+  `Kurzvorstellung.astro` (für acht Personen ausgelegt).
+- **Bild im Programmpunkt:** `bild` mit `src`, `alt`, `breite` und `hoehe`
+  (Pixelmaße der Datei) – erscheint oben im aufgeklappten Punkt.
+- **Rohmaterial:** Die Ordner mit Originalfotos und Word-Dateien in
+  `public/images/` (z. B. `nhiLe/`) sind per `.gitignore` ausgeschlossen und
+  werden nicht ausgeliefert. Die Seite nutzt nur die optimierten Fassungen.
 - **Logo einsetzen:** `<Logo variant="horizontal" width="200px" />`. Das SVG ist
   einfarbig (`fill="currentColor"`) – die Farbe kommt vom `color` des
   Elternelements.
@@ -180,8 +187,7 @@ Zwei Eigenheiten von Blob, die man kennen muss:
 ## Status
 
 CI umgesetzt: Farben, Schriften, Logo, Formensprache, alle Seiten.
-Noch offen: Profilfotos der Kurzvorstellung, Partnertexte (kiU, Mono) und
-die Pflichtangaben im Impressum (stehen noch auf „tba“).
+Noch offen: Partnertext storyLab kiU.
 
 Die Seite setzt keine Cookies: Schriften liegen lokal, es gibt kein
 Tracking und kein Kontaktformular – Kontakt läuft per Mail-Link.

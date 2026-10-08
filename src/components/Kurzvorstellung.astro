@@ -51,6 +51,9 @@ function initialen(name: string) {
               </div>
               <p class="blase__bio">{person.bio}</p>
               <p class="blase__wann">{person.wann}</p>
+              {person.fotoCredit && (
+                <p class="blase__credit">Foto: {person.fotoCredit}</p>
+              )}
             </div>
 
             <button
@@ -216,6 +219,12 @@ function initialen(name: string) {
     font-size: 0.95rem;
     line-height: 1.5;
   }
+  .blase__credit {
+    grid-column: 1 / -1;
+    margin: -0.2rem 0 0;
+    font-size: 0.72rem;
+    opacity: 0.65;
+  }
   .blase__wann {
     grid-column: 1 / -1;
     justify-self: start;
@@ -284,11 +293,14 @@ function initialen(name: string) {
 
   // Ruheplätze als Anteil von Breite/Höhe des Feldes
   const HEIM: [number, number][] = [
-    [0.24, 0.24],
-    [0.72, 0.2],
-    [0.47, 0.52],
-    [0.2, 0.8],
-    [0.76, 0.77],
+    [0.17, 0.17],
+    [0.5, 0.13],
+    [0.83, 0.2],
+    [0.3, 0.47],
+    [0.71, 0.5],
+    [0.16, 0.8],
+    [0.5, 0.84],
+    [0.84, 0.79],
   ];
   const RADIUS = 28; // Eckenradius der Karte
   const RAND_ZU = 8; // Abstand Bild ↔ Außenkante, geschlossen
@@ -346,15 +358,18 @@ function initialen(name: string) {
       const alteW = W || 1;
       const alteH = H || 1;
       W = feld.clientWidth;
-      D = clamp(W * 0.2, 76, 124);
+      // acht Personen: Kreise etwas kleiner als bei fünf
+      D = clamp(W * 0.17, 68, 112);
       KB = Math.min(W - 12, 360);
       BG = W < 420 ? 72 : 84;
       feld.style.setProperty('--karte-b', `${KB}px`);
       feld.style.setProperty('--bild-gross', `${BG}px`);
       koerper.forEach((k) => (k.karteH = k.inhalt.offsetHeight));
       const hoechsteKarte = Math.max(...koerper.map((k) => k.karteH));
-      // genug Höhe, dass über und unter einer offenen Karte Blasen Platz haben
-      H = Math.max(W < 600 ? 460 : 520, hoechsteKarte + D * 1.6);
+      // genug Höhe, dass über und unter einer offenen Karte die übrigen
+      // (geschrumpften) Kreise samt Abstand Platz haben – auch auf dem
+      // Handy, wo die Karte die ganze Breite einnimmt
+      H = Math.max(W < 600 ? 480 : 540, hoechsteKarte + D * 2.1);
       feld.style.height = `${H}px`;
       // Positionen bei Größenänderung mitskalieren und SOFORT neu zeichnen –
       // nicht erst im nächsten Frame (der kommt z. B. bei reduzierter
@@ -465,7 +480,13 @@ function initialen(name: string) {
             const dy = kreis.y - ny;
             const d = Math.hypot(dx, dy);
             const r = kreis.w / 2 + ABSTAND;
-            if (d < r) {
+            // Ist neben der Karte zu wenig Platz (Handy: Karte fast so breit
+            // wie das Feld), weicht der Kreis nach oben oder unten aus –
+            // seitlich würde ihn der Feldrand hinter die Karte zurückschieben.
+            const seitlichFrei = (W - karte.w) / 2 >= kreis.w + ABSTAND;
+            if (d < r && !seitlichFrei) {
+              kreis.y = kreis.y < karte.y ? karte.y - hy - r : karte.y + hy + r;
+            } else if (d < r) {
               if (d < 0.01) {
                 // Mittelpunkt innerhalb der Karte: zur nächsten Kante
                 const l = kreis.x - (karte.x - hx);
@@ -567,6 +588,13 @@ function initialen(name: string) {
         } else {
           zx = heimX(k);
           zy = heimY(k);
+          if (offen && (W - offen.w) / 2 < D + ABSTAND) {
+            // schmales Feld: Ruheplatz auf Höhe der Karte → darüber/darunter
+            const r = (D * k.s) / 2 + ABSTAND;
+            const oben = offen.y - offen.h / 2 - r;
+            const unten = offen.y + offen.h / 2 + r;
+            if (zy > oben && zy < unten) zy = zy < offen.y ? oben : unten;
+          }
           if (!ruhe) {
             zx += Math.sin(t * k.tempo + k.phase) * 10;
             zy += Math.cos(t * k.tempo * 0.8 + k.phase * 1.3) * 10;
@@ -603,8 +631,12 @@ function initialen(name: string) {
         }
       }
 
-      for (let n = 0; n < 3; n++) kollisionen();
-      koerper.forEach(begrenzen);
+      // Feldrand in jedem Durchgang mitprüfen: Schiebt der Rand einen Kreis
+      // zurück, kann der nächste Durchgang die neue Überlappung auflösen
+      for (let n = 0; n < 5; n++) {
+        kollisionen();
+        koerper.forEach(begrenzen);
+      }
       koerper.forEach(zeichnen);
 
       rafId = sichtbar ? requestAnimationFrame(schritt) : 0;

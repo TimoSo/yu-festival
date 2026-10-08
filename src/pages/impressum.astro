@@ -1,86 +1,126 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHeader from '../components/PageHeader.astro';
-import { impressum } from '../data/site';
+import RichText from '../components/RichText.astro';
+import { impressum, haftungsausschluss, type RechtsAbschnitt } from '../data/impressum';
+import { spotlight } from '../data/site';
+
+const v = impressum.verantwortlich;
+
+// Bildnachweise sammeln sich aus den Daten (Kurzvorstellung)
+const bildnachweise = spotlight
+  .filter((p) => p.fotoCredit)
+  .map((p) => `Porträt ${p.name}: ${p.fotoCredit}`);
 ---
 
 <BaseLayout
   title="Impressum"
-  description="Impressum und Anbieterkennzeichnung des YU Festivals."
+  description="Impressum, Haftungsausschluss und Datenschutzhinweise des YU Festivals."
 >
   <PageHeader
     eyebrow="Rechtliches"
     title="Impressum"
-    lead="Anbieterkennzeichnung und Kontakt zum YU Festival."
+    lead="Anbieterkennzeichnung, Haftungsausschluss und Datenschutz."
   />
 
   <section class="section">
-    <div class="container narrow">
-      <p class="hinweis">
-        Hinweis: Die Pflichtangaben sind noch Platzhalter. Vor dem Launch
-        müssen sie ausgefüllt werden – ein unvollständiges Impressum ist
-        abmahnfähig. Die Werte stehen in <code>src/data/site.ts</code>.
-      </p>
+    <div class="container narrow recht">
+      <p class="recht__intro">{impressum.intro}</p>
 
-      <h3>Angaben gemäß § 5 DDG</h3>
+      <h2>{v.titel}</h2>
       <p>
-        {impressum.anbieter}<br />
-        {impressum.strasse}<br />
-        {impressum.plz} {impressum.ort}
-      </p>
-
-      <h3>Vertreten durch</h3>
-      <p>{impressum.vertreten}</p>
-
-      <h3>Kontakt</h3>
-      <p>
-        E-Mail: <a href={`mailto:${impressum.email}`}>{impressum.email}</a><br />
-        Telefon: {impressum.telefon}
-      </p>
-
-      {
-        (impressum.registergericht || impressum.registernummer) && (
+        {v.anschrift.map((zeile) => (
           <>
-            <h3>Registereintrag</h3>
-            <p>
-              {impressum.registergericht}
-              <br />
-              {impressum.registernummer}
-            </p>
+            {zeile}
+            <br />
           </>
-        )
+        ))}
+      </p>
+      <p>
+        E-Mail: <a href={`mailto:${v.email}`}>{v.email}</a>
+        <br />
+        Telefon: <a href={`tel:${v.telefonLink}`}>{v.telefon}</a>
+      </p>
+
+      <h2>Haftungsausschluss</h2>
+      {
+        haftungsausschluss.map((a: RechtsAbschnitt) => (
+          <section class="recht__abschnitt">
+            <h3>{a.titel}</h3>
+            <RichText paras={a.absaetze} />
+            {a.liste && (
+              <ul>
+                {a.liste.map((punkt) => (
+                  <li>
+                    <strong>{punkt.fett}</strong> {punkt.text}
+                  </li>
+                ))}
+              </ul>
+            )}
+            {a.nach && <RichText paras={a.nach} />}
+            {a.unter?.map((u) => (
+              <>
+                <h4>{u.titel}</h4>
+                <RichText paras={u.absaetze} />
+              </>
+            ))}
+          </section>
+        ))
       }
 
       {
-        impressum.ustId && (
+        bildnachweise.length > 0 && (
           <>
-            <h3>Umsatzsteuer-ID</h3>
-            <p>{impressum.ustId}</p>
+            <h2>Bildnachweise</h2>
+            <ul>
+              {bildnachweise.map((zeile) => (
+                <li>{zeile}</li>
+              ))}
+            </ul>
           </>
         )
       }
-
-      <h3>Verantwortlich für den Inhalt</h3>
-      <p>{impressum.vertreten}</p>
     </div>
   </section>
 </BaseLayout>
 
 <style>
-  .hinweis {
-    padding: 1rem 1.25rem;
-    border-radius: var(--radius-sm);
-    background: var(--lime);
+  /* Rechtstext: ruhige Gliederung in Helvetica Rounded statt großer
+     Blob-Überschriften */
+  .recht h2 {
+    font-family: var(--font-sans);
+    font-weight: 900;
+    font-size: clamp(1.35rem, 3vw, 1.75rem);
+    line-height: 1.2;
+    text-transform: none;
+    letter-spacing: normal;
     color: var(--deep-purple);
-    font-weight: 700;
-    margin-bottom: 2.5rem;
+    margin: 3rem 0 1rem;
   }
-  .hinweis code {
-    font-family: ui-monospace, monospace;
-    font-size: 0.9em;
-  }
-  h3 {
-    margin-top: 2rem;
+  .recht h3 {
+    font-size: 1.15rem;
     color: var(--lavender);
+    margin: 2rem 0 0.6rem;
+  }
+  .recht h4 {
+    font-size: 1rem;
+    color: var(--deep-purple);
+    margin: 1.4rem 0 0.4rem;
+  }
+  .recht__intro {
+    font-weight: 900;
+    font-size: 1.1rem;
+  }
+  .recht ul {
+    padding-left: 1.2rem;
+    margin: 0 0 1rem;
+  }
+  .recht li {
+    margin-bottom: 0.4rem;
+  }
+  /* :global – Links kommen teils aus RichText (eigene Komponente) */
+  .recht :global(a) {
+    color: var(--lavender);
+    font-weight: 900;
   }
 </style>

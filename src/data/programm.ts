@@ -29,6 +29,9 @@ export type Inhalt = {
   /** true = Anmeldung nötig, false = ausdrücklich keine Anmeldung */
   registration?: boolean;
   link?: { label: string; href: string };
+  /** Bild im aufgeklappten Programmpunkt; Breite/Höhe in Pixeln, damit
+   *  die Karte beim Aufklappen die richtige Höhe kennt */
+  bild?: { src: string; alt: string; breite: number; hoehe: number };
 };
 
 export type ProgrammEvent = Inhalt & {
@@ -67,6 +70,13 @@ export const anmeldung = {
 // ------------------------------------------------------------
 
 const ORT_FOYER = 'Foyer im Dortmunder U';
+
+const ZINE_BILD = {
+  src: '/images/programm/zine-workshop.webp',
+  alt: 'Zine-Material und Stifte auf einem Tisch unter Schwarzlicht',
+  breite: 1200,
+  hoehe: 800,
+};
 
 const UNTER_HAUT_TEXT = [
   '„Unter Haut“ (~40 min) ist ein multimediales Performance-Projekt über Körper und Digitalität im immersiven Raum und Foyer des Dortmunder U. Vier Performer:innen bewegen sich in vernetzten Kostümen. Klang (Kehlmikrofone), Bewegung und Projektion (aus Bewegungsdaten) greifen ineinander und erzeugen ein choreografisches Feedbacksystem.',
@@ -199,7 +209,7 @@ export const tracks: {
     intro: {
       meta: [`22.–${WJ}25.${NB}Oktober${NB}2026${NB}· Dortmunder${NB}U`],
       text: [
-        'Performances, Workshops, Talks und Musik an vier Tagen. Für manche Veranstaltungen ist eine Anmeldung nötig – das steht jeweils beim Programmpunkt.',
+        'Workshops, Talks, Performances und digitale Kunst. Für einige Events brauchst du eine Anmeldung – Infos dazu findest du direkt beim Programmpunkt.',
       ],
     },
   },
@@ -216,7 +226,7 @@ export const tracks: {
       ],
       text: [
         'Auf der diesjährigen YU Konferenz fragen wir uns: Wie prägen digitale Entwicklungen unser Verständnis von Gemeinschaft und Gesellschaft? Wer setzt die Regeln im digitalen Raum? Wie beeinflusst das Digitale unser Bild von uns selbst und voneinander? Und wie können wir demokratische Werte auch im digitalen Raum stärken und bewahren?',
-        'Die YU Konferenz lädt dazu ein, bestehende Perspektiven zu hinterfragen, unterschiedliche Stimmen miteinander ins Gespräch zu bringen und gemeinsam darüber nachzudenken, wie wir digitale Räume und Gemeinschaften in Zukunft gestalten wollen.',
+        'Freu dich auf Impulse und Gespräche zu Bildung und Medienkompetenz, gesellschaftlicher Teilhabe und Gemeinschaft sowie Demokratie und digitaler Mitgestaltung.',
       ],
       link: {
         label: 'Das gesamte Programm der YU Konferenz beim Dortmunder U',
@@ -233,7 +243,7 @@ export const tracks: {
       title: 'Hackathon „Connections“',
       meta: [`im Rahmen der KoLab${NB}Days x ATEM${NB}Biennale und des YU${NB}Festivals`],
       text: [
-        'Nach den Kick-off-Workshops kann im Workspace über mehrere Tage weitergearbeitet werden: Ideen werden vertieft, ausprobiert und gemeinsam weiterentwickelt. So entsteht Schritt für Schritt eine kollektiv entwickelte VR-Installation – zu sehen beim Showcase am Sonntag.',
+        'Unter dem Thema „Connections“ entwickeln wir an drei Tagen gemeinsam eine interaktive VR-Installation, die sich mit Formen der Begegnung und des Zusammenlebens in digitalen Räumen beschäftigt. Dabei wollen wir untersuchen, wie virtuelle Umgebungen unsere Kommunikation und unser Verhalten beeinflussen und welche neuen Formen von Nähe, Distanz, Gemeinschaft und Abgrenzung dort entstehen können.',
       ],
     },
   },
@@ -276,6 +286,12 @@ export const ongoing: Ausstellung[] = [
   },
   {
     id: 'ausstellung-collective-mess',
+    bild: {
+      src: '/images/programm/collective-mess.webp',
+      alt: 'Bunte, verpixelte Collage mit dem Schriftzug „Collective Mess“',
+      breite: 1200,
+      hoehe: 800,
+    },
     title: 'Ausstellung: Collective Mess',
     by: 'von Camilo Sandoval und Camilla Scholz',
     period: '22.–25.10.2026',
@@ -327,6 +343,7 @@ export const events: ProgrammEvent[] = [
   },
   {
     id: 'speed-zine-festival',
+    bild: ZINE_BILD,
     track: 'festival',
     day: 2,
     start: '14:15',
@@ -397,6 +414,7 @@ export const events: ProgrammEvent[] = [
   },
   {
     id: 'zine-workshop-sa',
+    bild: ZINE_BILD,
     track: 'festival',
     day: 3,
     start: '14:00',
@@ -410,6 +428,12 @@ export const events: ProgrammEvent[] = [
   },
   {
     id: 'workshop-cyberfeminismus',
+    bild: {
+      src: '/images/programm/cyberfeminismus.webp',
+      alt: 'Code-Fragmente mit den Schriftzügen „Cyberfeministische Strategien“ und „KI-Praxis“',
+      breite: 1200,
+      hoehe: 629,
+    },
     track: 'festival',
     day: 3,
     start: '14:00',
@@ -512,6 +536,7 @@ export const events: ProgrammEvent[] = [
   },
   {
     id: 'zine-workshop-so',
+    bild: ZINE_BILD,
     track: 'festival',
     day: 4,
     start: '14:00',
@@ -698,6 +723,7 @@ export const events: ProgrammEvent[] = [
   },
   {
     id: 'konf-speed-zine',
+    bild: ZINE_BILD,
     track: 'konferenz',
     day: 2,
     start: '14:15',
@@ -714,6 +740,12 @@ export const events: ProgrammEvent[] = [
 
   {
     id: 'hack-creative-coding',
+    bild: {
+      src: '/images/programm/creative-coding.webp',
+      alt: 'Mit p5.js gezeichnetes Raster aus bunten Formen und Sternen',
+      breite: 1200,
+      hoehe: 600,
+    },
     track: 'hackathon',
     day: 1,
     start: '16:00',
@@ -813,6 +845,12 @@ export const events: ProgrammEvent[] = [
   },
   {
     id: 'hack-coding-jam',
+    bild: {
+      src: '/images/programm/coding-jam.webp',
+      alt: 'Generatives Muster aus verschlungenen limettengrünen Linien auf Schwarz',
+      breite: 1200,
+      hoehe: 600,
+    },
     track: 'hackathon',
     day: 3,
     start: '11:00',

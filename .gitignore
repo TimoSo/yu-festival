@@ -36,3 +36,16 @@ Thumbs.db
 .vscode/*
 !.vscode/extensions.json
 .claude/
+
+# Rohmaterial zu den Personen (Originalfotos bis 9 MB, Word-Dateien).
+# Nicht ins Repo: Alles in public/ wird mit ausgeliefert, die Word-Dateien
+# wären sonst öffentlich abrufbar. Die Seite nutzt die optimierten
+# Fassungen in public/images/personen/ und public/images/programm/.
+public/images/camillaScholz/
+public/images/dabrynLuisaKuhl/
+public/images/jenniferEikelmann/
+public/images/nhiLe/
+public/images/schnellhefterinnen/
+public/images/surajMailitafi/
+public/images/tongJinSmith/
+public/**/*.docx

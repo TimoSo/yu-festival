@@ -43,6 +43,19 @@ const betreff = encodeURIComponent(`Anmeldung: ${item.title}`);
 
   <div class="ev__wrap">
     <div class="ev__body" id={bodyId} role="region" aria-label={item.title}>
+      {
+        item.bild && (
+          <img
+            class="ev__bild"
+            src={item.bild.src}
+            alt={item.bild.alt}
+            width={item.bild.breite}
+            height={item.bild.hoehe}
+            loading="lazy"
+            decoding="async"
+          />
+        )
+      }
       {item.note && <p class="ev__note">{item.note}</p>}
 
       <RichText paras={item.text} />
@@ -217,6 +230,14 @@ const betreff = encodeURIComponent(`Anmeldung: ${item.title}`);
   }
   .ev__body :global(p) {
     margin: 0 0 0.85rem;
+  }
+  /* width/height im Markup halten den Platz frei, bevor das Bild geladen
+     ist – so misst das Aufklappen gleich die richtige Höhe */
+  .ev__bild {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-sm);
+    margin: 0.15rem 0 1.1rem;
   }
   .ev__note {
     display: inline-block;
