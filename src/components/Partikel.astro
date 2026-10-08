@@ -1,0 +1,150 @@
+---
+// EXPERIMENT: CI-Gestaltungselemente schweben als Partikel über die Seite.
+// Jedes Teil fliegt geradlinig in eine zufällige Richtung, mit zufälligem
+// Tempo und leichter Drehung. Wer den Rand verlässt, kommt auf der
+// gegenüberliegenden Seite wieder herein. Kopf- und Fußleiste liegen
+// eine Ebene darüber und verdecken die Formen.
+//
+// Die Bilder liegen in public/images/partikel/ und lassen sich einfach
+// austauschen (z. B. weichgezeichnete PNGs mit Grain). `verhaeltnis` =
+// Breite ÷ Höhe der Datei, `skala` gleicht unterschiedliche Formen an.
+const sorten = [
+  { src: '/images/partikel/maeander-coral.svg', verhaeltnis: 316 / 90, skala: 1.5 },
+  { src: '/images/partikel/maeander-lime.svg', verhaeltnis: 316 / 90, skala: 1.5 },
+  { src: '/images/partikel/maeander-lavender.svg', verhaeltnis: 316 / 90, skala: 1.5 },
+  { src: '/images/partikel/kapsel-lime.svg', verhaeltnis: 240 / 160, skala: 1.1 },
+  { src: '/images/partikel/kapsel-coral.svg', verhaeltnis: 240 / 160, skala: 1.1 },
+  { src: '/images/partikel/kapsel-lavender.svg', verhaeltnis: 240 / 160, skala: 1.1 },
+  { src: '/images/partikel/pille-lavender.svg', verhaeltnis: 120 / 220, skala: 0.55 },
+  { src: '/images/partikel/pille-coral.svg', verhaeltnis: 120 / 220, skala: 0.55 },
+  { src: '/images/partikel/pille-lime.svg', verhaeltnis: 120 / 220, skala: 0.55 },
+];
+---
+
+<div class="partikel" data-partikel data-sorten={JSON.stringify(sorten)} aria-hidden="true">
+</div>
+
+<style>
+  /* Feste Ebene über dem Inhalt (Kopf z-index 50, Fuß 45 liegen darüber).
+     pointer-events: none – Klicks gehen durch die Formen hindurch. */
+  .partikel {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .partikel :global(img) {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: auto;
+    max-width: none;
+    will-change: transform;
+    user-select: none;
+  }
+</style>
+
+<script>
+  // ---------- Stellschrauben ----------
+  const DICHTE = 80000; // ein Teil je so viele Pixel Fensterfläche
+  const ANZAHL_MIN = 5;
+  const ANZAHL_MAX = 18;
+  const BREITE = [70, 140]; // Grundbreite in px (wird mit `skala` multipliziert)
+  const TEMPO = [10, 38]; // px pro Sekunde
+  const DREHUNG = 14; // max. Grad pro Sekunde, in beide Richtungen
+
+  type Sorte = { src: string; verhaeltnis: number; skala: number };
+  type Teil = {
+    el: HTMLImageElement;
+    x: number;
+    y: number;
+    vx: number;
+    vy: number;
+    winkel: number;
+    dreh: number;
+    b: number;
+    h: number;
+    rand: number; // halbe Diagonale: so weit darf das Teil hinaus, bevor es umspringt
+  };
+
+  const ebene = document.querySelector<HTMLElement>('[data-partikel]');
+  if (ebene) starte(ebene);
+
+  function starte(ebene: HTMLElement) {
+    const sorten: Sorte[] = JSON.parse(ebene.dataset.sorten ?? '[]');
+    if (!sorten.length) return;
+    const ruhig = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const zufall = (a: number, b: number) => a + Math.random() * (b - a);
+
+    let W = window.innerWidth;
+    let H = window.innerHeight;
+    const teile: Teil[] = [];
+
+    function erzeuge(): Teil {
+      const s = sorten[Math.floor(Math.random() * sorten.length)];
+      const b = zufall(BREITE[0], BREITE[1]) * s.skala;
+      const h = b / s.verhaeltnis;
+      const el = document.createElement('img');
+      el.src = s.src;
+      el.alt = '';
+      el.decoding = 'async';
+      el.style.width = `${b}px`;
+      ebene.append(el);
+      const richtung = Math.random() * Math.PI * 2;
+      const tempo = zufall(TEMPO[0], TEMPO[1]);
+      return {
+        el,
+        x: Math.random() * W,
+        y: Math.random() * H,
+        vx: Math.cos(richtung) * tempo,
+        vy: Math.sin(richtung) * tempo,
+        winkel: Math.random() * 360,
+        dreh: zufall(-DREHUNG, DREHUNG),
+        b,
+        h,
+        rand: Math.hypot(b, h) / 2,
+      };
+    }
+
+    function zeichne(t: Teil) {
+      t.el.style.transform = `translate3d(${t.x - t.b / 2}px, ${t.y - t.h / 2}px, 0) rotate(${t.winkel}deg)`;
+    }
+
+    // Anzahl passend zur Fenstergröße
+    function anpassen() {
+      W = window.innerWidth;
+      H = window.innerHeight;
+      const soll = Math.max(ANZAHL_MIN, Math.min(ANZAHL_MAX, Math.round((W * H) / DICHTE)));
+      while (teile.length < soll) {
+        const t = erzeuge();
+        teile.push(t);
+        zeichne(t);
+      }
+      while (teile.length > soll) teile.pop()!.el.remove();
+    }
+
+    anpassen();
+    window.addEventListener('resize', anpassen);
+    if (ruhig.matches) return; // reduzierte Bewegung: Formen bleiben stehen
+
+    let zuletzt = performance.now();
+    function schritt(jetzt: number) {
+      const dt = Math.min(0.05, (jetzt - zuletzt) / 1000);
+      zuletzt = jetzt;
+      for (const t of teile) {
+        t.x += t.vx * dt;
+        t.y += t.vy * dt;
+        t.winkel += t.dreh * dt;
+        // Rand verlassen → gegenüber wieder herein
+        if (t.x < -t.rand) t.x += W + 2 * t.rand;
+        else if (t.x > W + t.rand) t.x -= W + 2 * t.rand;
+        if (t.y < -t.rand) t.y += H + 2 * t.rand;
+        else if (t.y > H + t.rand) t.y -= H + 2 * t.rand;
+        zeichne(t);
+      }
+      requestAnimationFrame(schritt);
+    }
+    requestAnimationFrame(schritt);
+  }
+</script>

@@ -88,6 +88,9 @@ function pngMasse(p?: string): { width?: number; height?: number } {
 
 <style>
   .site-footer {
+    /* liegt über den schwebenden Formen (Ebene z-index 40) */
+    position: relative;
+    z-index: 45;
     background: var(--deep-purple);
     color: var(--white);
     padding-block: 3rem 1.5rem;
