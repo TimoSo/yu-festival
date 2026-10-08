@@ -119,15 +119,28 @@ B:\YU_Festival
   `Kurzvorstellung.astro` (für acht Personen ausgelegt).
 - **Bild im Programmpunkt:** `bild` mit `src`, `alt`, `breite` und `hoehe`
   (Pixelmaße der Datei) – erscheint oben im aufgeklappten Punkt.
-- **Rohmaterial:** Die Ordner mit Originalfotos und Word-Dateien in
-  `public/images/` (z. B. `nhiLe/`) sind per `.gitignore` ausgeschlossen und
-  werden nicht ausgeliefert. Die Seite nutzt nur die optimierten Fassungen.
+- **Rohmaterial:** Originalfotos und Word-Dateien gehören nach `material/`
+  (per `.gitignore` ausgeschlossen), **nicht** nach `public/` – alles in
+  `public/` wird beim Bauen mit ausgeliefert. Die Seite nutzt nur die
+  optimierten Fassungen in `public/images/personen/` und `programm/`.
 - **Logo einsetzen:** `<Logo variant="horizontal" width="200px" />`. Das SVG ist
   einfarbig (`fill="currentColor"`) – die Farbe kommt vom `color` des
   Elternelements.
 - **Bilder:** in `public/images/` ablegen, einbinden als `/images/datei.jpg`.
   Für den CI-Look gibt es `.media` (runder Rahmen) und `.media--blob`
   (organische Maske wie in den Mood-Vorlagen).
+
+## Online stellen (IONOS)
+
+Die Seite ist rein statisch: `npm run build` erzeugt den fertigen Ordner
+`dist/`, der auf jedem Webspace läuft.
+
+- **Webspace per SFTP:** `npm run build`, dann den **Inhalt** von `dist/`
+  (nicht den Ordner selbst) per SFTP in das Verzeichnis laden, auf das die
+  Domain zeigt. Bei jeder Änderung: neu bauen und erneut hochladen.
+- **IONOS Deploy Now:** verbindet das GitHub-Repo und baut bei jedem Push
+  auf `main` automatisch neu (wie bisher Vercel). Build-Befehl
+  `npm run build`, Ausgabeordner `dist`.
 
 ## CI
 
