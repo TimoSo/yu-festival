@@ -1,9 +1,12 @@
 ---
 // EXPERIMENT: CI-Gestaltungselemente schweben als Partikel über die Seite.
 // Jedes Teil fliegt geradlinig in eine zufällige Richtung, mit zufälligem
-// Tempo und leichter Drehung. Wer den Rand verlässt, kommt auf der
-// gegenüberliegenden Seite wieder herein. Kopf- und Fußleiste liegen
-// eine Ebene darüber und verdecken die Formen.
+// Tempo und leichter Drehung. Die Positionen gelten auf der Seite, nicht
+// auf dem Bildschirm: Beim Scrollen bleiben die Formen an ihrem Platz und
+// wandern – leicht nachgleitend – mit dem Inhalt aus dem Bild. Wer den
+// sichtbaren Bereich verlässt, kommt außerhalb an der gegenüberliegenden
+// Kante wieder ins Spiel und fliegt von dort herein. Kopf- und Fußleiste
+// liegen eine Ebene darüber und verdecken die Formen.
 //
 // Die Bilder liegen in public/images/partikel/ und lassen sich einfach
 // austauschen (z. B. weichgezeichnete PNGs mit Grain). `verhaeltnis` =
@@ -53,19 +56,21 @@ const sorten = [
   const BREITE = [70, 140]; // Grundbreite in px (wird mit `skala` multipliziert)
   const TEMPO = [10, 38]; // px pro Sekunde
   const DREHUNG = 14; // max. Grad pro Sekunde, in beide Richtungen
+  const GLAETTUNG = 4; // wie schnell die Formen dem Scrollen folgen (größer = direkter)
+  const AUSSEN = 60; // Puffer in px: so weit außerhalb des Bildes warten Formen
 
   type Sorte = { src: string; verhaeltnis: number; skala: number };
   type Teil = {
     el: HTMLImageElement;
     x: number;
-    y: number;
+    y: number; // Position auf der Seite (nicht auf dem Bildschirm)
     vx: number;
     vy: number;
     winkel: number;
     dreh: number;
     b: number;
     h: number;
-    rand: number; // halbe Diagonale: so weit darf das Teil hinaus, bevor es umspringt
+    rand: number; // halbe Diagonale: so weit ragt das Teil höchstens über seinen Mittelpunkt hinaus
   };
 
   const ebene = document.querySelector<HTMLElement>('[data-partikel]');
@@ -79,6 +84,8 @@ const sorten = [
 
     let W = window.innerWidth;
     let H = window.innerHeight;
+    // geglättete Scrollposition: läuft der echten leicht hinterher
+    let sy = window.scrollY;
     const teile: Teil[] = [];
 
     function erzeuge(): Teil {
@@ -96,7 +103,7 @@ const sorten = [
       return {
         el,
         x: Math.random() * W,
-        y: Math.random() * H,
+        y: sy + Math.random() * H,
         vx: Math.cos(richtung) * tempo,
         vy: Math.sin(richtung) * tempo,
         winkel: Math.random() * 360,
@@ -108,7 +115,33 @@ const sorten = [
     }
 
     function zeichne(t: Teil) {
-      t.el.style.transform = `translate3d(${t.x - t.b / 2}px, ${t.y - t.h / 2}px, 0) rotate(${t.winkel}deg)`;
+      t.el.style.transform = `translate3d(${t.x - t.b / 2}px, ${t.y - sy - t.h / 2}px, 0) rotate(${t.winkel}deg)`;
+    }
+
+    // Hat ein Teil den sichtbaren Bereich samt Puffer verlassen – durch
+    // Scrollen oder durch die eigene Bewegung –, wandert es außerhalb an
+    // die gegenüberliegende Kante und fliegt von dort wieder herein. Die
+    // Stelle entlang der Kante ist neu ausgewürfelt, damit sich kein
+    // Muster wiederholt. Bei schnellem Scrollen wird der Überstand
+    // gekappt, damit nichts mitten im Bild auftaucht.
+    function umsetzen(t: Teil) {
+      const r = t.rand + AUSSEN;
+      const oben = sy - r;
+      const unten = sy + H + r;
+      if (t.y < oben) {
+        t.y = unten - Math.min(oben - t.y, AUSSEN);
+        t.x = zufall(-t.rand, W + t.rand);
+      } else if (t.y > unten) {
+        t.y = oben + Math.min(t.y - unten, AUSSEN);
+        t.x = zufall(-t.rand, W + t.rand);
+      }
+      if (t.x < -r) {
+        t.x = W + r - Math.min(-r - t.x, AUSSEN);
+        t.y = sy + zufall(-t.rand, H + t.rand);
+      } else if (t.x > W + r) {
+        t.x = -r + Math.min(t.x - W - r, AUSSEN);
+        t.y = sy + zufall(-t.rand, H + t.rand);
+      }
     }
 
     // Anzahl passend zur Fenstergröße
@@ -132,15 +165,13 @@ const sorten = [
     function schritt(jetzt: number) {
       const dt = Math.min(0.05, (jetzt - zuletzt) / 1000);
       zuletzt = jetzt;
+      // dem Scrollen weich folgen (unabhängig von der Bildrate)
+      sy += (window.scrollY - sy) * (1 - Math.exp(-GLAETTUNG * dt));
       for (const t of teile) {
         t.x += t.vx * dt;
         t.y += t.vy * dt;
         t.winkel += t.dreh * dt;
-        // Rand verlassen → gegenüber wieder herein
-        if (t.x < -t.rand) t.x += W + 2 * t.rand;
-        else if (t.x > W + t.rand) t.x -= W + 2 * t.rand;
-        if (t.y < -t.rand) t.y += H + 2 * t.rand;
-        else if (t.y > H + t.rand) t.y -= H + 2 * t.rand;
+        umsetzen(t);
         zeichne(t);
       }
       requestAnimationFrame(schritt);
