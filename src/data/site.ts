@@ -56,7 +56,8 @@ export const landing = {
   },
 };
 
-// Die drei inhaltlichen Säulen des Festivals (Startseite).
+// Die drei inhaltlichen Säulen des Festivals (Startseite). `accent` ist der
+// Farbbalken unter der Karte – kein Lime, die Säulen stehen auf Lime.
 export const pillars: { title: string; text: string; accent: string }[] = [
   {
     title: 'Diskurs',
@@ -66,7 +67,7 @@ export const pillars: { title: string; text: string; accent: string }[] = [
   {
     title: 'Workshops',
     text: 'Selbst gestalten, ausprobieren, mitmachen – von Zines über Creative Coding bis zur Zukunftswerkstatt.',
-    accent: 'var(--lime)',
+    accent: 'var(--deep-purple)',
   },
   {
     title: 'Digitale Kunst und Performances',
@@ -77,7 +78,7 @@ export const pillars: { title: string; text: string; accent: string }[] = [
 
 // ------------------------------------------------------------
 //  KURZVORSTELLUNG (Startseite)
-//  Fotos: Datei unter `foto` ablegen (public/images/kurzvorstellung/),
+//  Fotos: quadratischer Ausschnitt unter `foto` (public/images/personen/),
 //  dann erscheint sie automatisch. Bis dahin zeigt der Kreis Initialen.
 //  `farbe` ist die Farbe des Rings bzw. später des Kartenrahmens.
 // ------------------------------------------------------------
