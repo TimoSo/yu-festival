@@ -3,10 +3,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
 import Deco from '../components/Deco.astro';
 import Kurzvorstellung from '../components/Kurzvorstellung.astro';
+import Partikel from '../components/Partikel.astro';
 import { landing, pillars, partners } from '../data/site';
 ---
 
 <BaseLayout>
+  <!-- EXPERIMENT: schwebende CI-Elemente (feste Ebene, nur auf Start) -->
+  <Partikel />
   <Hero />
 
   <!-- Worum es geht -->

@@ -4,8 +4,9 @@
 // Tempo und leichter Drehung. Die Positionen gelten auf der Seite, nicht
 // auf dem Bildschirm: Beim Scrollen bleiben die Formen an ihrem Platz und
 // wandern mit dem Inhalt aus dem Bild – straff, solange gescrollt wird,
-// danach gleiten sie weich aus. Der Mauszeiger verdrängt Formen in seiner
-// Nähe. Wer den sichtbaren Bereich verlässt, kommt außerhalb an der
+// danach gleiten sie weich aus. Der Mauszeiger schiebt Formen in seiner
+// Nähe mit einer gleichmäßigen Kraft weg; sie gleiten dann an ihrer neuen
+// Stelle mit ihrem eigenen Tempo weiter. Nur auf der Startseite. Wer den sichtbaren Bereich verlässt, kommt außerhalb an der
 // gegenüberliegenden Kante wieder ins Spiel und fliegt von dort herein.
 // Kopf- und Fußleiste liegen eine Ebene darüber und verdecken die Formen.
 //
@@ -59,9 +60,9 @@ const sorten = formen.flatMap((f) =>
 
 <script>
   // ---------- Stellschrauben ----------
-  const DICHTE = 160000; // ein Teil je so viele Pixel Fensterfläche
-  const ANZAHL_MIN = 3;
-  const ANZAHL_MAX = 9;
+  const DICHTE = 213000; // ein Teil je so viele Pixel Fensterfläche
+  const ANZAHL_MIN = 2;
+  const ANZAHL_MAX = 7;
   const BREITE = [70, 140]; // Grundbreite in px (wird mit `skala` multipliziert)
   const TEMPO = [10, 38]; // px pro Sekunde
   const DREHUNG = 14; // max. Grad pro Sekunde, in beide Richtungen
@@ -74,13 +75,15 @@ const sorten = formen.flatMap((f) =>
   const UEBERGANG = 8; // wie schnell von straff auf weich umgeblendet wird
   const SCROLL_PAUSE = 0; // s ohne Bewegung, ab denen das Scrollen als beendet gilt
 
-  // Mauszeiger verdrängt die Formen
-  const ZEIGER_REICHWEITE = 200; // px Wirkradius (plus halbe Größe der Form)
-  const ZEIGER_WEG = 90; // px maximale Verdrängung direkt am Zeiger
-  const ZEIGER_GLAETTUNG = 6; // je Sekunde, wie weich die Formen ausweichen
+  // Mauszeiger schiebt die Formen weg: gleichmäßige Kraft im Kern, nach
+  // außen weich auslaufend. Ein Schubs direkt am Zeiger trägt eine Form
+  // etwa 450 px weit, danach nimmt sie wieder ihr Grundtempo an.
+  const ZEIGER_REICHWEITE = 300; // px Wirkradius (plus halbe Größe der Form)
+  const ZEIGER_KERN = 0.45; // innerer Anteil des Radius mit voller Kraft
+  const ZEIGER_KRAFT = 900; // px/s² Schub weg vom Zeiger
+  const RUECKKEHR = 2.2; // je Sekunde: wie schnell eine Form ihr Grundtempo zurückgewinnt
 
-  // so weit außerhalb des Bildes warten Formen, bevor sie hereinfliegen –
-  // größer als ZEIGER_WEG, damit kein verdrängtes Teil sichtbar umspringt
+  // so weit außerhalb des Bildes warten Formen, bevor sie hereinfliegen
   const AUSSEN = 120;
 
   type Sorte = { src: string; verhaeltnis: number; skala: number };
@@ -88,12 +91,12 @@ const sorten = formen.flatMap((f) =>
     el: HTMLImageElement;
     x: number;
     y: number; // Position auf der Seite (nicht auf dem Bildschirm)
-    vx: number;
+    vx: number; // aktuelles Tempo (inkl. Schub vom Zeiger)
     vy: number;
+    gvx: number; // Grundtempo, zu dem die Form zurückkehrt
+    gvy: number;
     winkel: number;
     dreh: number;
-    ox: number; // aktuelle Verdrängung durch den Mauszeiger
-    oy: number;
     b: number;
     h: number;
     rand: number; // halbe Diagonale: so weit ragt das Teil höchstens über seinen Mittelpunkt hinaus
@@ -128,16 +131,18 @@ const sorten = formen.flatMap((f) =>
       ebene.append(el);
       const richtung = Math.random() * Math.PI * 2;
       const tempo = zufall(TEMPO[0], TEMPO[1]);
+      const vx = Math.cos(richtung) * tempo;
+      const vy = Math.sin(richtung) * tempo;
       return {
         el,
         x: Math.random() * W,
         y: sy + Math.random() * H,
-        vx: Math.cos(richtung) * tempo,
-        vy: Math.sin(richtung) * tempo,
+        vx,
+        vy,
+        gvx: vx,
+        gvy: vy,
         winkel: Math.random() * 360,
         dreh: zufall(-DREHUNG, DREHUNG),
-        ox: 0,
-        oy: 0,
         b,
         h,
         rand: Math.hypot(b, h) / 2,
@@ -145,8 +150,8 @@ const sorten = formen.flatMap((f) =>
     }
 
     function zeichne(t: Teil) {
-      const x = t.x + t.ox - t.b / 2;
-      const y = t.y - sy + t.oy - t.h / 2;
+      const x = t.x - t.b / 2;
+      const y = t.y - sy - t.h / 2;
       t.el.style.transform = `translate3d(${x}px, ${y}px, 0) rotate(${t.winkel}deg)`;
     }
 
@@ -202,7 +207,7 @@ const sorten = formen.flatMap((f) =>
       },
       { passive: true }
     );
-    // Zeiger verlässt das Fenster → Formen kehren auf ihre Bahn zurück
+    // Zeiger verlässt das Fenster → keine Kraft mehr
     document.addEventListener('mouseout', (e) => {
       if (!e.relatedTarget) zeiger = null;
     });
@@ -230,31 +235,30 @@ const sorten = formen.flatMap((f) =>
       }
       sy += (window.scrollY - sy) * (1 - Math.exp(-folgen * dt));
 
-      const zeigerFolgen = 1 - Math.exp(-ZEIGER_GLAETTUNG * dt);
+      const zurueck = 1 - Math.exp(-RUECKKEHR * dt);
       for (const t of teile) {
-        t.x += t.vx * dt;
-        t.y += t.vy * dt;
-        t.winkel += t.dreh * dt;
-        umsetzen(t);
-
-        // Verdrängung: Ziel abhängig vom Abstand zum Zeiger, weich
-        // auslaufend; die Form gleitet geglättet dorthin
-        let zx = 0;
-        let zy = 0;
+        // Schub weg vom Zeiger: im Kern volle Kraft, nach außen weich weniger
         if (zeiger) {
           const dx = t.x - zeiger.x;
           const dy = t.y - sy - zeiger.y;
           const d = Math.hypot(dx, dy);
           const reichweite = ZEIGER_REICHWEITE + t.rand;
           if (d < reichweite) {
-            const weg = ZEIGER_WEG * (1 - glatt(d / reichweite));
-            zx = d > 0.5 ? (dx / d) * weg : weg;
-            zy = d > 0.5 ? (dy / d) * weg : 0;
+            const kern = reichweite * ZEIGER_KERN;
+            const anteil = d < kern ? 1 : 1 - glatt((d - kern) / (reichweite - kern));
+            const a = ZEIGER_KRAFT * anteil * dt;
+            t.vx += d > 0.5 ? (dx / d) * a : a;
+            t.vy += d > 0.5 ? (dy / d) * a : 0;
           }
         }
-        t.ox += (zx - t.ox) * zeigerFolgen;
-        t.oy += (zy - t.oy) * zeigerFolgen;
+        // und langsam wieder zum eigenen Grundtempo
+        t.vx += (t.gvx - t.vx) * zurueck;
+        t.vy += (t.gvy - t.vy) * zurueck;
 
+        t.x += t.vx * dt;
+        t.y += t.vy * dt;
+        t.winkel += t.dreh * dt;
+        umsetzen(t);
         zeichne(t);
       }
       requestAnimationFrame(schritt);
