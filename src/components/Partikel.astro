@@ -3,25 +3,34 @@
 // Jedes Teil fliegt geradlinig in eine zufällige Richtung, mit zufälligem
 // Tempo und leichter Drehung. Die Positionen gelten auf der Seite, nicht
 // auf dem Bildschirm: Beim Scrollen bleiben die Formen an ihrem Platz und
-// wandern – leicht nachgleitend – mit dem Inhalt aus dem Bild. Wer den
-// sichtbaren Bereich verlässt, kommt außerhalb an der gegenüberliegenden
-// Kante wieder ins Spiel und fliegt von dort herein. Kopf- und Fußleiste
-// liegen eine Ebene darüber und verdecken die Formen.
+// wandern mit dem Inhalt aus dem Bild – straff, solange gescrollt wird,
+// danach gleiten sie weich aus. Der Mauszeiger verdrängt Formen in seiner
+// Nähe. Wer den sichtbaren Bereich verlässt, kommt außerhalb an der
+// gegenüberliegenden Kante wieder ins Spiel und fliegt von dort herein.
+// Kopf- und Fußleiste liegen eine Ebene darüber und verdecken die Formen.
 //
-// Die Bilder liegen in public/images/partikel/ und lassen sich einfach
-// austauschen (z. B. weichgezeichnete PNGs mit Grain). `verhaeltnis` =
-// Breite ÷ Höhe der Datei, `skala` gleicht unterschiedliche Formen an.
-const sorten = [
-  { src: '/images/partikel/maeander-coral.svg', verhaeltnis: 316 / 90, skala: 1.5 },
-  { src: '/images/partikel/maeander-lime.svg', verhaeltnis: 316 / 90, skala: 1.5 },
-  { src: '/images/partikel/maeander-lavender.svg', verhaeltnis: 316 / 90, skala: 1.5 },
-  { src: '/images/partikel/kapsel-lime.svg', verhaeltnis: 240 / 160, skala: 1.1 },
-  { src: '/images/partikel/kapsel-coral.svg', verhaeltnis: 240 / 160, skala: 1.1 },
-  { src: '/images/partikel/kapsel-lavender.svg', verhaeltnis: 240 / 160, skala: 1.1 },
-  { src: '/images/partikel/pille-lavender.svg', verhaeltnis: 120 / 220, skala: 0.55 },
-  { src: '/images/partikel/pille-coral.svg', verhaeltnis: 120 / 220, skala: 0.55 },
-  { src: '/images/partikel/pille-lime.svg', verhaeltnis: 120 / 220, skala: 0.55 },
+// Bilder: public/images/partikel/ (scharf, SVG) und …/partikel/weich/
+// (weichgezeichnet mit Grain, WebP). `verhaeltnis` = Breite ÷ Höhe der
+// Datei, `skala` gleicht die Formen aneinander an. Die weichen Dateien
+// haben einen Rand für die Unschärfe – `rand` vergrößert sie entsprechend,
+// damit die Form selbst gleich groß bleibt.
+const formen = [
+  { name: 'maeander', verhaeltnis: 316 / 90, skala: 1.5, weich: { verhaeltnis: 345 / 120, rand: 1.095 } },
+  { name: 'kapsel', verhaeltnis: 240 / 160, skala: 1.1, weich: { verhaeltnis: 260 / 183, rand: 1.13 } },
+  { name: 'pille', verhaeltnis: 120 / 220, skala: 0.55, weich: { verhaeltnis: 145 / 241, rand: 1.261 } },
 ];
+const farben = ['coral', 'lime', 'lavender'];
+
+const sorten = formen.flatMap((f) =>
+  farben.flatMap((farbe) => [
+    { src: `/images/partikel/${f.name}-${farbe}.svg`, verhaeltnis: f.verhaeltnis, skala: f.skala },
+    {
+      src: `/images/partikel/weich/${f.name}-${farbe}-weich.webp`,
+      verhaeltnis: f.weich.verhaeltnis,
+      skala: f.skala * f.weich.rand,
+    },
+  ])
+);
 ---
 
 <div class="partikel" data-partikel data-sorten={JSON.stringify(sorten)} aria-hidden="true">
@@ -50,14 +59,29 @@ const sorten = [
 
 <script>
   // ---------- Stellschrauben ----------
-  const DICHTE = 80000; // ein Teil je so viele Pixel Fensterfläche
-  const ANZAHL_MIN = 5;
-  const ANZAHL_MAX = 18;
+  const DICHTE = 160000; // ein Teil je so viele Pixel Fensterfläche
+  const ANZAHL_MIN = 3;
+  const ANZAHL_MAX = 9;
   const BREITE = [70, 140]; // Grundbreite in px (wird mit `skala` multipliziert)
   const TEMPO = [10, 38]; // px pro Sekunde
   const DREHUNG = 14; // max. Grad pro Sekunde, in beide Richtungen
-  const GLAETTUNG = 4; // wie schnell die Formen dem Scrollen folgen (größer = direkter)
-  const AUSSEN = 60; // Puffer in px: so weit außerhalb des Bildes warten Formen
+
+  // Scrollen: Solange gescrollt wird, folgen die Formen straff (sofort),
+  // sobald das Scrollen stoppt, blendet das Folgen weich aus – die Formen
+  // gleiten noch etwa eine Sekunde nach.
+  const FOLGEN_AKTIV = 12; // je Sekunde, größer = direkter
+  const FOLGEN_AUSKLANG = 1.4; // je Sekunde, kleiner = längeres Nachgleiten
+  const UEBERGANG = 8; // wie schnell von straff auf weich umgeblendet wird
+  const SCROLL_PAUSE = 0; // s ohne Bewegung, ab denen das Scrollen als beendet gilt
+
+  // Mauszeiger verdrängt die Formen
+  const ZEIGER_REICHWEITE = 200; // px Wirkradius (plus halbe Größe der Form)
+  const ZEIGER_WEG = 90; // px maximale Verdrängung direkt am Zeiger
+  const ZEIGER_GLAETTUNG = 6; // je Sekunde, wie weich die Formen ausweichen
+
+  // so weit außerhalb des Bildes warten Formen, bevor sie hereinfliegen –
+  // größer als ZEIGER_WEG, damit kein verdrängtes Teil sichtbar umspringt
+  const AUSSEN = 120;
 
   type Sorte = { src: string; verhaeltnis: number; skala: number };
   type Teil = {
@@ -68,6 +92,8 @@ const sorten = [
     vy: number;
     winkel: number;
     dreh: number;
+    ox: number; // aktuelle Verdrängung durch den Mauszeiger
+    oy: number;
     b: number;
     h: number;
     rand: number; // halbe Diagonale: so weit ragt das Teil höchstens über seinen Mittelpunkt hinaus
@@ -81,10 +107,12 @@ const sorten = [
     if (!sorten.length) return;
     const ruhig = window.matchMedia('(prefers-reduced-motion: reduce)');
     const zufall = (a: number, b: number) => a + Math.random() * (b - a);
+    // weicher Verlauf 0 → 1 (für den Falloff)
+    const glatt = (t: number) => t * t * (3 - 2 * t);
 
     let W = window.innerWidth;
     let H = window.innerHeight;
-    // geglättete Scrollposition: läuft der echten leicht hinterher
+    // geglättete Scrollposition: läuft der echten hinterher
     let sy = window.scrollY;
     const teile: Teil[] = [];
 
@@ -108,6 +136,8 @@ const sorten = [
         vy: Math.sin(richtung) * tempo,
         winkel: Math.random() * 360,
         dreh: zufall(-DREHUNG, DREHUNG),
+        ox: 0,
+        oy: 0,
         b,
         h,
         rand: Math.hypot(b, h) / 2,
@@ -115,7 +145,9 @@ const sorten = [
     }
 
     function zeichne(t: Teil) {
-      t.el.style.transform = `translate3d(${t.x - t.b / 2}px, ${t.y - sy - t.h / 2}px, 0) rotate(${t.winkel}deg)`;
+      const x = t.x + t.ox - t.b / 2;
+      const y = t.y - sy + t.oy - t.h / 2;
+      t.el.style.transform = `translate3d(${x}px, ${y}px, 0) rotate(${t.winkel}deg)`;
     }
 
     // Hat ein Teil den sichtbaren Bereich samt Puffer verlassen – durch
@@ -129,17 +161,17 @@ const sorten = [
       const oben = sy - r;
       const unten = sy + H + r;
       if (t.y < oben) {
-        t.y = unten - Math.min(oben - t.y, AUSSEN);
+        t.y = unten - Math.min(oben - t.y, AUSSEN - 10);
         t.x = zufall(-t.rand, W + t.rand);
       } else if (t.y > unten) {
-        t.y = oben + Math.min(t.y - unten, AUSSEN);
+        t.y = oben + Math.min(t.y - unten, AUSSEN - 10);
         t.x = zufall(-t.rand, W + t.rand);
       }
       if (t.x < -r) {
-        t.x = W + r - Math.min(-r - t.x, AUSSEN);
+        t.x = W + r - Math.min(-r - t.x, AUSSEN - 10);
         t.y = sy + zufall(-t.rand, H + t.rand);
       } else if (t.x > W + r) {
-        t.x = -r + Math.min(t.x - W - r, AUSSEN);
+        t.x = -r + Math.min(t.x - W - r, AUSSEN - 10);
         t.y = sy + zufall(-t.rand, H + t.rand);
       }
     }
@@ -161,17 +193,68 @@ const sorten = [
     window.addEventListener('resize', anpassen);
     if (ruhig.matches) return; // reduzierte Bewegung: Formen bleiben stehen
 
+    // ---------- Mauszeiger (nur Maus/Stift, nicht beim Wischen) ----------
+    let zeiger: { x: number; y: number } | null = null;
+    window.addEventListener(
+      'pointermove',
+      (e) => {
+        if (e.pointerType !== 'touch') zeiger = { x: e.clientX, y: e.clientY };
+      },
+      { passive: true }
+    );
+    // Zeiger verlässt das Fenster → Formen kehren auf ihre Bahn zurück
+    document.addEventListener('mouseout', (e) => {
+      if (!e.relatedTarget) zeiger = null;
+    });
+    window.addEventListener('blur', () => (zeiger = null));
+
+    // ---------- Scrollen ----------
+    let letzteScrollY = window.scrollY;
+    let letzteScrollZeit = -Infinity;
+    let folgen = FOLGEN_AUSKLANG;
+
     let zuletzt = performance.now();
     function schritt(jetzt: number) {
       const dt = Math.min(0.05, (jetzt - zuletzt) / 1000);
       zuletzt = jetzt;
-      // dem Scrollen weich folgen (unabhängig von der Bildrate)
-      sy += (window.scrollY - sy) * (1 - Math.exp(-GLAETTUNG * dt));
+
+      // straff, solange gescrollt wird; danach weich ausblenden
+      if (window.scrollY !== letzteScrollY) {
+        letzteScrollY = window.scrollY;
+        letzteScrollZeit = jetzt;
+      }
+      if ((jetzt - letzteScrollZeit) / 1000 <= SCROLL_PAUSE) {
+        folgen = FOLGEN_AKTIV;
+      } else {
+        folgen += (FOLGEN_AUSKLANG - folgen) * (1 - Math.exp(-UEBERGANG * dt));
+      }
+      sy += (window.scrollY - sy) * (1 - Math.exp(-folgen * dt));
+
+      const zeigerFolgen = 1 - Math.exp(-ZEIGER_GLAETTUNG * dt);
       for (const t of teile) {
         t.x += t.vx * dt;
         t.y += t.vy * dt;
         t.winkel += t.dreh * dt;
         umsetzen(t);
+
+        // Verdrängung: Ziel abhängig vom Abstand zum Zeiger, weich
+        // auslaufend; die Form gleitet geglättet dorthin
+        let zx = 0;
+        let zy = 0;
+        if (zeiger) {
+          const dx = t.x - zeiger.x;
+          const dy = t.y - sy - zeiger.y;
+          const d = Math.hypot(dx, dy);
+          const reichweite = ZEIGER_REICHWEITE + t.rand;
+          if (d < reichweite) {
+            const weg = ZEIGER_WEG * (1 - glatt(d / reichweite));
+            zx = d > 0.5 ? (dx / d) * weg : weg;
+            zy = d > 0.5 ? (dy / d) * weg : 0;
+          }
+        }
+        t.ox += (zx - t.ox) * zeigerFolgen;
+        t.oy += (zy - t.oy) * zeigerFolgen;
+
         zeichne(t);
       }
       requestAnimationFrame(schritt);
