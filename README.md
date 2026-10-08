@@ -28,6 +28,7 @@ B:\YU_Festival
 │   ├── favicon.svg              # YU-Signet auf Lavendel
 │   ├── fonts/                   # CI-Schriften als WOFF2
 │   └── images/
+│       ├── header/              # Social-Media-Header (Originale + Web-Versionen)
 │       ├── foerderer/           # Fußleisten-Logos, weiß aufbereitet (Web-Versionen)
 │       ├── YU_EinFestivalVon_Logos/ # Originale dieser Logos (schwarz)
 │       ├── kurzvorstellung/     # Profilfotos für die Kurzvorstellung (folgen)
@@ -90,7 +91,7 @@ B:\YU_Festival
   ausdrücklich „keine Anmeldung erforderlich“. Alles rund um die Anmeldung
   ist in Lime gehalten (`.anmeldung`, `.btn--anmelden`, `.pill-anmeldung`
   in `global.css`) – Lime ist die Farbe für „besondere Aufmerksamkeit“.
-- **Anrede:** durchgehend „du“ bzw. „ihr“, nie „Sie“.
+- **Anrede:** durchgehend „du“ – weder „ihr“ noch „Sie“.
 - **Texte, die mehrfach vorkommen** (z. B. „Unter Haut“ läuft viermal, Bios,
   Hackathon-Hinweis) stehen oben in `programm.ts` einmal als Konstante –
   Korrekturen also nur dort.
@@ -102,6 +103,13 @@ B:\YU_Festival
   liegen in `public/images/foerderer/`, die Originale in
   `public/images/YU_EinFestivalVon_Logos/`. Die Höhe je Logo steht in
   `footerLogos` in `src/data/site.ts` (gleicht die Proportionen optisch aus).
+- **Header (Grafik: Jana Canê):** Die Originale `YU_Header.png` (gestapelt) und
+  `YU_Header2.png` (quer) liegen in `public/images/header/`. Daraus erzeugt:
+  `yu-header-quer-*.webp` (Titelbild der Startseite ab 760 px Breite),
+  `yu-header-gestapelt-*.webp` (Titelbild auf dem Handy, seitlich beschnitten,
+  damit das Logo groß bleibt) und `yu-muster.webp` (logofreier oberer Streifen
+  des queren Headers – Hintergrund der Seitenköpfe auf den Unterseiten, Klasse
+  `.section--muster` in `global.css`).
 - **Kurzvorstellung (Startseite):** Personen im Array `spotlight` in
   `src/data/site.ts`. Fotos unter dem dort angegebenen Namen nach
   `public/images/kurzvorstellung/` legen (z. B. `nhi-le.jpg`) – sie erscheinen

@@ -87,7 +87,7 @@ export const pillars: { title: string; text: string; accent: string }[] = [
 export const kurzvorstellung = {
   eyebrow: 'Wer dabei ist',
   titel: 'Kurzvorstellung',
-  text: 'Vier Tage, drei Formate, viele Perspektiven: Beim YU Festival treffen Wissenschaft, Kunst und Community aufeinander – in Keynote und Podium, Performances und Ausstellungen, Workshops und einem Hackathon. Lernt einige der Menschen kennen, die das Programm prägen.',
+  text: 'Vier Tage, drei Formate, viele Perspektiven: Beim YU Festival treffen Wissenschaft, Kunst und Community aufeinander – in Keynote und Podium, Performances und Ausstellungen, Workshops und einem Hackathon. Lerne einige der Menschen kennen, die das Programm prägen.',
   hinweis: 'Ein Klick auf einen Kreis verrät mehr.',
 };
 
@@ -155,7 +155,7 @@ export const about = {
   text: [
     'Das YU Festival lädt dazu ein, genau darüber nachzudenken, zu diskutieren und Dinge auszuprobieren. Denn ein großer Teil unseres Lebens findet heute digital statt: Wir informieren uns online, tauschen uns in sozialen Netzwerken aus, spielen, lernen, arbeiten und bleiben über Messenger verbunden. Dabei entstehen neue Gemeinschaften und neue Formen von Nähe – aber auch neue Konflikte, Ausschlüsse und Machtstrukturen.',
     'Das Festival richtet den Blick auf die Menschen und Communities, die digitale Räume mit Leben füllen. Wie werden digitale Gemeinschaften inklusiver, respektvoller und demokratischer? Wer wird gehört und wer bleibt unsichtbar? Workshops, Gespräche, künstlerische Arbeiten und Performances eröffnen dazu ganz unterschiedliche Zugänge – wissenschaftlich, kulturell und kreativ.',
-    'Wir wollen digitale Räume nicht einfach hinnehmen, wie sie sind, sondern sie gemeinsam neu denken – kritisch, kreativ und manchmal auch spielerisch. Egal, ob ihr schon tief in digitalen Themen steckt oder einfach neugierig seid: Kommt vorbei, probiert etwas aus und werdet Teil des Gesprächs über unsere gemeinsame digitale Zukunft.',
+    'Wir wollen digitale Räume nicht einfach hinnehmen, wie sie sind, sondern sie gemeinsam neu denken – kritisch, kreativ und manchmal auch spielerisch. Egal, ob du schon tief in digitalen Themen steckst oder einfach neugierig bist: Komm vorbei, probier etwas aus und werde Teil des Gesprächs über unsere gemeinsame digitale Zukunft.',
   ],
 };
 
@@ -179,7 +179,7 @@ export const team: { role: string; names: string }[] = [
   },
   { role: 'Assistenz in der Festivalkoordination', names: 'Alia Brunschier' },
   { role: 'Verwaltung', names: 'Dr. Claudia Beck' },
-  { role: 'Grafikdesign Social Media', names: 'Jana Uso' },
+  { role: 'Grafikdesign Social Media', names: 'Jana Canê' },
   { role: 'Webdesign', names: 'Timo Sodenkamp' },
   { role: 'CI und Logodesign', names: 'Marc Kemper' },
 ];
@@ -278,36 +278,36 @@ export const faq: { q: string; a: string[] }[] = [
   {
     q: 'Was kostet der Eintritt?',
     a: [
-      'Nichts – das YU Festival ist kostenlos. Für manche Veranstaltungen ist allerdings eine Anmeldung notwendig. Dies seht ihr bei den einzelnen Veranstaltungsbeschreibungen.',
+      'Nichts – das YU Festival ist kostenlos. Für manche Veranstaltungen ist allerdings eine Anmeldung notwendig. Das siehst du bei den einzelnen Veranstaltungsbeschreibungen.',
     ],
   },
   {
     q: 'Wo und wann findet das Festival statt?',
     a: [
       'Das YU Festival findet vom 22. bis 25. Oktober 2026 in verschiedenen Veranstaltungsräumen im Dortmunder U statt. 😊',
-      'Bei Veranstaltungen, für die ihr euch anmelden müsst, erfahrt ihr den genauen Veranstaltungsort nach eurer Anmeldung.',
-      'Während des Festivals hilft euch auch der Empfang im Dortmunder U gerne dabei, den richtigen Veranstaltungsraum zu finden.',
-      `Wenn ihr noch Fragen habt, meldet euch jederzeit gerne bei uns unter ${contact.email}!`,
+      'Bei Veranstaltungen, für die du dich anmelden musst, erfährst du den genauen Veranstaltungsort nach deiner Anmeldung.',
+      'Während des Festivals hilft dir auch der Empfang im Dortmunder U gerne dabei, den richtigen Veranstaltungsraum zu finden.',
+      `Wenn du noch Fragen hast, melde dich jederzeit gerne bei uns unter ${contact.email}!`,
     ],
   },
   {
     q: 'Muss ich mich für Workshops anmelden?',
     a: [
-      'Ja, für die Konferenz und die Workshops ist eine Anmeldung notwendig. 😊 Das YU Festival selbst ist kostenlos – bei den jeweiligen Veranstaltungen seht ihr, ob ihr euch vorher anmelden müsst.',
+      'Ja, für die Konferenz und die Workshops ist eine Anmeldung notwendig. 😊 Das YU Festival selbst ist kostenlos – bei den jeweiligen Veranstaltungen siehst du, ob du dich vorher anmelden musst.',
     ],
   },
   {
     q: 'Wie barrierefrei sind die Veranstaltungsorte?',
     a: [
-      'Die meisten Veranstaltungs- und Workshopräume sind mit dem Rollstuhl und über den Fahrstuhl erreichbar. Wir möchten allen Interessierten die Teilnahme am YU Festival ermöglichen und unterstützen euch gerne dabei.',
-      `Wenn ihr Fragen zur Barrierefreiheit einer bestimmten Veranstaltung habt oder besondere Bedürfnisse besprechen möchtet, schreibt uns gerne an ${contact.email}. 😊`,
+      'Die meisten Veranstaltungs- und Workshopräume sind mit dem Rollstuhl und über den Fahrstuhl erreichbar. Wir möchten allen Interessierten die Teilnahme am YU Festival ermöglichen und unterstützen dich gerne dabei.',
+      `Wenn du Fragen zur Barrierefreiheit einer bestimmten Veranstaltung hast oder besondere Bedürfnisse besprechen möchtest, schreib uns gerne an ${contact.email}. 😊`,
     ],
   },
   {
     q: 'Für wen ist das YU Festival?',
     a: [
       'Für alle, die sich kritisch und kreativ mit dem Digitalen, digitalen Räumen und unserer gemeinsamen digitalen Zukunft beschäftigen – und vor allem für alle, die diese Zukunft selbst mitgestalten möchten. 💜',
-      'Das Festival ist für kreative und experimentierfreudige Menschen, für alle, die Lust haben, Neues zu lernen, Dinge auszuprobieren und spannende Menschen kennenzulernen. Egal, ob ihr schon tief im Thema steckt oder einfach neugierig seid: Beim YU Festival seid ihr willkommen!',
+      'Das Festival ist für kreative und experimentierfreudige Menschen, für alle, die Lust haben, Neues zu lernen, Dinge auszuprobieren und spannende Menschen kennenzulernen. Egal, ob du schon tief im Thema steckst oder einfach neugierig bist: Beim YU Festival bist du willkommen!',
     ],
   },
   {

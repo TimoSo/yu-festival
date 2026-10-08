@@ -58,7 +58,7 @@ export const days: { nr: number; weekday: string; date: string }[] = [
 
 export const anmeldung = {
   email: contact.email,
-  text: `Für diese Veranstaltung ist eine Anmeldung erforderlich. 😊 Wenn ihr gerne dabei sein möchtet, schreibt uns einfach eine E-Mail an ${contact.email}. Wir freuen uns auf eure Anmeldung!`,
+  text: `Für diese Veranstaltung ist eine Anmeldung erforderlich. 😊 Wenn du gerne dabei sein möchtest, schreib uns einfach eine E-Mail an ${contact.email}. Wir freuen uns auf deine Anmeldung!`,
   keine: 'Es ist keine Anmeldung erforderlich.',
 };
 
@@ -110,8 +110,8 @@ const SCHNELLHEFTER = [
 const SPEED_ZINE_TEXT = [
   'Ein Blatt. Ein Kuli. Acht Seiten. Let’s go!',
   'Was ist eigentlich ein Zine? Und welche Geschichten kann man damit erzählen? Zum Kick-off zeigen wir Schnellhefter*innen, warum wir dieses kleine, selbstgemachte Medium so lieben: Zines können persönlich, politisch, albern, chaotisch, laut oder leise sein. Und vor allem müssen sie nicht perfekt sein.',
-  'Gemeinsam falten wir im 2-stündigen Workshop aus einem A3-Blatt ein eigenes kleines Heft und unterstützen euch beim Gestalten der Seiten mit kleinen Kreativimpulsen. Dabei geht es weniger ums Nachdenken als ums Ausprobieren.',
-  'Wir zeigen, wie niedrigschwelliges Gestalten möglich ist, wenn Material und Arbeitszeit bewusst begrenzt sind. Kommt vorbei, schnappt euch ein Blatt und einen Kuli und macht ein Zine mit uns.',
+  'Gemeinsam falten wir im 2-stündigen Workshop aus einem A3-Blatt ein eigenes kleines Heft und unterstützen dich beim Gestalten der Seiten mit kleinen Kreativimpulsen. Dabei geht es weniger ums Nachdenken als ums Ausprobieren.',
+  'Wir zeigen, wie niedrigschwelliges Gestalten möglich ist, wenn Material und Arbeitszeit bewusst begrenzt sind. Komm vorbei, schnapp dir ein Blatt und einen Kuli und mach ein Zine mit uns.',
 ];
 
 const ZINE_WOCHENENDE_TEXT = [
@@ -138,7 +138,7 @@ const CAMILO_SANDOVAL: Person = {
 };
 
 const INSTALLATION_EINLADUNG =
-  'Wir laden euch herzlich ein, die im Rahmen des YU Festivals vom 22. bis 25. Oktober 2026 im Foyer des Dortmunder U präsentierte Kunstinstallation zu besuchen und das entstehende digitale Medienkunstprojekt selbst zu erleben. Als interaktives Projekt lädt die Installation dazu ein, sich einzubringen, Verbindungen zu entdecken und Teil des entstehenden digitalen Projekts zu werden.';
+  'Wir laden dich herzlich ein, die im Rahmen des YU Festivals vom 22. bis 25. Oktober 2026 im Foyer des Dortmunder U präsentierte Kunstinstallation zu besuchen und das entstehende digitale Medienkunstprojekt selbst zu erleben. Als interaktives Projekt lädt die Installation dazu ein, sich einzubringen, Verbindungen zu entdecken und Teil des entstehenden digitalen Projekts zu werden.';
 
 const HACKATHON_HINWEIS =
   'Dieser Workshop ist Teil des Hackathons „Connections“ im Rahmen der KoLab Days x ATEM Biennale und des YU Festivals. Nach dem Workshop kann im Workspace über mehrere Tage weitergearbeitet werden. Hier können die entstandenen Ideen vertieft, ausprobiert und gemeinsam weiterentwickelt werden. So entsteht Schritt für Schritt eine kollektiv entstandene VR-Installation.';
@@ -377,7 +377,7 @@ export const events: ProgrammEvent[] = [
     by: 'mit Larissa Schäfer und Dana Hoffmann',
     text: [
       'FlowAR ist eine App, die Ideen für das Ruhrgebiet in 3D und Augmented Reality sichtbar macht. Auf einer virtuellen Karte entsteht so ein Bild davon, wie sich die Region ihre Zukunft vorstellt.',
-      'Was fehlt dir in deinem Alltag? Wie könnte dein Ort in ein paar Jahren aussehen? In dieser Werkstatt kommst du mit anderen ins Gespräch, entwickelst aus euren Wünschen eigene Visionen und hältst sie kreativ fest. Du probierst die App direkt aus und machst deine Idee digital sichtbar. Vorkenntnisse brauchst du keine.',
+      'Was fehlt dir in deinem Alltag? Wie könnte dein Ort in ein paar Jahren aussehen? In dieser Werkstatt kommst du mit anderen ins Gespräch, entwickelst aus deinen Wünschen eigene Visionen und hältst sie kreativ fest. Du probierst die App direkt aus und machst deine Idee digital sichtbar. Vorkenntnisse brauchst du keine.',
       'Mit deinen Ideen hilfst du uns, FlowAR weiterzuentwickeln. Und du wirst Teil der FlowAR-Community.',
     ],
     sections: [
@@ -420,7 +420,7 @@ export const events: ProgrammEvent[] = [
     text: [
       'Wie lassen sich KI-Tools selbstbestimmt besetzen, um Biases zu unterlaufen und eigene, emanzipatorische Ästhetiken jenseits von Big-Tech-Monopolen zu formen? Dieser Workshop schlägt die Brücke zwischen kritischem Diskurs und der eigenen künstlerischen Praxis.',
       'Der erste Teil ist diskursiv gestaltet und gewährt einen Blick hinter die Kulissen datenbasierter Systeme. Inspiriert von cyberfeministischen Ansätzen schärft er das Bewusstsein für die Entstehung von Biases und die Frage, wie sich Kreativität in der Zusammenarbeit mit KI verändert. Im anschließenden Praxisteil richtet sich der Fokus auf die Nutzung gängiger LLMs sowie des Text-to-Image-Modells Stable Diffusion. Es werden konkrete Methoden für das eigene kreative Schaffen vorgestellt und in einem experimentellen Rahmen erprobt, um KI-Voreinstellungen zu unterwandern und eigene Narrative zu prägen.',
-      'Der Workshop richtet sich an alle, die KI-Technologien kritisch hinterfragen und aktiv mitgestalten wollen. Da die PCs vor Ort knapp sind, bringt bitte nach Möglichkeit eigene leistungsstarke Windows-Laptops mit.',
+      'Der Workshop richtet sich an alle, die KI-Technologien kritisch hinterfragen und aktiv mitgestalten wollen. Da die PCs vor Ort knapp sind, bring bitte nach Möglichkeit einen eigenen leistungsstarken Windows-Laptop mit.',
     ],
     sections: [
       {
@@ -822,7 +822,7 @@ export const events: ProgrammEvent[] = [
     by: 'mit Camilla Scholz und Camilo Sandoval',
     text: [
       'In diesem Coding-Jam verwandeln wir Code und Visuals in eine „Collective Mess“. Statt perfektem Code oder fertigen Ergebnissen steht das Skizzieren, Verwerfen, Ausprobieren und bewusste Stören im Vordergrund. Mit Vibe Coding als Medium und vielseitigen Inputs, von Kameras über Mini-Keyboards bis hin zu Mikrofonen, experimentieren wir mit Code und Interaktion.',
-      'Auf einer gemeinsamen digitalen Leinwand überlagern sich Gedanken, Diskussionen und Bilder, verdichten sich zu neuen Ebenen und transformieren sich in etwas ganz Neues. Das kollektive Gemälde wird so zu einem lebendigen Abbild eurer Ideen.',
+      'Auf einer gemeinsamen digitalen Leinwand überlagern sich Gedanken, Diskussionen und Bilder, verdichten sich zu neuen Ebenen und transformieren sich in etwas ganz Neues. Das kollektive Gemälde wird so zu einem lebendigen Abbild der gemeinsamen Ideen.',
       'Erst im Foyer des Dortmunder U präsentiert, wandert das kollaborative Werk anschließend ins Metaverse, um dort im digitalen Raum des Hackathons weiterzuleben.',
       HACKATHON_HINWEIS,
     ],

@@ -1,17 +1,40 @@
 ---
 import { site, landing } from '../data/site';
-import Logo from './Logo.astro';
 import Deco from './Deco.astro';
+
+// Titelbild = Social-Media-Header (Grafik: Jana Canê). Schmale Bildschirme
+// bekommen die gestapelte Fassung (seitlich beschnitten, damit das Logo
+// groß bleibt), ab 760 px die quere. Erzeugt aus den Originalen
+// YU_Header.png / YU_Header2.png im selben Ordner.
+const H = '/images/header/';
 ---
+
+<div class="keyvisual">
+  <picture>
+    <source
+      media="(min-width: 760px)"
+      srcset={`${H}yu-header-quer-1280.webp 1280w, ${H}yu-header-quer-1920.webp 1920w, ${H}yu-header-quer-2560.webp 2560w`}
+      sizes="100vw"
+      width="2560"
+      height="1254"
+    />
+    <img
+      src={`${H}yu-header-gestapelt-800.webp`}
+      srcset={`${H}yu-header-gestapelt-800.webp 800w, ${H}yu-header-gestapelt-1200.webp 1200w`}
+      sizes="100vw"
+      width="1200"
+      height="784"
+      alt="YU Festival"
+      fetchpriority="high"
+      decoding="async"
+    />
+  </picture>
+</div>
 
 <section class="section section--lavender hero">
   <div class="container hero__inner">
     <div class="hero__content">
       <p class="eyebrow">{site.subtitleAlt}</p>
-
-      <div class="hero__logo">
-        <Logo variant="stacked" width="min(300px, 64vw)" />
-      </div>
 
       {/* <wbr> erlaubt saubere Umbruchstellen nach den Punkten */}
       <h1 class="hero__title">
@@ -45,6 +68,24 @@ import Deco from './Deco.astro';
 </section>
 
 <style>
+  .keyvisual {
+    background: var(--deep-purple);
+    line-height: 0;
+  }
+  .keyvisual img {
+    width: 100%;
+    height: auto;
+  }
+  /* Quere Fassung: Das Logo liegt zwischen 35 und 68 % der Bildhöhe.
+     Oben und unten darf deshalb Muster wegfallen – so passt das Bild
+     auch auf breiten, niedrigen Bildschirmen in den ersten Blick. */
+  @media (min-width: 760px) {
+    .keyvisual img {
+      height: clamp(100vw / 4.2, 72vh, 100vw / 2.04);
+      object-fit: cover;
+    }
+  }
+
   .hero {
     overflow: hidden;
   }
@@ -58,12 +99,6 @@ import Deco from './Deco.astro';
     .hero__inner {
       grid-template-columns: 1fr auto;
     }
-  }
-
-  .hero__logo {
-    color: var(--white);
-    line-height: 0;
-    margin-bottom: 1.75rem;
   }
 
   .hero__title {

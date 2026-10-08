@@ -12,9 +12,10 @@ interface Props {
   eyebrow: string;
   title: string;
   lead: string;
-  tone: 'lavender' | 'lime' | 'coral' | 'purple';
+  /** Hintergrund; Standard ist das Schnörkel-Muster wie im Social-Media-Header */
+  tone?: 'muster' | 'lavender' | 'lime' | 'coral' | 'purple';
 }
-const { eyebrow, title, lead, tone } = Astro.props;
+const { eyebrow, title, lead, tone = 'muster' } = Astro.props;
 ---
 
 <section class={`section section--${tone} page-head`}>
