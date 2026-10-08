@@ -42,7 +42,7 @@ B:\YU_Festival
 │   │   ├── Logo.astro       # Logo-Komponente (variant/width/label)
 │   │   ├── EventCard.astro  # aufklappbarer Programmpunkt
 │   │   ├── Kurzvorstellung.astro # schwebende Profil-Blasen auf der Startseite
-│   │   ├── PageHeader.astro # gleich hoher Seitenkopf (Kontakt, FAQ, Partner)
+│   │   ├── PageHeader.astro # gleich hoher Seitenkopf aller Unterseiten
 │   │   ├── RichText.astro   # Absätze mit automatisch verlinkten Mails/URLs
 │   │   ├── Deco.astro       # Gestaltungselemente: Mäander, Zahn-Kapsel, Pille
 │   │   ├── Header.astro     # Logo + Navigation (mobil + aktiver Reiter)
@@ -180,6 +180,8 @@ Zwei Eigenheiten von Blob, die man kennen muss:
 ## Status
 
 CI umgesetzt: Farben, Schriften, Logo, Formensprache, alle Seiten.
-Noch offen: echte Fotos, Termine/Uhrzeiten, Gast-Bios, Anbindung des
-Kontaktformulars, Lizenz-Webfonts. Platzhalter sind mit „tba“ bzw.
-„Platzhalter“ markiert.
+Noch offen: Profilfotos der Kurzvorstellung, Partnertexte (kiU, Mono) und
+die Pflichtangaben im Impressum (stehen noch auf „tba“).
+
+Die Seite setzt keine Cookies: Schriften liegen lokal, es gibt kein
+Tracking und kein Kontaktformular – Kontakt läuft per Mail-Link.

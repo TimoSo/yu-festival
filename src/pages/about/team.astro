@@ -1,16 +1,15 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
 import { team, kooperation } from '../../data/site';
 ---
 
 <BaseLayout title="YU Team" description="Das Team hinter dem YU Festival.">
-  <section class="section section--muster">
-    <div class="container narrow">
-      <p class="eyebrow">About</p>
-      <h1>YU Team</h1>
-      <p class="lead">Die Menschen, die das YU Festival möglich machen.</p>
-    </div>
-  </section>
+  <PageHeader
+    eyebrow="About"
+    title="YU Team"
+    lead="Die Menschen, die das YU Festival möglich machen."
+  />
 
   <section class="section">
     <div class="container">

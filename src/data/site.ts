@@ -148,7 +148,9 @@ export const spotlight: {
 // ------------------------------------------------------------
 
 export const about = {
-  lead: 'Das YU Festival ist ein Festival für digitale Medien. Es wirft einen positiven, optimistischen und aufgeschlossenen Blick auf Digitalität – ohne den kritischen Blick zu verlieren.',
+  // Einleitung im Seitenkopf – kurz halten (max. ~80 Zeichen), sonst wird
+  // der Kopf höher als die der anderen Seiten
+  lead: 'Ein Festival für digitale Medien – aufgeschlossen, optimistisch und kritisch.',
   titel: 'Mitreden, mitmachen, mitgestalten',
   frage:
     'Wie wollen wir in Zukunft digital zusammenleben? Und wie können wir digitale Räume gemeinsam gestalten?',
@@ -284,7 +286,7 @@ export const faq: { q: string; a: string[] }[] = [
   {
     q: 'Wo und wann findet das Festival statt?',
     a: [
-      'Das YU Festival findet vom 22. bis 25. Oktober 2026 in verschiedenen Veranstaltungsräumen im Dortmunder U statt. 😊',
+      'Das YU Festival findet vom 22. bis 25. Oktober 2026 in verschiedenen Veranstaltungsräumen im Dortmunder U statt.',
       'Bei Veranstaltungen, für die du dich anmelden musst, erfährst du den genauen Veranstaltungsort nach deiner Anmeldung.',
       'Während des Festivals hilft dir auch der Empfang im Dortmunder U gerne dabei, den richtigen Veranstaltungsraum zu finden.',
       `Wenn du noch Fragen hast, melde dich jederzeit gerne bei uns unter ${contact.email}!`,
@@ -293,20 +295,20 @@ export const faq: { q: string; a: string[] }[] = [
   {
     q: 'Muss ich mich für Workshops anmelden?',
     a: [
-      'Ja, für die Konferenz und die Workshops ist eine Anmeldung notwendig. 😊 Das YU Festival selbst ist kostenlos – bei den jeweiligen Veranstaltungen siehst du, ob du dich vorher anmelden musst.',
+      'Ja, für die Konferenz und die Workshops ist eine Anmeldung notwendig. Das YU Festival selbst ist kostenlos – bei den jeweiligen Veranstaltungen siehst du, ob du dich vorher anmelden musst.',
     ],
   },
   {
     q: 'Wie barrierefrei sind die Veranstaltungsorte?',
     a: [
       'Die meisten Veranstaltungs- und Workshopräume sind mit dem Rollstuhl und über den Fahrstuhl erreichbar. Wir möchten allen Interessierten die Teilnahme am YU Festival ermöglichen und unterstützen dich gerne dabei.',
-      `Wenn du Fragen zur Barrierefreiheit einer bestimmten Veranstaltung hast oder besondere Bedürfnisse besprechen möchtest, schreib uns gerne an ${contact.email}. 😊`,
+      `Wenn du Fragen zur Barrierefreiheit einer bestimmten Veranstaltung hast oder besondere Bedürfnisse besprechen möchtest, schreib uns gerne an ${contact.email}.`,
     ],
   },
   {
     q: 'Für wen ist das YU Festival?',
     a: [
-      'Für alle, die sich kritisch und kreativ mit dem Digitalen, digitalen Räumen und unserer gemeinsamen digitalen Zukunft beschäftigen – und vor allem für alle, die diese Zukunft selbst mitgestalten möchten. 💜',
+      'Für alle, die sich kritisch und kreativ mit dem Digitalen, digitalen Räumen und unserer gemeinsamen digitalen Zukunft beschäftigen – und vor allem für alle, die diese Zukunft selbst mitgestalten möchten.',
       'Das Festival ist für kreative und experimentierfreudige Menschen, für alle, die Lust haben, Neues zu lernen, Dinge auszuprobieren und spannende Menschen kennenzulernen. Egal, ob du schon tief im Thema steckst oder einfach neugierig bist: Beim YU Festival bist du willkommen!',
     ],
   },
@@ -314,7 +316,7 @@ export const faq: { q: string; a: string[] }[] = [
     q: 'Wer steckt hinter dem Festival?',
     a: [
       ...kooperation,
-      'Das Besondere am YU Festival ist der kooperative Charakter: Wir bringen unterschiedliche Communities, Perspektiven und Akteur*innen zusammen, um gemeinsam neue Ideen, Formate und Räume zu schaffen. Dabei soll das Festival vor allem ein Ort des Austauschs, Mitmachens und Vernetzens sein. 💜',
+      'Das Besondere am YU Festival ist der kooperative Charakter: Wir bringen unterschiedliche Communities, Perspektiven und Akteur*innen zusammen, um gemeinsam neue Ideen, Formate und Räume zu schaffen. Dabei soll das Festival vor allem ein Ort des Austauschs, Mitmachens und Vernetzens sein.',
     ],
   },
 ];

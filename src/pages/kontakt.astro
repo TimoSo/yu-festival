@@ -2,6 +2,10 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHeader from '../components/PageHeader.astro';
 import { contact } from '../data/site';
+
+// Bewusst ohne Kontaktformular: Ein Formular bräuchte einen Dienst oder
+// Server, der die Nachrichten weiterleitet (Datenschutzhinweis, oft
+// Spamschutz mit Cookies). Ein Mail-Link kommt ohne all das aus.
 ---
 
 <BaseLayout title="Kontakt" description="Kontakt zum YU Festival – schreib uns.">
@@ -14,30 +18,9 @@ import { contact } from '../data/site';
   <section class="section">
     <div class="container narrow">
       <a class="mail-cta" href={`mailto:${contact.email}`}>{contact.email}</a>
-
-      <!-- Formular-Gerüst: optisch fertig, aber noch nicht versendend.
-           Anbindung (z. B. Formspree, Netlify Forms o. ä.) folgt. -->
-      <form class="contact-form" aria-describedby="form-hint">
-        <p id="form-hint" class="form-hint">
-          Hinweis: Das Formular ist noch nicht angebunden – bitte nutz vorerst
-          die E-Mail-Adresse oben.
-        </p>
-        <label>
-          Name
-          <input type="text" name="name" autocomplete="name" disabled />
-        </label>
-        <label>
-          E-Mail
-          <input type="email" name="email" autocomplete="email" disabled />
-        </label>
-        <label>
-          Nachricht
-          <textarea name="message" rows="5" disabled></textarea>
-        </label>
-        <button class="btn btn--primary btn--on-white" type="submit" disabled>
-          Senden
-        </button>
-      </form>
+      <p class="kontakt-faq">
+        Viele Antworten findest du auch in den <a href="/faq">häufigen Fragen</a>.
+      </p>
     </div>
   </section>
 </BaseLayout>
@@ -45,7 +28,7 @@ import { contact } from '../data/site';
 <style>
   .mail-cta {
     display: inline-block;
-    margin-bottom: 2.5rem;
+    margin-bottom: 2rem;
     /* bewusst Helvetica Rounded: Blob fehlt das "@" */
     font-family: var(--font-sans);
     font-size: clamp(1.4rem, 4vw, 2.2rem);
@@ -59,50 +42,11 @@ import { contact } from '../data/site';
     color: var(--deep-purple);
     border-color: var(--coral);
   }
-
-  .contact-form {
-    display: grid;
-    gap: 1.25rem;
-    max-width: 540px;
-  }
-  .form-hint {
+  .kontakt-faq {
     margin: 0;
-    padding: 0.9rem 1.2rem;
-    border-radius: var(--radius-sm);
-    background: var(--lime);
-    color: var(--deep-purple);
-    font-weight: 700;
-    font-size: 0.95rem;
   }
-  .contact-form label {
-    display: grid;
-    gap: 0.4rem;
+  .kontakt-faq a {
     font-weight: 900;
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--deep-purple);
-  }
-  .contact-form input,
-  .contact-form textarea {
-    font-family: var(--font-sans);
-    font-weight: 700;
-    font-size: 1rem;
-    text-transform: none;
-    letter-spacing: normal;
-    color: var(--black);
-    background: var(--white);
-    border: 3px solid var(--lavender);
-    border-radius: var(--radius-sm);
-    padding: 0.8rem 1rem;
-  }
-  .contact-form input:focus,
-  .contact-form textarea:focus {
-    outline: 3px solid var(--lime);
-    outline-offset: 2px;
-  }
-  .contact-form button[disabled] {
-    opacity: 0.55;
-    cursor: not-allowed;
+    color: var(--lavender);
   }
 </style>

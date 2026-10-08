@@ -18,7 +18,10 @@ import { faq } from '../data/site';
         {
           faq.map((item) => (
             <details class="faq-item">
-              <summary>{item.q}</summary>
+              <summary>
+                {item.q}
+                <span class="faq-item__plus" aria-hidden="true" />
+              </summary>
               <div class="faq-item__answer">
                 <RichText paras={item.a} />
               </div>
@@ -60,22 +63,42 @@ import { faq } from '../data/site';
   .faq-item summary::-webkit-details-marker {
     display: none;
   }
-  .faq-item summary::after {
-    content: '+';
+  /* Plus aus zwei Balken statt aus dem Schriftzeichen „+“: Das Zeichen
+     sitzt in der Schrift nicht genau mittig und eierte beim Drehen. Die
+     Balken liegen exakt im Mittelpunkt, der Kreis dreht sich um ihn. */
+  .faq-item__plus {
+    position: relative;
     flex-shrink: 0;
-    display: grid;
-    place-items: center;
     width: 2rem;
     height: 2rem;
     border-radius: var(--radius-pill);
     background: var(--lavender);
-    color: var(--white);
-    font-size: 1.4rem;
-    line-height: 1;
-    transition: transform 0.2s ease;
+    transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
   }
-  .faq-item[open] summary::after {
+  .faq-item__plus::before,
+  .faq-item__plus::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    /* gerade Maße (14 × 4 px im 32-px-Kreis): ganzzahliger Abstand zum
+       Rand, sonst landet der Balken auf halben Pixeln */
+    width: 0.875rem;
+    height: 0.25rem;
+    border-radius: 999px;
+    background: var(--white);
+  }
+  .faq-item__plus::after {
+    width: 0.25rem;
+    height: 0.875rem;
+  }
+  .faq-item[open] .faq-item__plus {
     transform: rotate(45deg);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .faq-item__plus {
+      transition: none;
+    }
   }
 
   .faq-item__answer {

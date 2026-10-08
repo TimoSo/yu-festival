@@ -3,7 +3,7 @@
 // Komponente nutzen, sind gleich hoch – unabhängig davon, wie lang
 // Titel und Einleitung sind:
 //  - der Titel ist so bemessen, dass er immer in eine Zeile passt
-//    (Maßstab: „Häufige Fragen“, das breiteste Wort)
+//    (Maßstab: „Über das Festival“, der breiteste Titel)
 //  - für die Einleitung ist fester Platz reserviert
 //    (Desktop 2 Zeilen, Handy 3 Zeilen, unter 350 px 4 Zeilen)
 // Längere Einleitungen funktionieren weiterhin, machen den Kopf
@@ -27,11 +27,15 @@ const { eyebrow, title, lead, tone = 'muster' } = Astro.props;
 </section>
 
 <style>
-  /* „Häufige Fragen“ läuft in Blob etwa 9-mal so breit wie die
-     Schriftgröße. 9vw passt in jeder Breite in eine Zeile – auch dann,
-     wenn der Browser eine sichtbare Scrollleiste (~17 px) einblendet. */
+  /* „Über das Festival“ läuft in Blob etwa 10,5-mal so breit wie die
+     Schriftgröße. Die Größe richtet sich nach der Breite der Textspalte
+     (cqi = 1 % davon) und passt so in jeder Breite in eine Zeile – egal
+     ob mit oder ohne Scrollleiste. Alle Seiten nutzen dieselbe Größe. */
+  .page-head .container {
+    container-type: inline-size;
+  }
   .page-head__title {
-    font-size: clamp(1.75rem, 9vw, 4.5rem);
+    font-size: min(100cqi / 10.8, 4.25rem);
   }
 
   /* Platz für 3 Zeilen reservieren (Zeilenhöhe der .lead = 1.3) */

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/PageHeader.astro';
 import { site, about } from '../../data/site';
 ---
 
@@ -7,13 +8,7 @@ import { site, about } from '../../data/site';
   title="Über das Festival"
   description="Über das YU Festival – wie wollen wir digital zusammenleben?"
 >
-  <section class="section section--muster">
-    <div class="container narrow">
-      <p class="eyebrow">About</p>
-      <h1>Über das Festival</h1>
-      <p class="lead">{about.lead}</p>
-    </div>
-  </section>
+  <PageHeader eyebrow="About" title="Über das Festival" lead={about.lead} />
 
   <section class="section">
     <div class="container narrow">

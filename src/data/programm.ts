@@ -58,7 +58,7 @@ export const days: { nr: number; weekday: string; date: string }[] = [
 
 export const anmeldung = {
   email: contact.email,
-  text: `Für diese Veranstaltung ist eine Anmeldung erforderlich. 😊 Wenn du gerne dabei sein möchtest, schreib uns einfach eine E-Mail an ${contact.email}. Wir freuen uns auf deine Anmeldung!`,
+  text: `Für diese Veranstaltung ist eine Anmeldung erforderlich. Wenn du gerne dabei sein möchtest, schreib uns einfach eine E-Mail an ${contact.email}. Wir freuen uns auf deine Anmeldung!`,
   keine: 'Es ist keine Anmeldung erforderlich.',
 };
 

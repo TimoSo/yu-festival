@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
 import { impressum } from '../data/site';
 ---
 
@@ -7,11 +8,11 @@ import { impressum } from '../data/site';
   title="Impressum"
   description="Impressum und Anbieterkennzeichnung des YU Festivals."
 >
-  <section class="section section--muster">
-    <div class="container narrow">
-      <h1>Impressum</h1>
-    </div>
-  </section>
+  <PageHeader
+    eyebrow="Rechtliches"
+    title="Impressum"
+    lead="Anbieterkennzeichnung und Kontakt zum YU Festival."
+  />
 
   <section class="section">
     <div class="container narrow">
@@ -21,7 +22,7 @@ import { impressum } from '../data/site';
         abmahnfähig. Die Werte stehen in <code>src/data/site.ts</code>.
       </p>
 
-      <h3>Angaben gemäß § 5 TMG</h3>
+      <h3>Angaben gemäß § 5 DDG</h3>
       <p>
         {impressum.anbieter}<br />
         {impressum.strasse}<br />

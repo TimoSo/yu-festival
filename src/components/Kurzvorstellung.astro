@@ -24,7 +24,7 @@ function initialen(name: string) {
   <div class="container kv__inner">
     <div class="kv__text">
       <p class="eyebrow">{kurzvorstellung.eyebrow}</p>
-      <h2>{kurzvorstellung.titel}</h2>
+      <h2 class="kv__titel">{kurzvorstellung.titel}</h2>
       <p class="lead">{kurzvorstellung.text}</p>
       <p class="kv__hinweis">{kurzvorstellung.hinweis}</p>
       <a class="btn btn--primary" href="/programm">Zum Programm</a>
@@ -81,6 +81,15 @@ function initialen(name: string) {
       grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
       gap: 3rem;
     }
+  }
+  /* „Kurzvorstellung“ ist ein langes Wort (in Blob ≈ 10-mal so breit
+     wie die Schriftgröße). Die Größe richtet sich deshalb nach der Breite
+     der Textspalte, damit das Wort immer in einer Zeile bleibt. */
+  .kv__text {
+    container-type: inline-size;
+  }
+  .kv__titel {
+    font-size: min(clamp(2rem, 5vw, 3.5rem), 100cqi / 10.4);
   }
   .kv__hinweis {
     font-size: 0.9rem;
@@ -244,7 +253,8 @@ function initialen(name: string) {
   // ------------------------------------------------------------
   //  Schwebende Blasen: kleine Physik-Simulation
   //  Jede Blase hängt an einer weichen Feder an ihrem Platz, driftet
-  //  leicht, weicht dem Mauszeiger aus und stößt andere Blasen ab.
+  //  leicht, rückt in der Nähe des Mauszeigers zu ihm hin und stößt
+  //  andere Blasen ab.
   //  Beim Öffnen wächst sie per Feder (mit leichtem Überschwingen) zur
   //  Karte; die übrigen schrumpfen etwas und werden weggeschoben.
   // ------------------------------------------------------------
@@ -284,6 +294,7 @@ function initialen(name: string) {
   const RAND_ZU = 8; // Abstand Bild ↔ Außenkante, geschlossen
   const RAND_AUF = 12; // dito, geöffnet → Bildradius 28 − 12 = 16
   const ABSTAND = 10; // Mindestabstand zwischen den Blasen
+  const TEMPO = 0.65; // Gesamttempo der Bewegung (1 = ursprüngliches Tempo)
 
   const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v));
   const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
@@ -521,9 +532,10 @@ function initialen(name: string) {
     let sichtbar = false;
 
     function schritt(jetzt: number) {
-      const dt = Math.min(48, jetzt - zuletzt) / 16.667; // 1 = ein Frame bei 60 fps
+      // 1 = ein Frame bei 60 fps; TEMPO verlangsamt alles gleichmäßig
+      const dt = (Math.min(48, jetzt - zuletzt) / 16.667) * TEMPO;
       zuletzt = jetzt;
-      const t = (jetzt - start) / 1000;
+      const t = ((jetzt - start) / 1000) * TEMPO;
       const ruhe = ruhig.matches;
 
       for (const k of koerper) {
@@ -558,16 +570,19 @@ function initialen(name: string) {
           if (!ruhe) {
             zx += Math.sin(t * k.tempo + k.phase) * 10;
             zy += Math.cos(t * k.tempo * 0.8 + k.phase * 1.3) * 10;
+            // Anziehung: In der Nähe des Mauszeigers rückt die Blase ein
+            // Stück zu ihm hin. Die Kraft läuft nach außen weich aus und
+            // zieht die Blase nie ganz unter den Zeiger.
             if (maus) {
-              const dx = zx - maus.x;
-              const dy = zy - maus.y;
+              const dx = maus.x - zx;
+              const dy = maus.y - zy;
               const dist = Math.hypot(dx, dy);
-              const reichweite = 150;
+              const reichweite = D * 1.8;
               if (dist < reichweite && dist > 0.01) {
-                const f = 1 - dist / reichweite;
-                const weg = 34 * f * f;
-                zx += (dx / dist) * weg;
-                zy += (dy / dist) * weg;
+                const f = 1 - weich(0, reichweite, dist); // nah 1, am Rand 0
+                const zug = Math.min(D * 0.25 * f, dist * 0.35);
+                zx += (dx / dist) * zug;
+                zy += (dy / dist) * zug;
               }
             }
           }
