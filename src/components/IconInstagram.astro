@@ -1,0 +1,31 @@
+---
+// Schlichtes Instagram-Symbol (abgerundetes Quadrat, Linse, Punkt) in der
+// Textfarbe. Größe folgt der Schriftgröße, solange keine Breite gesetzt ist.
+interface Props {
+  size?: string;
+}
+const { size = '1.15em' } = Astro.props;
+---
+
+<svg
+  class="icon-instagram"
+  viewBox="0 0 24 24"
+  width={size}
+  height={size}
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2.2"
+  stroke-linecap="round"
+  aria-hidden="true"
+>
+  <rect x="3" y="3" width="18" height="18" rx="5.5"></rect>
+  <circle cx="12" cy="12" r="4.2"></circle>
+  <circle cx="17.3" cy="6.7" r="0.6" fill="currentColor" stroke="none"></circle>
+</svg>
+
+<style>
+  .icon-instagram {
+    flex-shrink: 0;
+    vertical-align: -0.18em;
+  }
+</style>

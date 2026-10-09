@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHeader from '../components/PageHeader.astro';
 import { contact } from '../data/site';
+import IconInstagram from '../components/IconInstagram.astro';
 
 // Bewusst ohne Kontaktformular: Ein Formular bräuchte einen Dienst oder
 // Server, der die Nachrichten weiterleitet (Datenschutzhinweis, oft
@@ -18,6 +19,9 @@ import { contact } from '../data/site';
   <section class="section">
     <div class="container narrow">
       <a class="mail-cta" href={`mailto:${contact.email}`}>{contact.email}</a>
+      <a class="insta-cta" href={contact.instagram} target="_blank" rel="noopener noreferrer">
+        <IconInstagram /> {contact.instagramName} auf Instagram
+      </a>
       <p class="kontakt-faq">
         Viele Antworten findest du auch in den <a href="/faq">häufigen Fragen</a>.
       </p>
@@ -41,6 +45,20 @@ import { contact } from '../data/site';
   .mail-cta:hover {
     color: var(--deep-purple);
     border-color: var(--coral);
+  }
+  .insta-cta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: fit-content;
+    margin: -0.75rem 0 2rem;
+    font-size: clamp(1.1rem, 2.6vw, 1.4rem);
+    font-weight: 900;
+    color: var(--deep-purple);
+    text-decoration: none;
+  }
+  .insta-cta:hover {
+    color: var(--lavender);
   }
   .kontakt-faq {
     margin: 0;

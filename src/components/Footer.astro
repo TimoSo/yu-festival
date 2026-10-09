@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { site, nav, contact, footerLogos } from '../data/site';
 import Logo from './Logo.astro';
+import IconInstagram from './IconInstagram.astro';
 
 const year = new Date().getFullYear();
 
@@ -30,6 +31,14 @@ function pngMasse(p?: string): { width?: number; height?: number } {
         <p class="site-footer__subtitle">{site.subtitle} · {site.subtitleAlt}</p>
         <a class="site-footer__mail" href={`mailto:${contact.email}`}>
           {contact.email}
+        </a>
+        <a
+          class="site-footer__insta"
+          href={contact.instagram}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <IconInstagram /> {contact.instagramName}
         </a>
       </div>
 
@@ -118,6 +127,19 @@ function pngMasse(p?: string): { width?: number; height?: number } {
   .site-footer__mail {
     font-weight: 900;
     color: var(--white);
+  }
+  .site-footer__insta {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    width: fit-content;
+    margin-top: 0.6rem;
+    font-weight: 900;
+    color: var(--white);
+    text-decoration: none;
+  }
+  .site-footer__insta:hover {
+    color: var(--lime);
   }
 
   .site-footer__nav {

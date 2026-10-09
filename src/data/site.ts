@@ -7,8 +7,9 @@
 // Kontaktdaten (steht oben, weil weitere Texte darauf verweisen)
 export const contact = {
   email: 'info@yufestival.de',
-  instagram: '',
-  note: 'Du erreichst uns am besten per E-Mail. Social-Media-Kanäle folgen.',
+  instagram: 'https://www.instagram.com/yufestival/',
+  instagramName: '@yufestival',
+  note: 'Du erreichst uns am besten per E-Mail. Neuigkeiten gibt es auf Instagram.',
 };
 
 export const site = {
@@ -220,6 +221,7 @@ export const team: { role: string; names: string }[] = [
   { role: 'Grafikdesign Social Media', names: 'Jana Canê' },
   { role: 'Webdesign', names: 'Timo Sodenkamp' },
   { role: 'CI und Logodesign', names: 'Marc Kemper' },
+  { role: 'Creative Coding Visuals', names: 'Florencia Alonso' },
 ];
 
 // Dank an alle, die das Festival unterstützen (Team-Seite)
@@ -241,6 +243,7 @@ export const specialThanks = [
   'Miu-Wah Lok',
   'Ilka Wessel',
   'Jannis Kötting',
+  'Max Tröndle',
 ];
 
 // ------------------------------------------------------------

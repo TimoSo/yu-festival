@@ -1,5 +1,6 @@
 ---
-import { site, landing } from '../data/site';
+import { site, landing, contact } from '../data/site';
+import IconInstagram from './IconInstagram.astro';
 import Logo from './Logo.astro';
 import Deco from './Deco.astro';
 ---
@@ -31,6 +32,9 @@ import Deco from './Deco.astro';
       <div class="hero__actions">
         <a class="btn btn--primary" href="/programm">Zum Programm</a>
         <a class="btn btn--ghost" href="/about/festival">Über das Festival</a>
+        <a class="btn btn--ghost" href={contact.instagram} target="_blank" rel="noopener noreferrer">
+          <IconInstagram /> Instagram
+        </a>
       </div>
     </div>
 
