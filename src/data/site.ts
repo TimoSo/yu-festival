@@ -169,6 +169,14 @@ export const spotlight: {
     foto: '/images/personen/camilla-scholz.webp',
     farbe: 'var(--coral)',
   },
+  {
+    name: 'Raphaël de Courville',
+    rolle: 'Talk „Community Visions“',
+    wann: 'Samstag, 24.10. · 18:00 Uhr',
+    bio: 'Arbeitet zwischen Kunst und Design mit generativen Systemen, Mustern, Interaktivität und Zeit – aus Paris, heute in Berlin. Raphaël hat Creative Code Berlin mitgegründet und ist seit 2022 Processing Community Lead der Processing Foundation.',
+    foto: '/images/personen/raphael-de-courville.webp',
+    farbe: 'var(--lavender)',
+  },
 ];
 
 // ------------------------------------------------------------

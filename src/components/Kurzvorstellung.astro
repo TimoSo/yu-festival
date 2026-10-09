@@ -289,23 +289,29 @@ function initialen(name: string) {
     w: number;
     h: number;
     karteH: number;
+    /** Seite der offenen Karte, auf die dieser Kreis ausweicht (fest
+     *  gewählt beim Öffnen, damit er nicht zwischen Seiten springt) */
+    seite: Seite | null;
   };
+  type Seite = 'links' | 'rechts' | 'oben' | 'unten';
 
   // Ruheplätze als Anteil von Breite/Höhe des Feldes
   const HEIM: [number, number][] = [
-    [0.17, 0.17],
-    [0.5, 0.13],
-    [0.83, 0.2],
-    [0.3, 0.47],
-    [0.71, 0.5],
-    [0.16, 0.8],
-    [0.5, 0.84],
-    [0.84, 0.79],
+    [0.17, 0.16],
+    [0.5, 0.12],
+    [0.83, 0.19],
+    [0.2, 0.5],
+    [0.52, 0.47],
+    [0.82, 0.53],
+    [0.16, 0.83],
+    [0.48, 0.86],
+    [0.83, 0.8],
   ];
   const RADIUS = 28; // Eckenradius der Karte
   const RAND_ZU = 8; // Abstand Bild ↔ Außenkante, geschlossen
   const RAND_AUF = 12; // dito, geöffnet → Bildradius 28 − 12 = 16
   const ABSTAND = 10; // Mindestabstand zwischen den Blasen
+  const GESCHRUMPFT = 0.72; // Größe der übrigen Kreise, solange eine Karte offen ist
   const TEMPO = 0.65; // Gesamttempo der Bewegung (1 = ursprüngliches Tempo)
 
   const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v));
@@ -342,6 +348,7 @@ function initialen(name: string) {
       w: 0,
       h: 0,
       karteH: 0,
+      seite: null,
     }));
     if (!koerper.length) return;
 
@@ -376,6 +383,7 @@ function initialen(name: string) {
       // Bewegung oder unsichtbarem Feld nicht). Sonst ragt eine Blase am
       // Rand kurz über die Seite, wenn etwa eine Scrollleiste auftaucht.
       if (!bereit) return;
+      if (offen) seitenWaehlen(offen);
       koerper.forEach((k) => {
         k.x *= W / alteW;
         k.y *= H / alteH;
@@ -396,8 +404,39 @@ function initialen(name: string) {
     }
 
     // ---------- Öffnen / Schließen ----------
+    // Beim Öffnen einmal festlegen, wohin jeder Kreis ausweicht, dessen
+    // Ruheplatz unter der Karte liegt: zur nächstgelegenen Kante, an der
+    // ein geschrumpfter Kreis Platz hat. Die Wahl bleibt, bis die Karte
+    // schließt – vorher wurde sie jedes Bild neu getroffen, und Kreise
+    // nahe der Mitte sprangen durch das Schweben hin und her.
+    function seitenWaehlen(o: Koerper) {
+      const r = (D * GESCHRUMPFT) / 2 + ABSTAND;
+      const kx = W / 2;
+      const ky = H / 2;
+      const hx = KB / 2;
+      const hy = o.karteH / 2;
+      const platzSeite = (W - KB) / 2 - 2 >= 2 * r - ABSTAND;
+      const platzOben = (H - o.karteH) / 2 - 2 >= 2 * r - ABSTAND;
+      const puffer = r + 12; // Schweben (±10 px) mit einrechnen
+      for (const k of koerper) {
+        k.seite = null;
+        if (k === o) continue;
+        const x = heimX(k);
+        const y = heimY(k);
+        const unterKarte =
+          x > kx - hx - puffer && x < kx + hx + puffer && y > ky - hy - puffer && y < ky + hy + puffer;
+        if (!unterKarte) continue;
+        const wege: [Seite, number][] = [];
+        if (platzSeite) wege.push(['links', x - (kx - hx - r)], ['rechts', kx + hx + r - x]);
+        if (platzOben || !platzSeite) wege.push(['oben', y - (ky - hy - r)], ['unten', ky + hy + r - y]);
+        wege.sort((a, b) => a[1] - b[1]);
+        k.seite = wege[0][0];
+      }
+    }
+
     function oeffnen(k: Koerper) {
       offen = k;
+      seitenWaehlen(k);
       k.pz = 1;
       k.knopf.setAttribute('aria-expanded', 'true');
       k.inhalt.setAttribute('aria-hidden', 'false');
@@ -480,12 +519,13 @@ function initialen(name: string) {
             const dy = kreis.y - ny;
             const d = Math.hypot(dx, dy);
             const r = kreis.w / 2 + ABSTAND;
-            // Ist neben der Karte zu wenig Platz (Handy: Karte fast so breit
-            // wie das Feld), weicht der Kreis nach oben oder unten aus –
-            // seitlich würde ihn der Feldrand hinter die Karte zurückschieben.
-            const seitlichFrei = (W - karte.w) / 2 >= kreis.w + ABSTAND;
-            if (d < r && !seitlichFrei) {
-              kreis.y = kreis.y < karte.y ? karte.y - hy - r : karte.y + hy + r;
+            // Hat der Kreis eine feste Ausweichseite, wird er nur zu dieser
+            // Kante geschoben – so springt er nicht zwischen den Seiten.
+            if (d < r && kreis.seite) {
+              if (kreis.seite === 'links') kreis.x = Math.min(kreis.x, karte.x - hx - r);
+              else if (kreis.seite === 'rechts') kreis.x = Math.max(kreis.x, karte.x + hx + r);
+              else if (kreis.seite === 'oben') kreis.y = Math.min(kreis.y, karte.y - hy - r);
+              else kreis.y = Math.max(kreis.y, karte.y + hy + r);
             } else if (d < r) {
               if (d < 0.01) {
                 // Mittelpunkt innerhalb der Karte: zur nächsten Kante
@@ -561,7 +601,7 @@ function initialen(name: string) {
 
       for (const k of koerper) {
         // Größe: offene Karte 1, andere schrumpfen leicht, wenn eine offen ist
-        const sZiel = offen && k !== offen ? 0.72 : 1;
+        const sZiel = offen && k !== offen ? GESCHRUMPFT : 1;
         // Verwandlung per Feder – leichtes Überschwingen wirkt wie ein „Plopp“
         if (ruhe) {
           k.s = sZiel;
@@ -588,13 +628,6 @@ function initialen(name: string) {
         } else {
           zx = heimX(k);
           zy = heimY(k);
-          if (offen && (W - offen.w) / 2 < D + ABSTAND) {
-            // schmales Feld: Ruheplatz auf Höhe der Karte → darüber/darunter
-            const r = (D * k.s) / 2 + ABSTAND;
-            const oben = offen.y - offen.h / 2 - r;
-            const unten = offen.y + offen.h / 2 + r;
-            if (zy > oben && zy < unten) zy = zy < offen.y ? oben : unten;
-          }
           if (!ruhe) {
             zx += Math.sin(t * k.tempo + k.phase) * 10;
             zy += Math.cos(t * k.tempo * 0.8 + k.phase * 1.3) * 10;
@@ -613,6 +646,16 @@ function initialen(name: string) {
                 zy += (dy / dist) * zug;
               }
             }
+          }
+          // feste Ausweichseite: Ziel an die gewählte Kante der Karte legen
+          if (offen && k.seite) {
+            const r = (D * GESCHRUMPFT) / 2 + ABSTAND;
+            const hx = KB / 2;
+            const hy = offen.karteH / 2;
+            if (k.seite === 'links') zx = Math.min(zx, W / 2 - hx - r);
+            else if (k.seite === 'rechts') zx = Math.max(zx, W / 2 + hx + r);
+            else if (k.seite === 'oben') zy = Math.min(zy, H / 2 - hy - r);
+            else zy = Math.max(zy, H / 2 + hy + r);
           }
         }
 

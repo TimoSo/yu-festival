@@ -480,7 +480,7 @@ export const events: ProgrammEvent[] = [
       {
         label: 'Zu Gast',
         text: [
-          'Raphaël de Courvielle, Darbyn Luisa Kalkuhl, Camilo Sandoval, Sam Hopkins',
+          'Raphaël de Courville, Darbyn Luisa Kalkuhl, Camilo Sandoval, Sam Hopkins',
         ],
       },
     ],
@@ -571,10 +571,13 @@ export const events: ProgrammEvent[] = [
     start: '10:00',
     end: '13:30',
     category: 'Präsentation',
-    title: 'Keynote: Wie prägen digitale Entwicklungen unser Miteinander?',
+    title: 'Keynote: Making connections, being moved! Das Gemeinsame im Digitalen',
     by: 'Dr. Jennifer Eickelmann',
     note: 'Teil von Block 1 (10:00–13:30 Uhr)',
-    text: [],
+    text: [
+      'Wie können und wollen wir miteinander leben, wenn digitale Räume und Öffentlichkeiten von Plattformen mitgestaltet werden, die nicht zuletzt auf Ab- und Ausgrenzung eingestellt sind? Wie lässt sich dem etwas entgegensetzen?',
+      'Nach einer einleitenden Problematisierung des Status Quo eröffnet der Vortrag zwei miteinander zusammenhängende Horizonte für ein demokratisches Miteinander unter digitalen Bedingungen: Erstens, ein Nachdenken darüber, wo und unter welchen Voraussetzungen etwas entstehen kann, das wir als etwas Gemeinsames begreifen können. Und zweitens die Frage, wie Verbindungen geschaffen werden können, die bewegen und auch Bewegungen, die verbinden.',
+    ],
     sections: [{ label: 'Referentin', people: [JENNIFER_EICKELMANN] }],
   },
   {

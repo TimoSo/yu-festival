@@ -112,11 +112,11 @@ B:\YU_Festival
   Hintergrund aller Seitenköpfe inklusive Startseite, Klasse `.section--muster`
   in `global.css`.
 - **Kurzvorstellung (Startseite):** Personen im Array `spotlight` in
-  `src/data/site.ts` (aktuell acht). Fotos als quadratischer Ausschnitt
+  `src/data/site.ts` (aktuell neun). Fotos als quadratischer Ausschnitt
   (400 × 400 px) nach `public/images/personen/` – ohne Foto zeigt der Kreis
   Initialen. `fotoCredit` erscheint in der Karte und im Impressum unter
   „Bildnachweise“. Die Ruheplätze der Kreise stehen in `HEIM` in
-  `Kurzvorstellung.astro` (für acht Personen ausgelegt).
+  `Kurzvorstellung.astro` (für neun Personen ausgelegt).
 - **Bild im Programmpunkt:** `bild` mit `src`, `alt`, `breite` und `hoehe`
   (Pixelmaße der Datei) – erscheint oben im aufgeklappten Punkt.
 - **Rohmaterial:** Originalfotos und Word-Dateien gehören nach `material/`
