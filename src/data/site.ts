@@ -218,7 +218,7 @@ export const team: { role: string; names: string }[] = [
   },
   { role: 'Assistenz in der Festivalkoordination', names: 'Alia Brunschier' },
   { role: 'Verwaltung', names: 'Dr. Claudia Beck' },
-  { role: 'Grafikdesign Social Media', names: 'Jana Canê' },
+  { role: 'Grafikdesign Social Media', names: 'Canê' },
   { role: 'Webdesign', names: 'Timo Sodenkamp' },
   { role: 'CI und Logodesign', names: 'Marc Kemper' },
   { role: 'Creative Coding Visuals', names: 'Florencia Alonso' },

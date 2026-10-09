@@ -106,7 +106,7 @@ B:\YU_Festival
   liegen in `public/images/foerderer/`, die Originale in
   `public/images/YU_EinFestivalVon_Logos/`. Die Höhe je Logo steht in
   `footerLogos` in `src/data/site.ts` (gleicht die Proportionen optisch aus).
-- **Header (Grafik: Jana Canê):** Die Originale `YU_Header.png` (gestapelt) und
+- **Header (Grafik: Canê):** Die Originale `YU_Header.png` (gestapelt) und
   `YU_Header2.png` (quer) liegen in `public/images/header/`. Daraus erzeugt:
   `yu-muster.webp` (logofreier oberer Streifen des queren Headers) – der
   Hintergrund aller Seitenköpfe inklusive Startseite, Klasse `.section--muster`
