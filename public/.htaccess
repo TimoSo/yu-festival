@@ -1,0 +1,12 @@
+# Steuerdatei für den Apache-Webserver bei IONOS (auf Vercel ohne Wirkung).
+# Liegt in public/ und landet beim Bauen automatisch in dist/ – wird also
+# mit dem normalen Hochladen auf den Server gebracht.
+
+RewriteEngine On
+
+# Aufrufe über http:// dauerhaft (301) auf https:// umleiten.
+# Die zweite Bedingung verhindert eine Endlosschleife, falls ein
+# vorgeschalteter Dienst (z. B. ein CDN) die Verschlüsselung übernimmt.
+RewriteCond %{HTTPS} !=on
+RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
