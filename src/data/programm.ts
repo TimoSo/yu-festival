@@ -797,36 +797,25 @@ export const events: ProgrammEvent[] = [
     registration: true,
   },
   {
-    id: 'hack-blender',
-    track: 'hackathon',
+    id: 'workshop-blender',
+    track: 'festival',
     day: 1,
     start: '16:00',
     end: '19:00',
     category: 'Workshop',
     title: '3D Modeling für Web Art in Blender',
-    by: 'mit Markus van Well',
+    by: 'mit Timo Sodenkamp und Marc Kemper vom KoLab',
     text: [
       'Wie kommen 3D-Modelle aus Blender ins Web – und was muss man beachten, damit sie dort auch flüssig laufen?',
-      'In diesem dreistündigen Kick-off-Workshop beschäftigen wir uns mit den Grundlagen des 3D Modelings in Blender und schauen uns an, wie 3D-Assets für interaktive Web-Anwendungen und VR optimiert werden können.',
+      'In diesem dreistündigen Workshop beschäftigen wir uns mit den Grundlagen des 3D Modelings in Blender und schauen uns an, wie 3D-Assets für interaktive Web-Anwendungen und VR optimiert werden können.',
       'Gemeinsam gehen wir den Workflow von der ersten Idee bis zum webfähigen 3D-Asset durch: Wir vermitteln grundlegende Modeling-Techniken, beschäftigen uns mit Materialien, Texturen und Polygonzahlen und zeigen, wie Modelle für den Einsatz im Browser vorbereitet und exportiert werden. Außerdem werfen wir einen Blick auf generative Tools für die Erstellung von 3D-Inhalten und sprechen darüber, wie bestehende Online-Assets sinnvoll genutzt, angepasst und in eigene Projekte integriert werden können.',
-      'Der Workshop dient gleichzeitig als Vorbereitung für den optional anschließenden zweitägigen Hackathon. Dort entwickeln wir aus den entstandenen 3D-Assets gemeinsam eine interaktive VR-Installation für das Dortmunder U. Mithilfe des Web-Frameworks A-Frame werden die Modelle in einen virtuellen Raum überführt, miteinander verbunden und interaktiv erfahrbar gemacht.',
-      'Neben der technischen Umsetzung geht es deshalb auch um die gemeinsame Konzeption: Unter dem Thema „Connections“ wollen wir überlegen, welche Verbindungen innerhalb eines virtuellen Raums entstehen können – zwischen Objekten, Räumen, Menschen und digitalen Welten. Eigene Ideen und konzeptionelle Ansätze sind ausdrücklich willkommen.',
       'Der Workshop richtet sich auch an Einsteiger*innen. Vorkenntnisse in Blender oder Webentwicklung sind nicht erforderlich.',
-      'Tools: Blender, 3D Modeling, Web Art, Optimierung von 3D-Assets, generative Tools, Online-Assets, A-Frame, VR. Anschließend optional: zweitägiger Hackathon zur Entwicklung einer gemeinsamen VR-Installation im Dortmunder U.',
-      HACKATHON_HINWEIS,
+      'Tools: Blender, 3D Modeling, Web Art, Optimierung von 3D-Assets, generative Tools, Online-Assets, A-Frame, VR.',
     ],
     sections: [
       {
         label: 'Workshopleitung',
-        people: [
-          {
-            name: 'Markus van Well',
-            bio: [
-              'Markus van Well ist Klangkünstler, Live Coder und Dozent aus Düsseldorf. 2018 war er Mitgründer von TOPLAP Düsseldorf, einem lokalen Live-Coding-Kollektiv, das Meetups, Workshops, Konzerte und Algoraves veranstaltet. Co-Organisator u. a. von der Konzertreihe COLLAB (2024), den Community-basierten Coding Islands in der Kunsthalle Düsseldorf (2025) und der ATEM Biennial (2025).',
-              'Er unterrichtet Creative Coding (u. a. Live Coding, Data Sonification, Soundwalks, KI) an Schulen, in Museen und der Hochschule Düsseldorf.',
-            ],
-          },
-        ],
+        text: ['Timo Sodenkamp und Marc Kemper vom KoLab (Digitales Koproduktionslabor)'],
       },
     ],
     registration: true,
