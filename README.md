@@ -45,7 +45,6 @@ B:\YU_Festival
 │   │   ├── Kurzvorstellung.astro # schwebende Profil-Blasen auf der Startseite
 │   │   ├── PageHeader.astro # gleich hoher Seitenkopf aller Unterseiten
 │   │   ├── RichText.astro   # Absätze mit automatisch verlinkten Mails/URLs
-│   │   ├── Deco.astro       # Gestaltungselemente: Mäander, Zahn-Kapsel, Pille
 │   │   ├── Header.astro     # Logo + Navigation (mobil + aktiver Reiter)
 │   │   ├── Footer.astro
 │   │   └── Hero.astro

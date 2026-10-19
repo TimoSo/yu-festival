@@ -1,7 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
-import Deco from '../components/Deco.astro';
 import Kurzvorstellung from '../components/Kurzvorstellung.astro';
 import Partikel from '../components/Partikel.astro';
 import { landing, pillars, partners } from '../data/site';
@@ -53,9 +52,14 @@ import { landing, pillars, partners } from '../data/site';
           <p class="eyebrow">In Kooperation mit</p>
           <h2>Partner</h2>
         </div>
-        <div class="partner-squiggle">
-          <Deco shape="squiggle" width="200px" />
-        </div>
+        <img
+          class="partner-form"
+          src="/images/partikel/welle-purple.svg"
+          alt=""
+          width="158"
+          height="250"
+          aria-hidden="true"
+        />
       </div>
 
       <ul class="partner-list">
@@ -92,8 +96,9 @@ import { landing, pillars, partners } from '../data/site';
     gap: 2rem;
     flex-wrap: wrap;
   }
-  .partner-squiggle {
-    color: var(--deep-purple);
+  .partner-form {
+    width: clamp(64px, 9vw, 96px);
+    height: auto;
   }
 
   .partner-list {

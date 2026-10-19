@@ -2,7 +2,6 @@
 import { site, landing, contact } from '../data/site';
 import IconInstagram from './IconInstagram.astro';
 import Logo from './Logo.astro';
-import Deco from './Deco.astro';
 ---
 
 <!-- Hintergrund: Schnörkel-Muster aus dem Social-Media-Header, wie bei
@@ -38,13 +37,10 @@ import Deco from './Deco.astro';
       </div>
     </div>
 
+    <!-- CI-Formen (dieselben Grafiken wie die schwebenden Partikel) -->
     <div class="hero__deco" aria-hidden="true">
-      <div class="hero__capsule">
-        <Deco shape="capsule" width="min(260px, 45vw)" />
-      </div>
-      <div class="hero__squiggle">
-        <Deco shape="squiggle" width="min(320px, 60vw)" />
-      </div>
+      <img class="hero__form hero__form--kapsel" src="/images/partikel/kapsel-lime.svg" alt="" width="192" height="250" />
+      <img class="hero__form hero__form--welle" src="/images/partikel/welle-coral.svg" alt="" width="158" height="250" />
     </div>
   </div>
 </section>
@@ -112,26 +108,21 @@ import Deco from './Deco.astro';
     gap: 1rem;
   }
 
+  /* zwei CI-Formen nebeneinander, die Welle etwas tiefer versetzt */
   .hero__deco {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2rem;
+    align-items: flex-start;
+    gap: clamp(1rem, 3vw, 2.25rem);
   }
-  .hero__capsule {
-    color: var(--lime);
-    --deco-inner: var(--lavender);
+  .hero__form {
+    height: auto;
   }
-  .hero__squiggle {
-    color: var(--coral);
+  .hero__form--kapsel {
+    width: min(200px, 34vw);
+  }
+  .hero__form--welle {
+    width: min(150px, 26vw);
+    margin-top: clamp(2.5rem, 7vw, 5rem);
   }
 
-  @media (max-width: 999px) {
-    .hero__deco {
-      flex-direction: row;
-      justify-content: flex-start;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-  }
 </style>
