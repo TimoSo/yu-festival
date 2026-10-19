@@ -797,8 +797,8 @@ export const events: ProgrammEvent[] = [
     registration: true,
   },
   {
-    id: 'workshop-blender',
-    track: 'festival',
+    id: 'hack-blender',
+    track: 'hackathon',
     day: 1,
     start: '16:00',
     end: '19:00',
