@@ -6,32 +6,48 @@
 // wandern mit dem Inhalt aus dem Bild – straff, solange gescrollt wird,
 // danach gleiten sie weich aus. Der Mauszeiger schiebt Formen in seiner
 // Nähe mit einer gleichmäßigen Kraft weg; sie gleiten dann an ihrer neuen
-// Stelle mit ihrem eigenen Tempo weiter. Nur auf der Startseite. Wer den sichtbaren Bereich verlässt, kommt außerhalb an der
-// gegenüberliegenden Kante wieder ins Spiel und fliegt von dort herein.
-// Kopf- und Fußleiste liegen eine Ebene darüber und verdecken die Formen.
+// Stelle mit ihrem eigenen Tempo weiter. Wer den sichtbaren Bereich
+// verlässt, kommt außerhalb an der gegenüberliegenden Kante wieder ins
+// Spiel und fliegt von dort herein. Kopf- und Fußleiste liegen eine Ebene
+// darüber und verdecken die Formen. Nur auf der Startseite.
 //
-// Bilder: public/images/partikel/ (scharf, SVG) und …/partikel/weich/
-// (weichgezeichnet mit Grain, WebP). `verhaeltnis` = Breite ÷ Höhe der
-// Datei, `skala` gleicht die Formen aneinander an. Die weichen Dateien
-// haben einen Rand für die Unschärfe – `rand` vergrößert sie entsprechend,
-// damit die Form selbst gleich groß bleibt.
-const formen = [
-  { name: 'maeander', verhaeltnis: 316 / 90, skala: 1.5, weich: { verhaeltnis: 345 / 120, rand: 1.095 } },
-  { name: 'kapsel', verhaeltnis: 240 / 160, skala: 1.1, weich: { verhaeltnis: 260 / 183, rand: 1.13 } },
-  { name: 'pille', verhaeltnis: 120 / 220, skala: 0.55, weich: { verhaeltnis: 145 / 241, rand: 1.261 } },
-];
-const farben = ['coral', 'lime', 'lavender'];
+// Formen: jede SVG in public/images/partikel/ (Name: <form>-<farbe>.svg).
+// Dazu die weichgezeichnete Fassung mit Korn aus …/partikel/weich/, erzeugt
+// mit `node scripts/partikel-weich.mjs` (schreibt auch partikel-weich.json).
+// Neue Grafiken: SVGs austauschen, Skript ausführen – fertig.
+import fs from 'node:fs';
+import path from 'node:path';
+import weich from '../data/partikel-weich.json';
 
-const sorten = formen.flatMap((f) =>
-  farben.flatMap((farbe) => [
-    { src: `/images/partikel/${f.name}-${farbe}.svg`, verhaeltnis: f.verhaeltnis, skala: f.skala },
-    {
-      src: `/images/partikel/weich/${f.name}-${farbe}-weich.webp`,
-      verhaeltnis: f.weich.verhaeltnis,
-      skala: f.skala * f.weich.rand,
-    },
-  ])
-);
+// Größe je Form als Faktor auf die Grundbreite (gleicht hochkante und
+// liegende Formen optisch aneinander an); unbekannte Formen: 1
+const SKALA: Record<string, number> = { kapsel: 0.9, pille: 1.3, welle: 0.75 };
+
+const ordner = path.join(process.cwd(), 'public/images/partikel');
+const weicheMasse: Record<string, { breite: number; hoehe: number; rand: number }> = weich;
+
+const sorten = fs
+  .readdirSync(ordner)
+  .filter((datei) => datei.endsWith('.svg'))
+  .sort()
+  .flatMap((datei) => {
+    const name = datei.slice(0, -'.svg'.length);
+    const skala = SKALA[name.split('-')[0]] ?? 1;
+    // Seitenverhältnis aus der viewBox der SVG
+    const vb = fs.readFileSync(path.join(ordner, datei), 'utf8').match(/viewBox="([^"]+)"/);
+    const [, , b, h] = (vb?.[1] ?? '0 0 1 1').trim().split(/[\s,]+/).map(Number);
+    const liste = [{ src: `/images/partikel/${datei}`, verhaeltnis: b / h, skala }];
+    const w = weicheMasse[name];
+    if (w) {
+      liste.push({
+        src: `/images/partikel/weich/${name}-weich.webp`,
+        verhaeltnis: w.breite / w.hoehe,
+        // die weiche Datei hat einen Rand für die Unschärfe
+        skala: skala * w.rand,
+      });
+    }
+    return liste;
+  });
 ---
 
 <div class="partikel" data-partikel data-sorten={JSON.stringify(sorten)} aria-hidden="true">

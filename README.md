@@ -117,6 +117,12 @@ B:\YU_Festival
   Initialen. `fotoCredit` erscheint in der Karte und im Impressum unter
   „Bildnachweise“. Die Ruheplätze der Kreise stehen in `HEIM` in
   `Kurzvorstellung.astro` (für neun Personen ausgelegt).
+- **Schwebende Formen (Startseite):** Jede SVG in `public/images/partikel/`
+  (Name `<form>-<farbe>.svg`) wird automatisch zur Partikel-Form. Nach dem
+  Austauschen `node scripts/partikel-weich.mjs` ausführen – das erzeugt die
+  weichgezeichneten Fassungen mit Korn in `partikel/weich/` samt
+  `src/data/partikel-weich.json`. Größe je Form: `SKALA` in `Partikel.astro`;
+  Tempo, Anzahl und Zeiger-Kraft: Stellschrauben oben im Skript dort.
 - **Bild im Programmpunkt:** `bild` mit `src`, `alt`, `breite` und `hoehe`
   (Pixelmaße der Datei) – erscheint oben im aufgeklappten Punkt.
 - **Rohmaterial:** Originalfotos und Word-Dateien gehören nach `material/`

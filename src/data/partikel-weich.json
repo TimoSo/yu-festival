@@ -1,0 +1,47 @@
+{
+  "kapsel-coral": {
+    "breite": 230,
+    "hoehe": 290,
+    "rand": 1.15
+  },
+  "kapsel-lavender": {
+    "breite": 230,
+    "hoehe": 290,
+    "rand": 1.15
+  },
+  "kapsel-lime": {
+    "breite": 230,
+    "hoehe": 290,
+    "rand": 1.15
+  },
+  "pille-coral": {
+    "breite": 290,
+    "hoehe": 146,
+    "rand": 1.1154
+  },
+  "pille-lavender": {
+    "breite": 290,
+    "hoehe": 146,
+    "rand": 1.1154
+  },
+  "pille-lime": {
+    "breite": 290,
+    "hoehe": 146,
+    "rand": 1.1154
+  },
+  "welle-coral": {
+    "breite": 194,
+    "hoehe": 290,
+    "rand": 1.1829
+  },
+  "welle-lime": {
+    "breite": 194,
+    "hoehe": 290,
+    "rand": 1.1829
+  },
+  "welle-purple": {
+    "breite": 194,
+    "hoehe": 290,
+    "rand": 1.1829
+  }
+}
