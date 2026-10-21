@@ -1,0 +1,130 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import RichText from '../components/RichText.astro';
+import PageHeader from '../components/PageHeader.astro';
+import { inhalt } from '../data/inhalt';
+import { spracheVon, ui, pfad } from '../i18n';
+
+const lang = spracheVon(Astro.url);
+const t = ui(lang);
+const { partners, kooperation, seiten } = inhalt(lang);
+---
+
+<BaseLayout title={seiten.partner.title} description={seiten.partner.description}>
+  <PageHeader
+    eyebrow={seiten.partner.eyebrow}
+    title={seiten.partner.title}
+    lead={seiten.partner.lead}
+  />
+
+  <section class="section">
+    <div class="container narrow">
+      <p class="partner-intro">{kooperation[0]}</p>
+      <div class="partner-grid">
+        {
+          partners.map((partner) => (
+            <article class="partner-card" id={partner.id}>
+              <div class="partner-logo">{partner.short}</div>
+              <div>
+                <h2 class="partner-name">{partner.name}</h2>
+                {partner.full && <p class="partner-full">{partner.full}</p>}
+                {partner.text.length > 0 && (
+                  <div class="partner-text">
+                    <RichText paras={partner.text} />
+                  </div>
+                )}
+                {partner.url && (
+                  <a href={partner.url} target="_blank" rel="noopener noreferrer">
+                    {t.partner.website}
+                  </a>
+                )}
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .partner-intro {
+    font-weight: 900;
+    margin: 0 0 2rem;
+  }
+  .partner-grid {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .partner-card {
+    display: grid;
+    grid-template-columns: 6rem minmax(0, 1fr);
+    gap: 1.5rem;
+    align-items: start;
+    border: var(--border-w) solid var(--lavender);
+    border-radius: var(--radius);
+    padding: 1.75rem;
+    /* Sprung von der Startseite: nicht unter dem festen Kopf landen */
+    scroll-margin-top: 6.5rem;
+  }
+  /* angesprungener Partner wird kurz hervorgehoben */
+  .partner-card:target {
+    animation: angesprungen 2.4s ease-out;
+  }
+  @keyframes angesprungen {
+    0%,
+    45% {
+      border-color: var(--coral);
+      background: color-mix(in srgb, var(--coral) 14%, var(--white));
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .partner-card:target {
+      animation: none;
+      border-color: var(--coral);
+    }
+  }
+  .partner-logo {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 1;
+    border-radius: var(--radius-sm);
+    background: var(--lavender);
+    color: var(--white);
+    font-weight: 900;
+    font-size: 1.15rem;
+    text-align: center;
+    padding: 0.25rem;
+  }
+  /* Partnernamen bewusst in Helvetica Rounded statt Blob:
+     Blob ist unicase und wuerde z. B. aus "kiU" ein "KIU" machen */
+  .partner-name {
+    font-family: var(--font-sans);
+    font-weight: 900;
+    font-size: clamp(1.3rem, 2.6vw, 1.7rem);
+    line-height: 1.2;
+    text-transform: none;
+    margin-bottom: 0.25rem;
+  }
+  .partner-full {
+    font-weight: 900;
+    color: var(--lavender);
+    margin: 0 0 0.9rem;
+  }
+  .partner-text {
+    max-width: 70ch;
+  }
+  .partner-text :global(p) {
+    margin: 0 0 0.85rem;
+  }
+
+  @media (max-width: 480px) {
+    .partner-card {
+      grid-template-columns: 1fr;
+    }
+    .partner-logo {
+      width: 5rem;
+    }
+  }
+</style>

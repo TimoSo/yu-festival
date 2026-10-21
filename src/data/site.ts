@@ -2,6 +2,7 @@
 //  Zentrale Inhalts- & Konfigurationsdatei
 //  Texte einmal hier ändern → überall aktualisiert.
 //  Das Programm steht in einer eigenen Datei: src/data/programm.ts
+//  Englische Fassung: src/data/site.en.ts (gleiche Struktur)
 // ============================================================
 
 // Kontaktdaten (steht oben, weil weitere Texte darauf verweisen)
@@ -23,26 +24,53 @@ export const site = {
     'YU Festival – Medien.Kunst.Diskurs: vom 22. bis 25. Oktober 2026 im Dortmunder U. Performances, Workshops, Talks, Konferenz und Hackathon rund um digitale Räume und Gemeinschaft. Eintritt frei.',
 };
 
-// Hauptnavigation. `children` erzeugt ein aufklappbares Untermenü.
-export const nav: {
-  label: string;
-  href: string;
-  children?: { label: string; href: string }[];
-}[] = [
-  { label: 'Start', href: '/' },
-  { label: 'Programm', href: '/programm' },
-  { label: 'Partner', href: '/partner' },
-  {
-    label: 'About',
-    href: '/about/festival',
-    children: [
-      { label: 'Festival', href: '/about/festival' },
-      { label: 'Team', href: '/about/team' },
-    ],
+// Titel, Beschreibung (für Suchmaschinen) und Seitenkopf je Unterseite.
+// Einleitungen (lead) kurz halten – max. ~80 Zeichen, sonst wird der Kopf
+// höher als die der anderen Seiten.
+export const seiten = {
+  programm: {
+    title: 'Programm',
+    description:
+      'Das Programm des YU Festivals vom 22. bis 25. Oktober 2026 im Dortmunder U: Festival, Konferenz und Hackathon.',
   },
-  { label: 'FAQ', href: '/faq' },
-  { label: 'Kontakt', href: '/kontakt' },
-];
+  partner: {
+    title: 'Partner',
+    description:
+      'Die Partner des YU Festivals: KoLab, ATEM Biennial, VKII Ruhrbezirk e. V., storyLab kiU und Mono Listening Café.',
+    eyebrow: 'In Kooperation mit',
+    lead: 'Unterstützt wird das Festival von vielen tollen Partnern.',
+  },
+  festival: {
+    title: 'Über das Festival',
+    description: 'Über das YU Festival – wie wollen wir digital zusammenleben?',
+    eyebrow: 'About',
+  },
+  team: {
+    title: 'YU Team',
+    description: 'Das Team hinter dem YU Festival.',
+    eyebrow: 'About',
+    lead: 'Die Menschen, die das YU Festival möglich machen.',
+  },
+  faq: {
+    title: 'Häufige Fragen',
+    metaTitle: 'FAQ',
+    description: 'Häufig gestellte Fragen zum YU Festival.',
+    eyebrow: 'FAQ',
+    lead: 'Die wichtigsten Antworten auf einen Blick. Fehlt etwas? Dann schreib uns gerne.',
+  },
+  kontakt: {
+    title: 'Schreib uns',
+    metaTitle: 'Kontakt',
+    description: 'Kontakt zum YU Festival – schreib uns.',
+    eyebrow: 'Kontakt',
+  },
+  impressum: {
+    title: 'Impressum',
+    description: 'Impressum, Haftungsausschluss und Datenschutzhinweise des YU Festivals.',
+    eyebrow: 'Rechtliches',
+    lead: 'Anbieterkennzeichnung, Haftungsausschluss und Datenschutz.',
+  },
+};
 
 // ------------------------------------------------------------
 //  STARTSEITE

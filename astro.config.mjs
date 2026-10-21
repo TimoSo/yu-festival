@@ -6,6 +6,7 @@ export default defineConfig({
   site: 'https://yufestival.de',
   // Die Festival-Seite lag früher unter /about – alte Links leiten weiter
   redirects: {
-    '/about': '/about/festival',
+    '/about': '/about/festival/',
+    '/en/about': '/en/about/festival/',
   },
 });

@@ -1,0 +1,111 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import RichText from '../components/RichText.astro';
+import PageHeader from '../components/PageHeader.astro';
+import { inhalt } from '../data/inhalt';
+import { spracheVon, ui, pfad } from '../i18n';
+
+const lang = spracheVon(Astro.url);
+const t = ui(lang);
+const { faq, seiten } = inhalt(lang);
+---
+
+<BaseLayout title={seiten.faq.metaTitle} description={seiten.faq.description}>
+  <PageHeader eyebrow={seiten.faq.eyebrow} title={seiten.faq.title} lead={seiten.faq.lead} />
+
+  <section class="section">
+    <div class="container narrow">
+      <div class="faq-list">
+        {
+          faq.map((item) => (
+            <details class="faq-item">
+              <summary>
+                {item.q}
+                <span class="faq-item__plus" aria-hidden="true" />
+              </summary>
+              <div class="faq-item__answer">
+                <RichText paras={item.a} />
+              </div>
+            </details>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .faq-list {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .faq-item {
+    border: var(--border-w) solid var(--lavender);
+    border-radius: var(--radius);
+    padding: 0 1.5rem;
+    background: var(--white);
+  }
+
+  .faq-item summary {
+    cursor: pointer;
+    font-family: var(--font-sans);
+    font-weight: 900;
+    font-size: 1.15rem;
+    line-height: 1.2;
+    color: var(--deep-purple);
+    padding: 1.25rem 0;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+  }
+  .faq-item summary::-webkit-details-marker {
+    display: none;
+  }
+  /* Plus aus zwei Balken statt aus dem Schriftzeichen „+“: Das Zeichen
+     sitzt in der Schrift nicht genau mittig und eierte beim Drehen. Die
+     Balken liegen exakt im Mittelpunkt, der Kreis dreht sich um ihn. */
+  .faq-item__plus {
+    position: relative;
+    flex-shrink: 0;
+    width: 2rem;
+    height: 2rem;
+    border-radius: var(--radius-pill);
+    background: var(--lavender);
+    transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .faq-item__plus::before,
+  .faq-item__plus::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    /* gerade Maße (14 × 4 px im 32-px-Kreis): ganzzahliger Abstand zum
+       Rand, sonst landet der Balken auf halben Pixeln */
+    width: 0.875rem;
+    height: 0.25rem;
+    border-radius: 999px;
+    background: var(--white);
+  }
+  .faq-item__plus::after {
+    width: 0.25rem;
+    height: 0.875rem;
+  }
+  .faq-item[open] .faq-item__plus {
+    transform: rotate(45deg);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .faq-item__plus {
+      transition: none;
+    }
+  }
+
+  .faq-item__answer {
+    padding-bottom: 0.6rem;
+  }
+  .faq-item__answer :global(p) {
+    margin: 0 0 0.9rem;
+  }
+</style>

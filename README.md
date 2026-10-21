@@ -50,21 +50,31 @@ B:\YU_Festival
 │   │   └── Hero.astro
 │   ├── data/
 │   │   ├── site.ts          # ★ Texte: Start, About, Team, Partner, FAQ, Kontakt
+│   │   ├── site.en.ts       # ★ dieselben Texte auf Englisch
 │   │   ├── programm.ts      # ★ das komplette Programm (Bereiche, Tage, Punkte)
-│   │   └── impressum.ts     # ★ Impressum und Rechtstexte
+│   │   ├── programm.en.ts   # ★ englische Programmtexte (je Punkt über die id)
+│   │   ├── impressum.ts     # ★ Impressum und Rechtstexte
+│   │   ├── inhalt.ts            # wählt site.ts oder site.en.ts je Sprache
+│   │   └── programm-sprache.ts  # setzt das Programm je Sprache zusammen
+│   ├── i18n/
+│   │   └── index.ts         # ★ Sprachen: Adressen, Navigation, Beschriftungen
 │   ├── lib/
 │   │   └── linkify.ts       # erkennt E-Mail-Adressen und URLs im Text
 │   ├── layouts/
 │   │   └── BaseLayout.astro # Grundgerüst (head, Fonts, Header, Footer)
-│   ├── pages/               # ★ jede Datei = eine URL/ein Reiter
-│   │   ├── index.astro           # Start                  → /
-│   │   ├── programm.astro        # Programm mit Zeitplan  → /programm
-│   │   ├── partner.astro         # Partner                → /partner
-│   │   ├── about/festival.astro  # About › Festival       → /about/festival
-│   │   ├── about/team.astro      # About › Team           → /about/team
-│   │   ├── faq.astro             # FAQ                    → /faq
-│   │   ├── kontakt.astro         # Kontakt                → /kontakt
-│   │   └── impressum.astro       # Impressum              → /impressum
+│   ├── views/               # ★ Aufbau der Seiten, gemeinsam für beide Sprachen
+│   │   ├── Start.astro, Programm.astro, Partner.astro, Festival.astro,
+│   │   └── Team.astro, Faq.astro, Kontakt.astro, Impressum.astro
+│   ├── pages/               # jede Datei = eine Adresse (nur dünne Hülle um views/)
+│   │   ├── index.astro           # Start                  → /            /en/
+│   │   ├── programm.astro        # Programm mit Zeitplan  → /programm/   /en/programme/
+│   │   ├── partner.astro         # Partner                → /partner/    /en/partners/
+│   │   ├── about/festival.astro  # About › Festival       → /about/festival/
+│   │   ├── about/team.astro      # About › Team           → /about/team/
+│   │   ├── faq.astro             # FAQ                    → /faq/        /en/faq/
+│   │   ├── kontakt.astro         # Kontakt                → /kontakt/    /en/contact/
+│   │   ├── impressum.astro       # Impressum              → /impressum/  /en/legal-notice/
+│   │   └── en/                   # dieselben Seiten auf Englisch
 │   └── styles/
 │       └── global.css       # ★ Design-Tokens – die CI
 ├── astro.config.mjs
@@ -73,6 +83,19 @@ B:\YU_Festival
 ```
 
 ## Häufige Aufgaben
+
+- **Zwei Sprachen:** Deutsch liegt unter `/`, Englisch unter `/en/`. Beide
+  nutzen dieselben Bausteine in `src/views/` – die Sprache ergibt sich aus der
+  Adresse. Der Umschalter „DE | EN“ in der Kopfleiste springt zur gleichen
+  Seite in der anderen Sprache.
+  - Längere Texte: `site.ts` (Deutsch) und `site.en.ts` (Englisch).
+  - Programm: Termine, Bilder und Anmeldung nur in `programm.ts`; die
+    englischen Texte stehen in `programm.en.ts` unter derselben `id`. Fehlt
+    dort ein Eintrag, erscheint auf der englischen Seite der deutsche Text.
+  - Kurze Beschriftungen (Buttons, Navigation, Hinweise) und die Adressen
+    beider Sprachen: `src/i18n/index.ts`.
+  - Impressum: Kopfdaten zweisprachig, der Rechtstext nur auf Deutsch (mit
+    Hinweis auf der englischen Seite).
 
 - **Texte ändern:** Start, About, Team, Partner, FAQ und Kontakt stehen in
   `src/data/site.ts`, das Programm in `src/data/programm.ts`, Impressum und
@@ -87,7 +110,8 @@ B:\YU_Festival
   `src/data/programm.ts` ergänzen – mit `track` (festival/konferenz/hackathon),
   `day` (1 = Do 22.10. … 4 = So 25.10.), `start`/`end` und `category` (steht
   als Text auf der Pille, z. B. „Workshop“). Innerhalb eines Tages wird
-  automatisch nach Uhrzeit sortiert.
+  automatisch nach Uhrzeit sortiert. Für die englische Seite den Text unter
+  derselben `id` in `src/data/programm.en.ts` ergänzen.
 - **Anmeldung:** `registration: true` zeigt „Anmeldung erforderlich“ samt
   Mail-Button (Betreff wird mit dem Titel vorbefüllt), `false` zeigt
   ausdrücklich „keine Anmeldung erforderlich“. Alles rund um die Anmeldung

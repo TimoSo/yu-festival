@@ -1,7 +1,16 @@
 ---
-import { site, landing, contact } from '../data/site';
+import { inhalt } from '../data/inhalt';
+import { spracheVon, ui, pfad } from '../i18n';
 import IconInstagram from './IconInstagram.astro';
 import Logo from './Logo.astro';
+
+const lang = spracheVon(Astro.url);
+const t = ui(lang).start;
+const { site, landing, contact } = inhalt(lang);
+// Titel aus dem Untertitel („Medien.Kunst.Diskurs“ bzw. „media.art.society“).
+// Als ein Stück HTML ohne Leerzeichen zusammengesetzt: Der Punkt bleibt am
+// Wort davor, umbrechen darf die Zeile nur nach dem Punkt (<wbr>).
+const titelHtml = site.subtitle.split('.').join('<span class="dot">.</span><wbr />');
 ---
 
 <!-- Hintergrund: Schnörkel-Muster aus dem Social-Media-Header, wie bei
@@ -15,22 +24,19 @@ import Logo from './Logo.astro';
         <Logo variant="stacked" width="min(300px, 64vw)" />
       </div>
 
-      {/* <wbr> erlaubt saubere Umbruchstellen nach den Punkten */}
-      <h1 class="hero__title">
-        Medien<span class="dot">.</span><wbr />Kunst<span class="dot">.</span><wbr
-        />Diskurs
-      </h1>
+      <h1 class="hero__title" set:html={titelHtml} />
 
       <p class="hero__facts">
-        <span class="hero__pill">{site.date} · {site.location}</span>
-        {site.free && <span class="hero__pill hero__pill--free">Eintritt frei</span>}
+        {/* geschütztes Leerzeichen: „Dortmunder U“ bricht nicht auseinander */}
+        <span class="hero__pill">{site.date} · {site.location.replace(' ', ' ')}</span>
+        {site.free && <span class="hero__pill hero__pill--free">{t.eintrittFrei}</span>}
       </p>
 
       <p class="lead hero__lead">{landing.intro}</p>
 
       <div class="hero__actions">
-        <a class="btn btn--primary" href="/programm">Zum Programm</a>
-        <a class="btn btn--ghost" href="/about/festival">Über das Festival</a>
+        <a class="btn btn--primary" href={pfad(lang, 'programm')}>{t.zumProgramm}</a>
+        <a class="btn btn--ghost" href={pfad(lang, 'festival')}>{t.ueberFestival}</a>
         <a class="btn btn--ghost" href={contact.instagram} target="_blank" rel="noopener noreferrer">
           <IconInstagram /> Instagram
         </a>
@@ -70,7 +76,8 @@ import Logo from './Logo.astro';
   .hero__title {
     margin-bottom: 1.25rem;
   }
-  .hero__title .dot {
+  /* :global – der Punkt kommt über set:html und trägt keine Astro-Klasse */
+  .hero__title :global(.dot) {
     color: var(--lime);
   }
 

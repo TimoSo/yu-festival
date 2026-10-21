@@ -23,6 +23,12 @@ export const impressum = {
   },
 };
 
+// Englische Fassung der Kopfdaten (der Rechtstext bleibt deutsch)
+export const impressumEn = {
+  intro: 'The website yufestival.de is a project of the City of Dortmund at the Dortmunder U.',
+  verantwortlich: 'Project and event management',
+};
+
 export type RechtsAbschnitt = {
   titel: string;
   absaetze: string[];

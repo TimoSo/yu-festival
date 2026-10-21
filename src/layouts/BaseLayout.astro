@@ -1,7 +1,8 @@
 ---
-import { site } from '../data/site';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import { inhalt } from '../data/inhalt';
+import { SPRACHEN, spracheVon, seiteVon, ui, pfad } from '../i18n';
 
 // Schriften der CI liegen als WOFF2 in public/fonts/ und werden
 // per @font-face in global.css eingebunden.
@@ -12,14 +13,23 @@ interface Props {
   description?: string;
 }
 
+const lang = spracheVon(Astro.url);
+const { site } = inhalt(lang);
+const t = ui(lang);
 const { title, description = site.description } = Astro.props;
+
+// Dieselbe Seite in allen Sprachen – für Suchmaschinen (hreflang)
+const seite = seiteVon(Astro.url);
+const alternativen = seite
+  ? SPRACHEN.map((l) => ({ lang: l, href: new URL(pfad(l, seite), Astro.site ?? Astro.url).href }))
+  : [];
 const pageTitle = title
   ? `${title} – ${site.name}`
   : `${site.name} – ${site.subtitle}`;
 ---
 
 <!doctype html>
-<html lang="de">
+<html lang={lang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -47,9 +57,15 @@ const pageTitle = title
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    <meta property="og:locale" content={lang === 'en' ? 'en_GB' : 'de_DE'} />
+    {
+      alternativen.map((a) => (
+        <link rel="alternate" hreflang={a.lang} href={a.href} />
+      ))
+    }
   </head>
   <body>
-    <a href="#main" class="skip-link">Zum Inhalt springen</a>
+    <a href="#main" class="skip-link">{t.kopf.zumInhalt}</a>
     <Header />
     <main id="main">
       <slot />

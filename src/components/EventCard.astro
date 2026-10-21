@@ -2,7 +2,13 @@
 // Aufklappbarer Programmpunkt: Kopf mit Kategorie, Titel und Kurzinfos,
 // darunter der ausführliche Teil (Text, Personen, Ort, Anmeldung).
 import RichText from './RichText.astro';
-import { anmeldung, type Inhalt } from '../data/programm';
+import type { Inhalt } from '../data/programm';
+import { programm } from '../data/programm-sprache';
+import { spracheVon, ui } from '../i18n';
+
+const lang = spracheVon(Astro.url);
+const t = ui(lang).programm;
+const { anmeldung } = programm(lang);
 
 interface Props {
   item: Inhalt;
@@ -13,7 +19,7 @@ interface Props {
 
 const { item, tag, variant = 'event' } = Astro.props;
 const bodyId = `body-${item.id}`;
-const betreff = encodeURIComponent(`Anmeldung: ${item.title}`);
+const betreff = encodeURIComponent(`${t.betreff}: ${item.title}`);
 ---
 
 <article class:list={['ev', { 'ev--ongoing': variant === 'ongoing' }]}>
@@ -32,7 +38,7 @@ const betreff = encodeURIComponent(`Anmeldung: ${item.title}`);
           <span class="ev__facts">
             {item.location && <span class="ev__fact">{item.location}</span>}
             {item.registration && (
-              <span class="pill-anmeldung">Anmeldung erforderlich</span>
+              <span class="pill-anmeldung">{t.anmeldungErforderlich}</span>
             )}
           </span>
         )
@@ -80,7 +86,7 @@ const betreff = encodeURIComponent(`Anmeldung: ${item.title}`);
       {
         item.location && (
           <p class="ev__detail">
-            <strong>Ort:</strong> {item.location}
+            <strong>{t.ort}:</strong> {item.location}
           </p>
         )
       }
@@ -103,7 +109,7 @@ const betreff = encodeURIComponent(`Anmeldung: ${item.title}`);
               class="btn btn--anmelden"
               href={`mailto:${anmeldung.email}?subject=${betreff}`}
             >
-              Per E-Mail anmelden
+              {t.perMail}
             </a>
           </div>
         )

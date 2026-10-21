@@ -1,0 +1,71 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import { inhalt } from '../data/inhalt';
+import { spracheVon, ui, pfad } from '../i18n';
+
+const lang = spracheVon(Astro.url);
+const t = ui(lang);
+const { site, about, seiten } = inhalt(lang);
+---
+
+<BaseLayout title={seiten.festival.title} description={seiten.festival.description}>
+  <PageHeader eyebrow={seiten.festival.eyebrow} title={seiten.festival.title} lead={about.lead} />
+
+  <section class="section">
+    <div class="container narrow">
+      <h2>{about.titel}</h2>
+      <p class="lead about__frage">{about.frage}</p>
+      {about.text.map((absatz) => <p>{absatz}</p>)}
+    </div>
+  </section>
+
+  <section class="section section--lime">
+    <div class="container narrow">
+      <h2>{t.festival.eckdaten}</h2>
+      <dl class="facts">
+        <div><dt>{t.festival.termin}</dt><dd>{site.date}</dd></div>
+        <div><dt>{t.festival.ort}</dt><dd>{site.location}</dd></div>
+        <div>
+          <dt>{t.festival.eintritt}</dt>
+          <dd>{t.festival.eintrittText}</dd>
+        </div>
+      </dl>
+
+      <p style="margin-top: 2.5rem;">
+        <a class="btn btn--primary" href={pfad(lang, 'programm')}>{t.start.zumProgramm}</a>
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .about__frage {
+    color: var(--lavender);
+    margin-bottom: 1.5rem;
+  }
+  .facts {
+    display: grid;
+    gap: 0.75rem;
+    margin: 1.5rem 0 0;
+  }
+  .facts > div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+    border-bottom: 3px solid color-mix(in srgb, var(--deep-purple) 25%, transparent);
+    padding-bottom: 0.6rem;
+  }
+  .facts dt {
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.85rem;
+    min-width: 7rem;
+    margin: 0;
+  }
+  .facts dd {
+    margin: 0;
+    font-weight: 900;
+  }
+</style>

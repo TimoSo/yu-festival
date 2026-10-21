@@ -1,11 +1,15 @@
 ---
 import fs from 'node:fs';
 import path from 'node:path';
-import { site, nav, contact, footerLogos } from '../data/site';
+import { inhalt } from '../data/inhalt';
+import { NAVIGATION, spracheVon, ui, pfad } from '../i18n';
 import Logo from './Logo.astro';
 import IconInstagram from './IconInstagram.astro';
 
 const year = new Date().getFullYear();
+const lang = spracheVon(Astro.url);
+const t = ui(lang);
+const { site, contact, footerLogos } = inhalt(lang);
 
 // Beim Bauen pruefen, ob die Logodatei schon existiert. Fehlt sie,
 // zeigen wir den Namen als Text – kein kaputtes Bild.
@@ -42,12 +46,12 @@ function pngMasse(p?: string): { width?: number; height?: number } {
         </a>
       </div>
 
-      <nav aria-label="Footer-Navigation">
+      <nav aria-label={t.fuss.navigation}>
         <ul class="site-footer__nav">
           {
-            nav.map((item) => (
+            NAVIGATION.map((item) => (
               <li>
-                <a href={item.href}>{item.label}</a>
+                <a href={pfad(lang, item.seite)}>{t.nav[item.label]}</a>
               </li>
             ))
           }
@@ -87,10 +91,10 @@ function pngMasse(p?: string): { width?: number; height?: number } {
     <div class="site-footer__meta">
       <span>© {year} {site.name}</span>
       <span class="site-footer__links">
-        <a href="/about/team">YU Team</a>
-        <a href="/impressum">Impressum</a>
+        <a href={pfad(lang, 'team')}>{t.fuss.team}</a>
+        <a href={pfad(lang, 'impressum')}>{t.fuss.impressum}</a>
       </span>
-      <span>Eintritt frei</span>
+      <span>{t.fuss.eintrittFrei}</span>
     </div>
   </div>
 </footer>

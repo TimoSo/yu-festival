@@ -4,7 +4,12 @@
 // werden weggeschoben. Bewegung und Verwandlung steuert das Skript unten.
 import fs from 'node:fs';
 import path from 'node:path';
-import { kurzvorstellung, spotlight } from '../data/site';
+import { inhalt } from '../data/inhalt';
+import { spracheVon, ui, pfad } from '../i18n';
+
+const lang = spracheVon(Astro.url);
+const t = ui(lang).start;
+const { kurzvorstellung, spotlight } = inhalt(lang);
 
 // Foto nur verwenden, wenn die Datei schon existiert – sonst Initialen
 const hatFoto = (p?: string) =>
@@ -27,7 +32,7 @@ function initialen(name: string) {
       <h2 class="kv__titel">{kurzvorstellung.titel}</h2>
       <p class="lead">{kurzvorstellung.text}</p>
       <p class="kv__hinweis">{kurzvorstellung.hinweis}</p>
-      <a class="btn btn--primary" href="/programm">Zum Programm</a>
+      <a class="btn btn--primary" href={pfad(lang, 'programm')}>{t.zumProgramm}</a>
     </div>
 
     <div class="kv__feld" data-kv-feld>
@@ -52,7 +57,7 @@ function initialen(name: string) {
               <p class="blase__bio">{person.bio}</p>
               <p class="blase__wann">{person.wann}</p>
               {person.fotoCredit && (
-                <p class="blase__credit">Foto: {person.fotoCredit}</p>
+                <p class="blase__credit">{t.foto}: {person.fotoCredit}</p>
               )}
             </div>
 
@@ -62,7 +67,7 @@ function initialen(name: string) {
               aria-expanded="false"
               aria-controls={`kv-person-${i}`}
             >
-              <span class="visually-hidden">{person.name} – Kurzvorstellung</span>
+              <span class="visually-hidden">{person.name} – {t.profil}</span>
             </button>
           </div>
         ))

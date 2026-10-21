@@ -1,0 +1,143 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import RichText from '../components/RichText.astro';
+import {
+  impressum,
+  impressumEn,
+  haftungsausschluss,
+  type RechtsAbschnitt,
+} from '../data/impressum';
+import { inhalt } from '../data/inhalt';
+import { spracheVon, ui, pfad } from '../i18n';
+
+const lang = spracheVon(Astro.url);
+const t = ui(lang);
+const { spotlight, seiten } = inhalt(lang);
+
+const v = impressum.verantwortlich;
+// Kopfdaten gibt es auf Englisch, den Rechtstext nur auf Deutsch
+const intro = lang === 'en' ? impressumEn.intro : impressum.intro;
+const verantwortlichTitel = lang === 'en' ? impressumEn.verantwortlich : v.titel;
+
+// Bildnachweise sammeln sich aus den Daten (Kurzvorstellung)
+const bildnachweise = spotlight
+  .filter((p) => p.fotoCredit)
+  .map((p) => `${t.impressum.portraet} ${p.name}: ${p.fotoCredit}`);
+---
+
+<BaseLayout title={seiten.impressum.title} description={seiten.impressum.description}>
+  <PageHeader
+    eyebrow={seiten.impressum.eyebrow}
+    title={seiten.impressum.title}
+    lead={seiten.impressum.lead}
+  />
+
+  <section class="section">
+    <div class="container narrow recht">
+      <p class="recht__intro">{intro}</p>
+
+      <h2>{verantwortlichTitel}</h2>
+      <p>
+        {v.anschrift.map((zeile) => (
+          <>
+            {zeile}
+            <br />
+          </>
+        ))}
+      </p>
+      <p>
+        {t.impressum.email}: <a href={`mailto:${v.email}`}>{v.email}</a>
+        <br />
+        {t.impressum.telefon}: <a href={`tel:${v.telefonLink}`}>{v.telefon}</a>
+      </p>
+
+      <h2>{t.impressum.haftung}</h2>
+      {t.impressum.nurDeutsch && <p class="recht__hinweis">{t.impressum.nurDeutsch}</p>}
+      {
+        haftungsausschluss.map((a: RechtsAbschnitt) => (
+          <section class="recht__abschnitt">
+            <h3>{a.titel}</h3>
+            <RichText paras={a.absaetze} />
+            {a.liste && (
+              <ul>
+                {a.liste.map((punkt) => (
+                  <li>
+                    <strong>{punkt.fett}</strong> {punkt.text}
+                  </li>
+                ))}
+              </ul>
+            )}
+            {a.nach && <RichText paras={a.nach} />}
+            {a.unter?.map((u) => (
+              <>
+                <h4>{u.titel}</h4>
+                <RichText paras={u.absaetze} />
+              </>
+            ))}
+          </section>
+        ))
+      }
+
+      {
+        bildnachweise.length > 0 && (
+          <>
+            <h2>{t.impressum.bildnachweise}</h2>
+            <ul>
+              {bildnachweise.map((zeile) => (
+                <li>{zeile}</li>
+              ))}
+            </ul>
+          </>
+        )
+      }
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* Rechtstext: ruhige Gliederung in Helvetica Rounded statt großer
+     Blob-Überschriften */
+  .recht h2 {
+    font-family: var(--font-sans);
+    font-weight: 900;
+    font-size: clamp(1.35rem, 3vw, 1.75rem);
+    line-height: 1.2;
+    text-transform: none;
+    letter-spacing: normal;
+    color: var(--deep-purple);
+    margin: 3rem 0 1rem;
+  }
+  .recht h3 {
+    font-size: 1.15rem;
+    color: var(--lavender);
+    margin: 2rem 0 0.6rem;
+  }
+  .recht h4 {
+    font-size: 1rem;
+    color: var(--deep-purple);
+    margin: 1.4rem 0 0.4rem;
+  }
+  .recht__hinweis {
+    font-weight: 900;
+    padding: 0.9rem 1.2rem;
+    border-radius: var(--radius-sm);
+    background: color-mix(in srgb, var(--lavender) 12%, var(--white));
+  }
+  .recht__intro {
+    font-weight: 900;
+    font-size: 1.1rem;
+  }
+  .recht ul {
+    padding-left: 1.2rem;
+    margin: 0 0 1rem;
+  }
+  .recht li {
+    margin-bottom: 0.4rem;
+  }
+  /* :global – Links kommen teils aus RichText (eigene Komponente) */
+  .recht :global(a) {
+    color: var(--lavender);
+    font-weight: 900;
+  }
+</style>
