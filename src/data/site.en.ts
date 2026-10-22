@@ -230,7 +230,15 @@ const partnerEn: Record<string, { full?: string; text: string[] }> = {
     ],
   },
   vkii: { text: vkiiText },
-  kiu: { full: 'Fachhochschule Dortmund – University of Applied Sciences and Arts', text: [] },
+  kiu: {
+    full: 'Fachhochschule Dortmund – University of Applied Sciences and Arts',
+    text: [
+      'The storyLab kiU is an interdisciplinary research and creative lab based at the Dortmunder U. Founded in 2016, it sees itself as an offshoot of the university: here, the artistic and design research of the Department of Design becomes visible in the middle of the city.',
+      'The focus is on new forms of storytelling in digital media. Students explore how dramaturgy and storytelling change through current technologies. It is less about technical skills than about trying out alternative ways of telling stories.',
+      'The storyLab kiU works as a digital production studio for image, sound and programming. It realises immersive spaces, interactive installations and 3D facade projections – for example at the city festival DORTBUNT 2025 and, since 2019, at the annual Museum Night at the Dortmunder U. It also carries out third-party-funded projects and collaborations, including with the City of Dortmund and the Leibniz Institute for Analytical Sciences (ISAS).',
+      'The artistic director is Harald Opel, who received the Research Prize of Fachhochschule Dortmund in 2025 for his work at the storyLab kiU.',
+    ],
+  },
   mono: {
     text: [
       'mono is the listening café in the Dortmund record shop Black Plastic. Excellent classic espresso meets McIntosh amplifiers and Tannoy speakers – a place to listen consciously to all kinds of music in everyday life, to enjoy readings or small concerts, or to listen to and watch changing DJs several times a week. Or simply to drink a coffee and browse through music books.',

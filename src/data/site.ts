@@ -331,7 +331,12 @@ export const partners: {
     name: 'storyLab kiU',
     short: 'kiU',
     full: 'Fachhochschule Dortmund',
-    text: [],
+    text: [
+      'Das storyLab kiU ist ein interdisziplinäres Forschungs- und Kreativlabor mit Sitz im Dortmunder U. Es besteht seit 2016 und versteht sich als Ableger der Hochschule: Hier wird die künstlerische und gestalterische Forschung des Fachbereichs Design mitten in der Stadt sichtbar gemacht.',
+      'Im Mittelpunkt stehen neue Erzählformen digitaler Medien. Studierende erkunden, wie sich Dramaturgie und Storytelling durch aktuelle Technologien verändern. Dabei geht es weniger um technische Fertigkeiten als darum, alternative Erzählweisen auszuprobieren.',
+      'Das storyLab kiU arbeitet als digitale Produktionsstätte für Bild, Sound und Programmierung. Es realisiert immersive Räume, interaktive Installationen und 3D-Fassadenprojektionen, etwa beim Stadtfest DORTBUNT 2025 und seit 2019 zur jährlich stattfindenden Museumsnacht am Dortmunder U. Zudem entstehen drittmittelfinanzierte Projekte und Kooperationen, unter anderem mit der Stadt Dortmund und dem Leibniz-Institut für Analytische Wissenschaften (ISAS).',
+      'Die künstlerische Leitung hat Harald Opel, der 2025 für seine Arbeit am storyLab kiU den Forschungspreis der Fachhochschule Dortmund erhielt.',
+    ],
   },
   {
     id: 'mono',

@@ -229,7 +229,7 @@ Zwei Eigenheiten von Blob, die man kennen muss:
 ## Status
 
 CI umgesetzt: Farben, Schriften, Logo, Formensprache, alle Seiten.
-Noch offen: Partnertext storyLab kiU.
+Alle Partnertexte sind da.
 
 Die Seite setzt keine Cookies: Schriften liegen lokal, es gibt kein
 Tracking und kein Kontaktformular – Kontakt läuft per Mail-Link.
