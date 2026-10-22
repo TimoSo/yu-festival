@@ -24,7 +24,9 @@ const { partners, kooperation, seiten } = inhalt(lang);
         {
           partners.map((partner) => (
             <article class="partner-card" id={partner.id}>
-              <div class="partner-logo">{partner.short}</div>
+              <div class="partner-logo">
+                {partner.logo ? <img src={partner.logo} alt="" /> : partner.short}
+              </div>
               <div>
                 <h2 class="partner-name">{partner.name}</h2>
                 {partner.full && <p class="partner-full">{partner.full}</p>}
@@ -96,6 +98,10 @@ const { partners, kooperation, seiten } = inhalt(lang);
     font-size: 1.15rem;
     text-align: center;
     padding: 0.25rem;
+  }
+  .partner-logo img {
+    width: 88%;
+    height: auto;
   }
   /* Partnernamen bewusst in Helvetica Rounded statt Blob:
      Blob ist unicase und wuerde z. B. aus "kiU" ein "KIU" machen */

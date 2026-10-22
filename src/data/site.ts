@@ -36,7 +36,7 @@ export const seiten = {
   partner: {
     title: 'Partner',
     description:
-      'Die Partner des YU Festivals: KoLab, ATEM Biennial, VKII Ruhrbezirk e. V., storyLab kiU und Mono Listening Café.',
+      'Die Partner des YU Festivals: KoLab, ATEM Biennial, VKII Ruhrbezirk e. V., storyLab kiU, Mono Listening Café und Processing Community Day.',
     eyebrow: 'In Kooperation mit',
     lead: 'Unterstützt wird das Festival von vielen tollen Partnern.',
   },
@@ -229,7 +229,7 @@ export const about = {
 // Wer das Festival trägt – erscheint auf der Team-Seite und im FAQ.
 export const kooperation = [
   'Das YU Festival ist ein Kooperationsprojekt der Abteilung Digitale Kultur im Dortmunder U und der Koordinierungsstelle Digital- und Medienkompetenz aus dem Team Smart City Dortmund.',
-  'Unterstützt wird das Festival von vielen tollen Partnern: dem Digitalen Koproduktionslabor, VKII e. V., dem storyLab kiU der Fachhochschule Dortmund, ATEM – Alternative Thoughts on the Emerging Metaverse und dem Mono Listening Café.',
+  'Unterstützt wird das Festival von vielen tollen Partnern: dem Digitalen Koproduktionslabor, VKII e. V., dem storyLab kiU der Fachhochschule Dortmund, ATEM – Alternative Thoughts on the Emerging Metaverse, dem Mono Listening Café und dem Processing Community Day (PCD@Dortmund).',
 ];
 
 // YU Team
@@ -293,6 +293,8 @@ export const partners: {
   short: string;
   /** ausgeschriebener Name / Zusatz */
   full?: string;
+  /** Logo für die Kachel (hell auf Lavender); ohne Logo steht dort `short` */
+  logo?: string;
   text: string[];
   url?: string;
 }[] = [
@@ -337,6 +339,18 @@ export const partners: {
     short: 'Mono',
     text: [
       'Das mono ist das Listening Café im Dortmunder Plattenladen Black Plastic. Hervorragender, klassischer Espresso trifft auf McIntosh-Verstärker und Tannoy-Lautsprecher – ein Ort, um im Alltag bewusst Musik verschiedenster Spielarten zu hören, Lesungen oder kleine Konzerte zu erleben oder mehrmals die Woche wechselnden DJs zuzuhören und -schauen. Oder um einfach nur einen Kaffee zu trinken und in Musikbüchern zu blättern.',
+    ],
+  },
+  {
+    id: 'pcd',
+    name: 'Processing Community Day',
+    short: 'PCD',
+    full: 'PCD@Dortmund',
+    logo: '/images/partner/pcd-2026.svg',
+    text: [
+      'Der Processing Community Day ist eine kostenlose Gemeinschaftsveranstaltung, die die Schnittstelle zwischen Design, Kunst, Programmierung und Technologie feiert.',
+      'Egal, ob du bereits mit Processing oder p5.js arbeitest, dich für Creative Coding interessierst, Design oder Technik studierst oder einfach nur neue Wege entdecken möchtest, mit Code etwas zu gestalten – PCD@Dortmund bietet dir die Gelegenheit, Gleichgesinnte zu treffen, Ideen auszutauschen und gemeinsam etwas zu schaffen.',
+      'Die Veranstaltung richtet sich sowohl an erfahrene Creative Coder*innen als auch an absolute Anfänger*innen. Vorkenntnisse in Processing oder p5.js sind nicht erforderlich.',
     ],
   },
 ];

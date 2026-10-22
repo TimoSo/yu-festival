@@ -30,7 +30,7 @@ export const seiten: typeof de.seiten = {
   partner: {
     title: 'Partners',
     description:
-      'The partners of the YU Festival: KoLab, ATEM Biennial, VKII Ruhrbezirk e. V., storyLab kiU and Mono Listening Café.',
+      'The partners of the YU Festival: KoLab, ATEM Biennial, VKII Ruhrbezirk e. V., storyLab kiU, Mono Listening Café and Processing Community Day.',
     eyebrow: 'In cooperation with',
     lead: 'The festival is supported by many great partners.',
   },
@@ -180,7 +180,7 @@ export const about: typeof de.about = {
 
 export const kooperation = [
   'The YU Festival is a joint project of the Digital Culture department at the Dortmunder U and the Digital and Media Literacy Coordination Office of the Smart City Dortmund team.',
-  'The festival is supported by many great partners: the Digitales Koproduktionslabor (KoLab), VKII e. V., the storyLab kiU of Fachhochschule Dortmund, ATEM – Alternative Thoughts on the Emerging Metaverse and the Mono Listening Café.',
+  'The festival is supported by many great partners: the Digitales Koproduktionslabor (KoLab), VKII e. V., the storyLab kiU of Fachhochschule Dortmund, ATEM – Alternative Thoughts on the Emerging Metaverse, the Mono Listening Café and Processing Community Day (PCD@Dortmund).',
 ];
 
 const rollenEn = [
@@ -234,6 +234,13 @@ const partnerEn: Record<string, { full?: string; text: string[] }> = {
   mono: {
     text: [
       'mono is the listening café in the Dortmund record shop Black Plastic. Excellent classic espresso meets McIntosh amplifiers and Tannoy speakers – a place to listen consciously to all kinds of music in everyday life, to enjoy readings or small concerts, or to listen to and watch changing DJs several times a week. Or simply to drink a coffee and browse through music books.',
+    ],
+  },
+  pcd: {
+    text: [
+      'Processing Community Day is a free community event celebrating the intersection of design, art, code and technology.',
+      'Whether you already work with Processing or p5.js, are interested in creative coding, study design or technology, or simply want to discover new ways of creating with code, PCD@Dortmund offers an opportunity to meet like-minded people, exchange ideas and create together.',
+      'The event welcomes experienced creative coders as well as complete beginners. No previous knowledge of Processing or p5.js is required.',
     ],
   },
 };
